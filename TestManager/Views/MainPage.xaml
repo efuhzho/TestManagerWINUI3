@@ -56,45 +56,57 @@
                       HorizontalContentAlignment="Left"
                       IsExpanded="True">
                 <Expander.Header>
-                    <ToggleSwitch OffContent="串口已关闭"
-                                  OnContent="串口已打开"
+                    <ToggleSwitch OffContent="串口关闭"
+                                  OnContent="串口打开"
                                   Toggled="ToggleSwitch_Toggled"></ToggleSwitch>
                 </Expander.Header>
                 <Expander.Content>
                     <StackPanel Orientation="Vertical"
-                                Spacing="8">
+                                Spacing="15">
                         <ComboBox PlaceholderText="选择端口号"
                                   ItemsSource="{x:Bind ViewModel.Ports}"
                                   MinWidth="170"
                                   SelectedIndex="0"
                                   ToolTipService.ToolTip="设置通信端口。"
-                                  SelectedItem="{x:Bind ViewModel.Port ,Mode=TwoWay}" />
+                                  SelectedItem="{x:Bind ViewModel.Port ,Mode=TwoWay}"
+                                  Header="端口号"
+                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"/>
                         <ComboBox PlaceholderText="设置波特率"
                                   ItemsSource="{x:Bind ViewModel.BaudRates}"
                                   MinWidth="170"
                                   IsEditable="False"
                                   SelectedIndex="2"
                                   ToolTipService.ToolTip="设置串行波特率。"
-                                  SelectedValue="{x:Bind ViewModel.BaudRate ,Mode=TwoWay}" />
+                                  SelectedValue="{x:Bind ViewModel.BaudRate ,Mode=TwoWay}"
+                                  Header="波特率"
+                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
                         <ComboBox PlaceholderText="选择校验位"
                                   ItemsSource="{x:Bind ViewModel.Paritys}"
                                   MinWidth="170"
                                   SelectedIndex="0"
-                                  ToolTipService.ToolTip="指定 SerialPort 对象的奇偶校验位。" />
+                                  ToolTipService.ToolTip="指定 SerialPort 对象的奇偶校验位。"
+                                  Header="校验位"
+                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
                         <ComboBox PlaceholderText="选择数据位"
                                   ItemsSource="{x:Bind ViewModel.DataBits}"
                                   MinWidth="170"
                                   SelectedIndex="3"
-                                  ToolTipService.ToolTip="设置每个字节的标准数据位长度。" />
+                                  ToolTipService.ToolTip="设置每个字节的标准数据位长度。"
+                                  Header="数据位"
+                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
                         <ComboBox PlaceholderText="选择停止位"
                                   ItemsSource="{x:Bind ViewModel.StopBits}"
                                   MinWidth="170"
                                   SelectedIndex="1"
-                                  ToolTipService.ToolTip="指定在 SerialPort 对象上使用的停止位的数目。" />
+                                  ToolTipService.ToolTip="指定在 SerialPort 对象上使用的停止位的数目。"
+                                  Header="停止位"
+                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
                         <ComboBox PlaceholderText="选择控制协议"
                                   ItemsSource="{x:Bind ViewModel.HandShakes}"
                                   MinWidth="170"
-                                  ToolTipService.ToolTip="指定在为 SerialPort 对象建立串行端口通信时使用的控制协议。" />
+                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"
+                                  ToolTipService.ToolTip="指定在为 SerialPort 对象建立串行端口通信时使用的控制协议。"
+                                  Header="流控制" />
                     </StackPanel>
                 </Expander.Content>
             </Expander>

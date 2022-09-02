@@ -23,7 +23,7 @@ public partial class MainViewModel : ObservableObject
         baudRate=baudRates[2];
     }
     [ObservableProperty]
-    private Dandick? ds;
+    private Dandick? dS;
 
     [ObservableProperty]
     private string? dsModel;
@@ -57,36 +57,8 @@ public partial class MainViewModel : ObservableObject
     private int[] dataBits = new int[] { 5 , 6 , 7 , 8 };
     #endregion
 
-    [RelayCommand]
-    private void ToggleSwitch_Toggled (object sender )
-    {
-        var toggleSwitch = sender as ToggleSwitch;
-        if ( toggleSwitch != null )
-        {
-            switch ( toggleSwitch. IsOn )
-            {
-                case true:
-                    if ( dsModel != null && port != null )
-                    {
-                        ds = new Dandick(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , dsModel));
-
-                         ds. SerialPortInni(port , baudRate);
-
-                       ds. Open();
-                    }
-                    break;
-
-                case false:
-                    if ( ds != null )
-                    {
-                        ds. Close();
-                    }
-                    break;
-            }
-        }
-    }
-
-
+    [ObservableProperty]
+    private bool disableSerialPortEdit=true;
 
 
 }

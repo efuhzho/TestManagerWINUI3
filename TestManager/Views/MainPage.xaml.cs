@@ -2,12 +2,12 @@
 using Microsoft. UI. Xaml. Controls;
 
 using TestManager. ViewModels;
+using Windows. UI. Popups;
 
 namespace TestManager. Views;
 
 public sealed partial class MainPage : Page
 {
-
     public MainViewModel ViewModel
     {
         get;
@@ -21,29 +21,40 @@ public sealed partial class MainPage : Page
 
     private void ToggleSwitch_Toggled (object sender , Microsoft. UI. Xaml. RoutedEventArgs e)
     {
-        var toggleSwitch = sender as ToggleSwitch;
-        if ( toggleSwitch != null )
+        try
         {
-            switch ( toggleSwitch. IsOn )
+            var toggleSwitch = sender as ToggleSwitch;
+            if ( toggleSwitch != null )
             {
-                case true:
-                    if ( ViewModel. DsModel != null && ViewModel. Port != null )
-                    {
-                        ViewModel. Ds = new Dandick(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , ViewModel. DsModel));
+                switch ( toggleSwitch. IsOn )
+                {
+                    case true:
+                        ViewModel. DisableSerialPortEdit = false;
+                        if ( ViewModel. DsModel != null && ViewModel. Port != null )
+                        {
+                            ViewModel. DS = new Dandick(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , ViewModel. DsModel));
 
-                        ViewModel. Ds. SerialPortInni(ViewModel. Port , ViewModel. BaudRate);
+                            ViewModel. DS. SerialPortInni(ViewModel. Port , ViewModel. BaudRate);
 
-                        ViewModel. Ds. Open();
-                    }
-                    break;
+                            ViewModel. DS. Open();
+                        }
+                        break;
 
-                case false:
-                    if ( ViewModel. Ds != null )
-                    {
-                        ViewModel. Ds. Close();
-                    }
-                    break;
+                    case false:
+                        ViewModel. DisableSerialPortEdit = true;
+                        if ( ViewModel. DS != null )
+                        {
+                            ViewModel. DS. Close();
+                        }
+                        break;
+                }
             }
         }
+        catch ( Exception ex)
+        {
+
+            
+        }
+      
     }
 }
