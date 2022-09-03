@@ -1,7 +1,7 @@
 ﻿<Page x:Class="TestManager.Views.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
@@ -41,8 +41,8 @@
                 </TabViewItem>
             </TabView.TabItems>
         </TabView>
+        <ScrollViewer Grid.Column="1">
         <StackPanel Spacing="8"
-                    Grid.Column="1"
                     Margin="10,0,0,0"
                     x:Name="StackPanel_MainRight">
             <ComboBox Width="{x:Bind StackPanel_MainRight.ActualWidth ,Mode=OneWay}"
@@ -50,15 +50,22 @@
                       MinWidth="200"
                       ToolTipService.ToolTip="选择您的设备型号"
                       ItemsSource="{x:Bind ViewModel.DsModels}"
-                      SelectedValue="{x:Bind ViewModel.DsModel ,Mode=TwoWay}" />
+                      SelectedValue="{x:Bind ViewModel.DsModel ,Mode=TwoWay}"
+                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
             <Expander Width="{x:Bind StackPanel_MainRight.ActualWidth ,Mode=OneWay}"
                       MinWidth="200"
                       HorizontalContentAlignment="Left"
                       IsExpanded="True">
                 <Expander.Header>
                     <ToggleSwitch OffContent="串口关闭"
-                                  OnContent="串口打开"
-                                  Toggled="ToggleSwitch_Toggled"></ToggleSwitch>
+                                  OnContent="串口打开"                                  
+                                 Name="ts" >
+                        <interactivity:Interaction.Behaviors>
+                            <core:EventTriggerBehavior EventName="Toggled">
+                                <core:InvokeCommandAction Command="{x:Bind ViewModel.ToggleSwitch_ToggledCommand}" CommandParameter="{Binding ElementName=ts,Path=IsOn}"/>
+                            </core:EventTriggerBehavior>
+                        </interactivity:Interaction.Behaviors>
+                    </ToggleSwitch>
                 </Expander.Header>
                 <Expander.Content>
                     <StackPanel Orientation="Vertical"
@@ -107,10 +114,23 @@
                                   IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"
                                   ToolTipService.ToolTip="指定在为 SerialPort 对象建立串行端口通信时使用的控制协议。"
                                   Header="流控制" />
+                        <TextBox Text="{x:Bind ViewModel.DS.ReadTimeOut ,Mode=TwoWay}"
+                                 HorizontalAlignment="Stretch"
+                                 Header="读超时" />
+                        <TextBox Text="{x:Bind ViewModel.DS.WriteTimeOut ,Mode=TwoWay}"
+                                 HorizontalAlignment="Stretch"
+                                 Header="写超时" />
+                        <TextBox Text="{x:Bind ViewModel.DS.SleepTime ,Mode=TwoWay}"
+                                 HorizontalAlignment="Stretch"
+                                 Header="延时读取" />
+                        <TextBox Text="{x:Bind ViewModel.DS.ReceiveTimeout ,Mode=TwoWay}"
+                                 HorizontalAlignment="Stretch"
+                                 Header="接收超时" />
                     </StackPanel>
                 </Expander.Content>
             </Expander>
         </StackPanel>
+        </ScrollViewer>
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     Grid.ColumnSpan="2">

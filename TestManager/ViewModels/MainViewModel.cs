@@ -20,7 +20,7 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel ()
     {
         port = ports[0];
-        baudRate=baudRates[2];
+        baudRate = baudRates[2];
     }
     [ObservableProperty]
     private Dandick? dS;
@@ -35,6 +35,7 @@ public partial class MainViewModel : ObservableObject
     private int baudRate;
 
     #region ComboBox初始化
+
     [ObservableProperty]
     private string[] dsModels = Enum. GetNames(typeof(DKCommunicationNET. Models));
 
@@ -55,10 +56,49 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private int[] dataBits = new int[] { 5 , 6 , 7 , 8 };
-    #endregion
 
     [ObservableProperty]
-    private bool disableSerialPortEdit=true;
+    private string? model;
+    #endregion
+    /// <summary>
+    /// 指示打开串口后禁用的状态
+    /// </summary>
+    [ObservableProperty]
+    private bool disableSerialPortEdit = true;
 
+    [RelayCommand]
+    private void ToggleSwitch_Toggled (bool isOn)
+    {
+        try
+        {
+            switch ( isOn )
+            {
+                case true:
+                    DisableSerialPortEdit = false;
+                    if ( dsModel != null && port != null )
+                    {
+                        DS = new Dandick(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , dsModel));
+                        DS. SerialPortInni(port , baudRate);
+                        DS. Open();
+
+                        Model = DS. Model;
+                    }
+                    break;
+
+                case false:
+                    DisableSerialPortEdit = true;
+                    if ( DS != null )
+                    {
+                        DS. Close();
+                    }
+                    break;
+            }
+        }
+        catch ( Exception ex )
+        {
+
+        }
+
+    }
 
 }
