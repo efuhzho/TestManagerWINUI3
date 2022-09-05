@@ -8,6 +8,7 @@
       mc:Ignorable="d">
     <Grid x:Name="ContentArea"
           BorderThickness="1">
+        <!--#region 网格行列定义 -->
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
@@ -16,6 +17,8 @@
             <ColumnDefinition />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
+        <!--#endregion 网格行列定义-->
+        <!--#region TabView -->
         <TabView SelectedIndex="0"
                  IsAddTabButtonVisible="False"
                  MinHeight="475"
@@ -41,96 +44,271 @@
                 </TabViewItem>
             </TabView.TabItems>
         </TabView>
+        <!--#endregion TabView-->
+        <!--#region 边栏 -->
         <ScrollViewer Grid.Column="1">
-        <StackPanel Spacing="8"
-                    Margin="10,0,0,0"
-                    x:Name="StackPanel_MainRight">
-            <ComboBox Width="{x:Bind StackPanel_MainRight.ActualWidth ,Mode=OneWay}"
-                      PlaceholderText="选择设备型号"
-                      MinWidth="200"
-                      ToolTipService.ToolTip="选择您的设备型号"
-                      ItemsSource="{x:Bind ViewModel.DsModels}"
-                      SelectedValue="{x:Bind ViewModel.DsModel ,Mode=TwoWay}"
-                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-            <Expander Width="{x:Bind StackPanel_MainRight.ActualWidth ,Mode=OneWay}"
-                      MinWidth="200"
-                      HorizontalContentAlignment="Left"
-                      IsExpanded="True">
-                <Expander.Header>
-                    <ToggleSwitch OffContent="串口关闭"
-                                  OnContent="串口打开"                                  
-                                 Name="ts" >
-                        <interactivity:Interaction.Behaviors>
-                            <core:EventTriggerBehavior EventName="Toggled">
-                                <core:InvokeCommandAction Command="{x:Bind ViewModel.ToggleSwitch_ToggledCommand}" CommandParameter="{Binding ElementName=ts,Path=IsOn}"/>
-                            </core:EventTriggerBehavior>
-                        </interactivity:Interaction.Behaviors>
-                    </ToggleSwitch>
-                </Expander.Header>
-                <Expander.Content>
-                    <StackPanel Orientation="Vertical"
-                                Spacing="15">
-                        <ComboBox PlaceholderText="选择端口号"
-                                  ItemsSource="{x:Bind ViewModel.Ports}"
-                                  MinWidth="170"
-                                  SelectedIndex="0"
-                                  ToolTipService.ToolTip="设置通信端口。"
-                                  SelectedItem="{x:Bind ViewModel.Port ,Mode=TwoWay}"
-                                  Header="端口号"
-                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"/>
-                        <ComboBox PlaceholderText="设置波特率"
-                                  ItemsSource="{x:Bind ViewModel.BaudRates}"
-                                  MinWidth="170"
-                                  IsEditable="False"
-                                  SelectedIndex="2"
-                                  ToolTipService.ToolTip="设置串行波特率。"
-                                  SelectedValue="{x:Bind ViewModel.BaudRate ,Mode=TwoWay}"
-                                  Header="波特率"
-                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-                        <ComboBox PlaceholderText="选择校验位"
-                                  ItemsSource="{x:Bind ViewModel.Paritys}"
-                                  MinWidth="170"
-                                  SelectedIndex="0"
-                                  ToolTipService.ToolTip="指定 SerialPort 对象的奇偶校验位。"
-                                  Header="校验位"
-                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-                        <ComboBox PlaceholderText="选择数据位"
-                                  ItemsSource="{x:Bind ViewModel.DataBits}"
-                                  MinWidth="170"
-                                  SelectedIndex="3"
-                                  ToolTipService.ToolTip="设置每个字节的标准数据位长度。"
-                                  Header="数据位"
-                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-                        <ComboBox PlaceholderText="选择停止位"
-                                  ItemsSource="{x:Bind ViewModel.StopBits}"
-                                  MinWidth="170"
-                                  SelectedIndex="1"
-                                  ToolTipService.ToolTip="指定在 SerialPort 对象上使用的停止位的数目。"
-                                  Header="停止位"
-                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-                        <ComboBox PlaceholderText="选择控制协议"
-                                  ItemsSource="{x:Bind ViewModel.HandShakes}"
-                                  MinWidth="170"
-                                  IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"
-                                  ToolTipService.ToolTip="指定在为 SerialPort 对象建立串行端口通信时使用的控制协议。"
-                                  Header="流控制" />
-                        <TextBox Text="{x:Bind ViewModel.DS.ReadTimeOut ,Mode=TwoWay}"
-                                 HorizontalAlignment="Stretch"
-                                 Header="读超时" />
-                        <TextBox Text="{x:Bind ViewModel.DS.WriteTimeOut ,Mode=TwoWay}"
-                                 HorizontalAlignment="Stretch"
-                                 Header="写超时" />
-                        <TextBox Text="{x:Bind ViewModel.DS.SleepTime ,Mode=TwoWay}"
-                                 HorizontalAlignment="Stretch"
-                                 Header="延时读取" />
-                        <TextBox Text="{x:Bind ViewModel.DS.ReceiveTimeout ,Mode=TwoWay}"
-                                 HorizontalAlignment="Stretch"
-                                 Header="接收超时" />
-                    </StackPanel>
-                </Expander.Content>
-            </Expander>
-        </StackPanel>
+            <StackPanel Spacing="8"
+                        Margin="10,0,0,0"
+                        x:Name="StackPanel_MainRight">
+                <!--#region 源 型号 -->
+                <TextBlock Text="标准源型号" FontSize="16" />
+                <ComboBox HorizontalAlignment="Stretch"
+                          PlaceholderText="选择设备型号"
+                          MinWidth="200"
+                          ToolTipService.ToolTip="选择您的设备型号"
+                          ItemsSource="{x:Bind ViewModel.DsModels}"
+                          SelectedValue="{x:Bind ViewModel.DsModel ,Mode=TwoWay}"
+                          IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                <!--#endregion-->
+                <!--#region 源 串口参数设置 -->
+                <TextBlock Text="标准源参数配置"
+                           FontSize="16" Margin="0,10,0,0"/>
+                <Expander MinWidth="200"
+                          HorizontalContentAlignment="Stretch"
+                          IsExpanded="True"
+                          HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <ToggleSwitch OffContent="串口关闭"
+                                      OnContent="串口打开"
+                                      Name="ToggleSwitch_SS">
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Toggled">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.ToggleSwitch_ToggledCommand}"
+                                                              CommandParameter="{Binding ElementName=ToggleSwitch_SS,Path=IsOn}" />
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </ToggleSwitch>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <StackPanel Orientation="Vertical"
+                                    Spacing="15">
+                            <ComboBox PlaceholderText="选择端口号"
+                                      ItemsSource="{x:Bind ViewModel.Ports}"
+                                      MinWidth="170"
+                                      SelectedIndex="0"
+                                      ToolTipService.ToolTip="设置通信端口。"
+                                      SelectedItem="{x:Bind ViewModel.Port ,Mode=TwoWay}"
+                                      Header="端口号"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="设置波特率"
+                                      ItemsSource="{x:Bind ViewModel.BaudRates}"
+                                      MinWidth="170"
+                                      IsEditable="False"
+                                      SelectedIndex="2"
+                                      ToolTipService.ToolTip="设置串行波特率。"
+                                      SelectedValue="{x:Bind ViewModel.BaudRate ,Mode=TwoWay}"
+                                      Header="波特率"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择校验位"
+                                      ItemsSource="{x:Bind ViewModel.Paritys}"
+                                      MinWidth="170"
+                                      SelectedIndex="0"
+                                      ToolTipService.ToolTip="指定 SerialPort 对象的奇偶校验位。"
+                                      Header="校验位"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择数据位"
+                                      ItemsSource="{x:Bind ViewModel.DataBits}"
+                                      MinWidth="170"
+                                      SelectedIndex="3"
+                                      ToolTipService.ToolTip="设置每个字节的标准数据位长度。"
+                                      Header="数据位"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择停止位"
+                                      ItemsSource="{x:Bind ViewModel.StopBits}"
+                                      MinWidth="170"
+                                      SelectedIndex="1"
+                                      ToolTipService.ToolTip="指定在 SerialPort 对象上使用的停止位的数目。"
+                                      Header="停止位"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择控制协议"
+                                      ItemsSource="{x:Bind ViewModel.HandShakes}"
+                                      MinWidth="170"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"
+                                      ToolTipService.ToolTip="指定在为 SerialPort 对象建立串行端口通信时使用的控制协议。"
+                                      Header="流控制" />
+                        </StackPanel>
+                    </Expander.Content>
+                </Expander>
+                <!--#endregion-->
+                <!--#region 源 超时设置 -->
+                <Expander HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <TextBlock Text="读取延时"
+                                       VerticalAlignment="Center" />
+                            <NumberBox Value="{x:Bind ViewModel.DS.SleepTime ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="10"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       MinWidth="160"
+                                       Minimum="10"
+                                       Maximum="500" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <StackPanel Spacing="15">
+                            <NumberBox Value="{x:Bind ViewModel.DS.ReadTimeOut ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       Header="端口读超时"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="500"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       Minimum="500"
+                                       Maximum="9000" />
+                            <NumberBox Value="{x:Bind ViewModel.DS.WriteTimeOut ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       Header="端口写超时"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="500"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       Minimum="500"
+                                       Maximum="9000" />
+                            <NumberBox Value="{x:Bind ViewModel.DS.ReceiveTimeout ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       Header="数据接收超时"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="500"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       Minimum="500"
+                                       Maximum="9000" />
+                        </StackPanel>
+                    </Expander.Content>
+                </Expander>
+                <!--#endregion-->
+                <!--#region 表 串口设置 -->
+                <TextBlock Text="标准表参数配置"
+                           FontSize="16"
+                           Margin="0,10,0,0" />
+                <Expander MinWidth="200"
+                          HorizontalContentAlignment="Stretch"
+                          IsExpanded="True"
+                          HorizontalAlignment="Stretch">
+                    <Expander.Header>
+                        <ToggleSwitch OffContent="串口关闭"
+                                      OnContent="串口打开"
+                                      Name="ToggleSwitch_SM">
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="Toggled">
+                                    <core:InvokeCommandAction Command="{x:Bind ViewModel.ToggleSwitch_ToggledCommand}"
+                                                              CommandParameter="{Binding ElementName=ToggleSwitch_SM,Path=IsOn}" />
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
+                        </ToggleSwitch>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <StackPanel Orientation="Vertical"
+                                    Spacing="15">
+                            <ComboBox PlaceholderText="选择端口号"
+                                      ItemsSource="{x:Bind ViewModel.Ports}"
+                                      MinWidth="170"
+                                      SelectedIndex="0"
+                                      ToolTipService.ToolTip="设置通信端口。"
+                                      SelectedItem="{x:Bind ViewModel.Port ,Mode=TwoWay}"
+                                      Header="端口号"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="设置波特率"
+                                      ItemsSource="{x:Bind ViewModel.BaudRates}"
+                                      MinWidth="170"
+                                      IsEditable="False"
+                                      SelectedIndex="2"
+                                      ToolTipService.ToolTip="设置串行波特率。"
+                                      SelectedValue="{x:Bind ViewModel.BaudRate ,Mode=TwoWay}"
+                                      Header="波特率"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择校验位"
+                                      ItemsSource="{x:Bind ViewModel.Paritys}"
+                                      MinWidth="170"
+                                      SelectedIndex="0"
+                                      ToolTipService.ToolTip="指定 SerialPort 对象的奇偶校验位。"
+                                      Header="校验位"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择数据位"
+                                      ItemsSource="{x:Bind ViewModel.DataBits}"
+                                      MinWidth="170"
+                                      SelectedIndex="3"
+                                      ToolTipService.ToolTip="设置每个字节的标准数据位长度。"
+                                      Header="数据位"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择停止位"
+                                      ItemsSource="{x:Bind ViewModel.StopBits}"
+                                      MinWidth="170"
+                                      SelectedIndex="1"
+                                      ToolTipService.ToolTip="指定在 SerialPort 对象上使用的停止位的数目。"
+                                      Header="停止位"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                            <ComboBox PlaceholderText="选择控制协议"
+                                      ItemsSource="{x:Bind ViewModel.HandShakes}"
+                                      MinWidth="170"
+                                      IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"
+                                      ToolTipService.ToolTip="指定在为 SerialPort 对象建立串行端口通信时使用的控制协议。"
+                                      Header="流控制" />
+                        </StackPanel>
+                    </Expander.Content>
+                </Expander>
+                <!--#endregion-->
+                <!--#region 表 超时设置 -->
+                <Expander HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Stretch">
+                    <Expander.Header>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            <TextBlock Text="读取延时"
+                                       VerticalAlignment="Center" />
+                            <NumberBox Value="{x:Bind ViewModel.DS.SleepTime ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="10"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       MinWidth="160"
+                                       Minimum="10"
+                                       Maximum="500" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <StackPanel Spacing="15">
+                            <NumberBox Value="{x:Bind ViewModel.DS.ReadTimeOut ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       Header="端口读超时"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="500"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       Minimum="500"
+                                       Maximum="9000" />
+                            <NumberBox Value="{x:Bind ViewModel.DS.WriteTimeOut ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       Header="端口写超时"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="500"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       Minimum="500"
+                                       Maximum="9000" />
+                            <NumberBox Value="{x:Bind ViewModel.DS.ReceiveTimeout ,Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch"
+                                       Header="数据接收超时"
+                                       SpinButtonPlacementMode="Inline"
+                                       SmallChange="500"
+                                       AcceptsExpression="True"
+                                       PlaceholderText="单位：毫秒"
+                                       Minimum="500"
+                                       Maximum="9000" />
+                        </StackPanel>
+                    </Expander.Content>
+                </Expander>
+                <!--#endregion-->
+            </StackPanel>
         </ScrollViewer>
+        <!--#endregion 边栏-->
+        <!--#region 底部状态栏 -->
         <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     Grid.ColumnSpan="2">
@@ -144,5 +322,6 @@
                 </InfoBar.ActionButton>
             </InfoBar>
         </StackPanel>
+        <!--#endregion-->
     </Grid>
 </Page>

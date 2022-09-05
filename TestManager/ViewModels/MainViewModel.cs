@@ -75,9 +75,9 @@ public partial class MainViewModel : ObservableObject
             {
                 case true:
                     DisableSerialPortEdit = false;
-                    if ( dsModel != null && port != null )
+                    if ( dsModel!=null&& port != null )
                     {
-                        DS = new Dandick(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , dsModel));
+                        DS = new Dandick( ( DKCommunicationNET. Models )Enum.Parse(typeof(DKCommunicationNET.Models),dsModel));
                         DS. SerialPortInni(port , baudRate);
                         DS. Open();
 
