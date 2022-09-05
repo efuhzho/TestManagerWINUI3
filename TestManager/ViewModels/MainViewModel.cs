@@ -1,17 +1,8 @@
-﻿using CommunityToolkit. Mvvm. ComponentModel;
-using Windows. UI. Popups;
-using WinUIEx. Messaging;
-using System. Windows;
-using Microsoft. UI. Xaml. Controls;
-using Windows. Foundation. Metadata;
+﻿using System. IO. Ports;
+using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
-using System. Windows. Input;
-using TestManager. Core. Contracts. Services;
-using TestManager. Core. Services;
-using TestManager. Core. Models;
-using System. IO. Ports;
-using Windows. Devices. SerialCommunication;
 using DKCommunicationNET;
+using Microsoft. UI. Xaml. Controls;
 
 namespace TestManager. ViewModels;
 
@@ -37,7 +28,7 @@ public partial class MainViewModel : ObservableObject
     private string? infobarMessage;
 
     [ObservableProperty]
-    private string? infoBarSeverity ;
+    private InfoBarSeverity infoBarSeverity = InfoBarSeverity. Success;
 
     #endregion
 
@@ -89,13 +80,12 @@ public partial class MainViewModel : ObservableObject
     private bool disableSerialPortEdit = true;
 
     [RelayCommand]
-    private  void ToggleSwitch_Toggled (bool isOn)
+    private void ToggleSwitch_Toggled (bool isOn)
     {
-        try
+        switch ( isOn )
         {
-            switch ( isOn )
-            {
-                case true:
+            case true:
+                {
                     DisableSerialPortEdit = false;
 
                     if ( SS_Model != null && PortName != null )
@@ -107,41 +97,46 @@ public partial class MainViewModel : ObservableObject
                         SS. SerialPortInni(PortName , baudRate);
 
                         //打开串口并发送握手报文
-                        SS. Open();
 
-                        if ( !SS.IsOpen() )
+                        try
                         {
-                            InfoBarSeverity="0";
+                            SS. Open();
+                            if ( !SS. IsOpen() )
+                            {
+                                InfoBarSeverity = InfoBarSeverity. Error;
+                                IsInfobarShow = true;
+                                InfobarTitle = "Failed";
+                                InfobarMessage = "串口打开失败。";
+                                return;
+                            }
+                            InfoBarSeverity = InfoBarSeverity. Success;
                             IsInfobarShow = true;
-                            InfobarTitle = "Failed";
-                            infobarMessage = "串口打开失败。";
-                            return;
+                            InfobarTitle = "Success";
+                            InfobarMessage = "串口打开成功。";
+                            Model = SS. Model;
                         }
-                        InfoBarSeverity = "0";
-                        IsInfobarShow = true;
-                        InfobarTitle = "Success";
-                        infobarMessage = "串口打开成功。";
-                        Model = SS. Model;
+                        catch ( Exception ex )
+                        {
+                            InfoBarSeverity = InfoBarSeverity. Warning;
+                            IsInfobarShow = true;
+                            InfobarTitle = "Warning";
+                            InfobarMessage = ex. Message;
+                        }
                     }
                     break;
+                }
 
-                case false:
+            case false:
+                {
                     DisableSerialPortEdit = true;
+
                     if ( SS != null )
                     {
                         SS. Close();
                     }
                     break;
-            }
+                }
         }
-        catch ( Exception  )
-        {
-            InfoBarSeverity = "Error";
-            IsInfobarShow = true;
-            InfobarTitle = "Warning";
-            infobarMessage = "串口打开过程中发生了异常：";
-        }
-
     }
 
     #region 自动界面处理方法

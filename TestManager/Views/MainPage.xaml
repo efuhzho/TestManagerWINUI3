@@ -49,10 +49,11 @@
         <ScrollViewer Grid.Column="1">
             <StackPanel Spacing="8"
                         Margin="10,0,0,0"
-                        x:Name="StackPanel_MainRight">
+                        >
                 <!--#region 源 型号 -->
                 <TextBlock Text="标准源型号"
-                           FontSize="16" />
+                           FontSize="16"
+                           Foreground="#4CC2FF"/>
                 <ComboBox HorizontalAlignment="Stretch"
                           PlaceholderText="选择设备型号"
                           MinWidth="200"
@@ -61,27 +62,26 @@
                           SelectedValue="{x:Bind ViewModel.DsModels ,Mode=TwoWay}"
                           SelectedIndex="0"
                           IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-               
                 <!--#endregion-->
                 <!--#region 源 串口参数设置 -->
                 <TextBlock Text="标准源参数配置"
                            FontSize="16"
                            Margin="0,10,0,0" />
-                <InfoBar IsOpen="True"
+                <InfoBar IsOpen="{x:Bind ViewModel.IsInfobarShow,Mode=TwoWay}"
                          IsIconVisible="True"
                          IsClosable="True"
-                         Title="{x:Bind ViewModel.InfobarTitle}"
-                         Message="{x:Bind ViewModel.InfobarMessage}"
-                         Severity="{x:Bind ViewModel.InfoBarSeverity}" />
+                         Title="{x:Bind ViewModel.InfobarTitle,Mode=OneWay}"
+                         Message="{x:Bind ViewModel.InfobarMessage,Mode=OneWay}"
+                         Severity="{x:Bind ViewModel.InfoBarSeverity,Mode=OneWay}" MaxWidth="400"/>
                 <Expander MinWidth="200"
                           HorizontalContentAlignment="Stretch"
                           IsExpanded="True"
-                          HorizontalAlignment="Stretch">
-                    <Expander.Header>
-                        <StackPanel Orientation="Vertical">
-                            <ToggleSwitch OffContent="串口关闭"
-                                          OnContent="串口打开"
-                                          Name="ToggleSwitch_SS">
+                          HorizontalAlignment="Stretch" Background="DarkSlateGray">
+                    <Expander.Header >
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="8">
+                            
+                            <ToggleSwitch Name="ToggleSwitch_SS"  VerticalAlignment="Center" >
                                 <interactivity:Interaction.Behaviors>
                                     <core:EventTriggerBehavior EventName="Toggled">
                                         <core:InvokeCommandAction Command="{x:Bind ViewModel.ToggleSwitch_ToggledCommand}"
@@ -89,21 +89,19 @@
                                     </core:EventTriggerBehavior>
                                 </interactivity:Interaction.Behaviors>
                             </ToggleSwitch>
-                           
-                        </StackPanel>
-                        
-                    </Expander.Header>
-                    <Expander.Content>
-                        <StackPanel Spacing="15">
                             <ComboBox PlaceholderText="选择端口号"
-                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"
                                       ItemsSource="{x:Bind ViewModel.Ports}"
-                                      MinWidth="170"
+                                      MinWidth="120"
                                       SelectedIndex="0"
                                       ToolTipService.ToolTip="设置通信端口。"
                                       SelectedItem="{x:Bind ViewModel.PortName ,Mode=TwoWay}"
-                                      Header="端口号"
                                       IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
+                        </StackPanel>
+                    </Expander.Header>
+                    <Expander.Content>
+                        <StackPanel Spacing="15">
+                            
                             <ComboBox PlaceholderText="设置波特率"
                                       HorizontalAlignment="Stretch"
                                       ItemsSource="{x:Bind ViewModel.BaudRates}"
@@ -210,9 +208,8 @@
                           IsExpanded="True"
                           HorizontalAlignment="Stretch">
                     <Expander.Header>
-                        <ToggleSwitch OffContent="串口关闭"
-                                      OnContent="串口打开"
-                                      Name="ToggleSwitch_SM">
+                        <ToggleSwitch 
+                                      Name="ToggleSwitch_SM" >
                             <interactivity:Interaction.Behaviors>
                                 <core:EventTriggerBehavior EventName="Toggled">
                                     <core:InvokeCommandAction Command="{x:Bind ViewModel.ToggleSwitch_ToggledCommand}"
