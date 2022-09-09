@@ -21,7 +21,7 @@ public sealed partial class MainPage : Page
 
 
     private void ToggleSwitch_SS_Toggled (object sender , Microsoft. UI. Xaml. RoutedEventArgs e)
-    {
+    {       
         ViewModel. ToggleSwitch_Toggled(ToggleSwitch_SS. IsOn);
         if ( ViewModel. IsOn_PortSwitch )
         {
@@ -30,6 +30,6 @@ public sealed partial class MainPage : Page
         else
         {
             ToggleSwitch_SS. IsOn = false;
-        }
+        }       
     }
 }

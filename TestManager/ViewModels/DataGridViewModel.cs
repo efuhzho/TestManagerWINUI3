@@ -24,11 +24,11 @@ public class DataGridViewModel : ObservableRecipient, INavigationAware
         Source.Clear();
 
         // TODO: Replace with real data.
-        var data = await _sampleDataService.GetGridDataAsync();
+        var data = await _sampleDataService. GetGridDataAsync();
 
-        foreach (var item in data)
+        foreach ( var item in data )
         {
-            Source.Add(item);
+            Source. Add(item);
         }
     }
 

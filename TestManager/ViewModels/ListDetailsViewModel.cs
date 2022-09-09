@@ -31,11 +31,11 @@ public class ListDetailsViewModel : ObservableRecipient, INavigationAware
         SampleItems.Clear();
 
         // TODO: Replace with real data.
-        var data = await _sampleDataService.GetListDetailsDataAsync();
+        var data = await _sampleDataService. GetListDetailsDataAsync();
 
-        foreach (var item in data)
+        foreach ( var item in data )
         {
-            SampleItems.Add(item);
+            SampleItems. Add(item);
         }
     }
 
@@ -45,9 +45,6 @@ public class ListDetailsViewModel : ObservableRecipient, INavigationAware
 
     public void EnsureItemSelected()
     {
-        if (Selected == null)
-        {
-            Selected = SampleItems.First();
-        }
+        Selected ??= SampleItems.First();
     }
 }

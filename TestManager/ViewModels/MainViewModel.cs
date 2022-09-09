@@ -3,6 +3,7 @@ using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
 using DKCommunicationNET;
 using DKCommunicationNET. Module;
+using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
 
 namespace TestManager. ViewModels;
@@ -14,6 +15,19 @@ public partial class MainViewModel : ObservableObject
         portName = portNames[0];
         baudRate = baudRates[2];
     }
+
+    /// <summary>
+    /// 用户选择的设备ID
+    /// </summary>
+    [ObservableProperty]
+    private ushort iD;
+    
+    /// <summary>
+    /// 设备型号
+    /// </summary>
+    [ObservableProperty]
+    private string[] dandickModels = Enum. GetNames(typeof(DKCommunicationNET. Models));
+
 
     #region 源串口打开Infobar绑定
     /// <summary>
@@ -45,7 +59,7 @@ public partial class MainViewModel : ObservableObject
     /// 丹迪克设备对象
     /// </summary>
     [ObservableProperty]
-    private Dandick? sS;
+    private DKStandardSource? dKS;
 
     /// <summary>
     /// 当前选择的设备型号
@@ -89,8 +103,7 @@ public partial class MainViewModel : ObservableObject
 
     #region ComboBox初始化
 
-    [ObservableProperty]
-    private string[] dandickModels = Enum. GetNames(typeof(DKCommunicationNET. Models));
+    
 
     [ObservableProperty]
     private string[]? portNames = SerialPort. GetPortNames();
@@ -110,7 +123,11 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private int[] dataBits = new int[] { 5 , 6 , 7 , 8 };
 
-
+    /// <summary>
+    /// 串口开关打开时，显示超时设置选项
+    /// </summary>
+    [ObservableProperty]
+    private Visibility visibilityFollowToggleSwitch = Visibility. Collapsed;
 
     #endregion
     /// <summary>
@@ -119,15 +136,24 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool disableSerialPortEdit = true;
 
+    /// <summary>
+    /// 当点击开关时显示转圈圈
+    /// </summary>
+    [ObservableProperty]
+    bool progressRingWhenSwitching;
+
+    /// <summary>
+    /// 打开串口开关时，设备实例化
+    /// </summary>
+    /// <param name="isOn"></param>
     public async void ToggleSwitch_Toggled (bool isOn)
     {
+
         switch ( isOn )
         {
             //正在打开串口
             case true:
 
-                //禁用参数设置控件
-                DisableSerialPortEdit = false;
                 //判断是否选择型号和串口号
                 if ( SS_Model == null || PortName == null )
                 {
@@ -138,13 +164,18 @@ public partial class MainViewModel : ObservableObject
                     IsOn_PortSwitch = false;
                     return;
                 }
+
                 //实例化对象
-                SS = new Dandick(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , SS_Model));
+                DKS = new DKStandardSource(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , SS_Model),ID);
                 //初始化串口参数
-                SS. SerialPortInni(PortName , baudRate);
+                DKS. SerialPortInni(PortName , baudRate);
 
                 //打开串口并发送握手报文
-                var result = SS. Open();
+                if ( DKS. IsOpen() )
+                {
+                    DKS. Close();
+                }
+                var result = DKS. Open();
 
                 if ( result. IsSuccess )
                 {
@@ -153,17 +184,21 @@ public partial class MainViewModel : ObservableObject
                     InfobarTitle = "Success";
                     InfobarMessage = result. Content;
                     IsOn_PortSwitch = true;
+                    ProgressRingWhenSwitching = true;
 
                     await Task. Run(() =>
                     {
-                        SS. HandShake();
 
-                        //获取交流源档位信息
-                        var result_GetRanges = SS. ACS. GetRanges();
-                        SS. DCS. GetRanges();
+                        DKS. Settings?.HandShake();
+                        DKS. ACS?.GetRanges();
+                        DKS. DCS?.GetRanges();
                     });
-                    Ranges_ACU = SS. ACS. Ranges_ACU;
-                    Ranges_ACI = SS. ACS.Ranges_ACI;
+                    Ranges_ACU = DKS. ACS?.Ranges_ACU;
+                    Ranges_ACI = DKS. ACS?.Ranges_ACI;
+                    //禁用参数设置控件
+                    DisableSerialPortEdit = false;
+                    VisibilityFollowToggleSwitch = Visibility. Visible;
+                    ProgressRingWhenSwitching = false;
                     return;
                 }
                 else
@@ -178,13 +213,10 @@ public partial class MainViewModel : ObservableObject
 
             //正在关闭串口
             case false:
-
                 DisableSerialPortEdit = true;
+                VisibilityFollowToggleSwitch = Visibility. Collapsed;
                 IsOn_PortSwitch = false;
-                if ( SS != null )
-                {
-                    SS. Close();
-                }
+                DKS?.Close();
                 break;
         }
     }

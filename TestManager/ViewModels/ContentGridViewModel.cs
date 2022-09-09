@@ -36,10 +36,10 @@ public class ContentGridViewModel : ObservableRecipient, INavigationAware
         Source.Clear();
 
         // TODO: Replace with real data.
-        var data = await _sampleDataService.GetContentGridDataAsync();
-        foreach (var item in data)
+        var data = await _sampleDataService. GetContentGridDataAsync();
+        foreach ( var item in data )
         {
-            Source.Add(item);
+            Source. Add(item);
         }
     }
 

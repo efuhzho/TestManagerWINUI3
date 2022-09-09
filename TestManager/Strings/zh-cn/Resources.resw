@@ -165,10 +165,4 @@
   <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
     <value>https://YourPrivacyUrlGoesHere/</value>
   </data>
-  <data name="ComboBox_DeviceModel.Header" xml:space="preserve">
-    <value>型号</value>
-  </data>
-  <data name="ComboBox_DeviceModel.PlaceholderText" xml:space="preserve">
-    <value>选择设备型号</value>
-  </data>
 </root>
