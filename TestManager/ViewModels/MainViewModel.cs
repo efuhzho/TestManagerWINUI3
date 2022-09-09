@@ -21,7 +21,7 @@ public partial class MainViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private ushort iD;
-    
+
     /// <summary>
     /// 设备型号
     /// </summary>
@@ -79,31 +79,30 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private int baudRate;
 
-    #region 从实例同步的引用类型数据
+    #region 《数据区
 
     /// <summary>
     /// 下位机回复的型号
     /// </summary>
     [ObservableProperty]
     private string? model;
-
     /// <summary>
-    /// 交流电压档位集合
+    /// 下位机回复的交流电压档位集合
     /// </summary>
     [ObservableProperty]
-    private float[]? ranges_ACU;
-
+    private float[]? ranges_ACU;   
     /// <summary>
-    /// 交流电压档位集合
+    /// 交流电流档位集合
     /// </summary>
     [ObservableProperty]
     private float[]? ranges_ACI;
-    #endregion
+    
+    #endregion 数据区》
 
 
     #region ComboBox初始化
 
-    
+
 
     [ObservableProperty]
     private string[]? portNames = SerialPort. GetPortNames();
@@ -166,7 +165,7 @@ public partial class MainViewModel : ObservableObject
                 }
 
                 //实例化对象
-                DKS = new DKStandardSource(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , SS_Model),ID);
+                DKS = new DKStandardSource(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , SS_Model) , ID);
                 //初始化串口参数
                 DKS. SerialPortInni(PortName , baudRate);
 
@@ -180,24 +179,31 @@ public partial class MainViewModel : ObservableObject
                 if ( result. IsSuccess )
                 {
                     InfoBarSeverity = InfoBarSeverity. Success;
-                    IsInfobarShow = false;   //TODO 改为false
+                    IsInfobarShow = false;
                     InfobarTitle = "Success";
                     InfobarMessage = result. Content;
                     IsOn_PortSwitch = true;
+                    //开始转圈圈
                     ProgressRingWhenSwitching = true;
 
                     await Task. Run(() =>
                     {
-
+                        //执行联机命令
                         DKS. Settings?.HandShake();
+                        //获取交流源档位
                         DKS. ACS?.GetRanges();
+                        //获取直流源档位
                         DKS. DCS?.GetRanges();
                     });
-                    Ranges_ACU = DKS. ACS?.Ranges_ACU;
-                    Ranges_ACI = DKS. ACS?.Ranges_ACI;
+                    //交流电压档位集合初始化
+                    Ranges_ACU = DKS. ACS?.Ranges_ACU ;
+                    //交流电流档位集合初始化
+                    Ranges_ACI = DKS. ACS?.Ranges_ACI ;
                     //禁用参数设置控件
                     DisableSerialPortEdit = false;
+                    //打开串口超时参数设置控件
                     VisibilityFollowToggleSwitch = Visibility. Visible;
+                    //停止转圈圈
                     ProgressRingWhenSwitching = false;
                     return;
                 }

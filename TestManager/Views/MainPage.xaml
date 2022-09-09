@@ -19,13 +19,18 @@
         <!--#region TabView -->
         <TabView SelectedIndex="0"
                  IsAddTabButtonVisible="False"
-                 TabWidthMode="SizeToContent">
+                 TabWidthMode="Equal" CornerRadius="20" >
+            <TabView.Background >
+                <SolidColorBrush Color="{StaticResource SystemAccentColor }" Opacity="0.1" />                
+            </TabView.Background>
             <TabView.TabItems>
+                <!--源控制选项卡-->
                 <TabViewItem  Header="源控制"
                               IsClosable="False">
                     <TabViewItem.IconSource>
                         <SymbolIconSource Symbol="Home" />
                     </TabViewItem.IconSource>
+                    <!--boot-->
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="AUTO" />
@@ -35,12 +40,12 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <!--#region 数据显示区 -->
+                        <!--#region 交流源数据显示网格 -->
                         <Grid Margin="8"
                               CornerRadius="10">
                             <!--背景-->
                             <Grid.Background>
-                                <SolidColorBrush Color="Black"
+                                <SolidColorBrush Color="{StaticResource SystemAccentColor}"
                                                  Opacity="0.1" />
                             </Grid.Background>
                             <!--设置资源-->
@@ -84,13 +89,15 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="AUTO" />
                                 <ColumnDefinition Width="AUTO" />
-                                <ColumnDefinition MinWidth="150"
+                                <ColumnDefinition MinWidth="130"
                                                   Width="auto" />
-                                <ColumnDefinition MinWidth="150"
+                                <ColumnDefinition MinWidth="130"
                                                   Width="auto" />
-                                <ColumnDefinition MinWidth="150"
+                                <ColumnDefinition MinWidth="130"
                                                   Width="auto" />
-                                <ColumnDefinition MinWidth="150"
+                                <ColumnDefinition MinWidth="130"
+                                                  Width="auto" />
+                                <ColumnDefinition MinWidth="130"
                                                   Width="auto" />
                             </Grid.ColumnDefinitions>
                             <!--#region 表头 -->
@@ -101,6 +108,8 @@
                             <TextBlock Grid.Column="4"
                                        Text="C" />
                             <TextBlock Grid.Column="5"
+                                       Text="X" />
+                            <TextBlock Grid.Column="6"
                                        Text="Σ" />
                             <TextBlock Grid.Row="1"
                                        Grid.Column="0"
@@ -176,7 +185,7 @@
                                        Text="Hz"
                                        Foreground="Gray" />
                             <!--#endregion-->
-                            <!--#region 数据 -->
+                            <!--#region 行1：交流电压数据行 -->
                             <NumberBox Grid.Row="1"
                                        Grid.Column="2"
                                        Value="{x:Bind ViewModel.DKS.ACS.UA,Mode=OneWay}" />
@@ -186,14 +195,19 @@
                             <NumberBox Grid.Row="1"
                                        Grid.Column="4"
                                        Value="{x:Bind ViewModel.DKS.ACS.UC,Mode=OneWay}" />
+                            <NumberBox Grid.Row="1"
+                                       Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.UX,Mode=OneWay}" />
+                            <!--交流电压档位列表-->
                             <ComboBox Header="ACU Ranges"
                                       Grid.Row="1"
                                       Grid.RowSpan="2"
-                                      Grid.Column="5"
+                                      Grid.Column="6"
                                       ItemsSource="{x:Bind ViewModel.Ranges_ACU,Mode=OneWay}"
                                       SelectedIndex="0"
                                       HorizontalAlignment="Stretch"
                                       Margin="5" />
+                            <!--行2：交流电流数据-->
                             <NumberBox Grid.Row="2"
                                        Grid.Column="2"
                                        Value="{x:Bind ViewModel.DKS.ACS.IA,Mode=OneWay}" />
@@ -203,10 +217,14 @@
                             <NumberBox Grid.Row="2"
                                        Grid.Column="4"
                                        Value="{x:Bind ViewModel.DKS.ACS.IC,Mode=OneWay}" />
+                            <NumberBox Grid.Row="2"
+                                       Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.IX,Mode=OneWay}" />
+                            <!--交流电流档位列表-->
                             <ComboBox Header="ACI Ranges"
                                       Grid.Row="3"
                                       Grid.RowSpan="2"
-                                      Grid.Column="5"
+                                      Grid.Column="6"
                                       ItemsSource="{x:Bind ViewModel.Ranges_ACI,Mode=OneWay}"
                                       SelectedIndex="0"
                                       HorizontalAlignment="Stretch"
@@ -222,8 +240,7 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.FAI_UC,Mode=OneWay}" />
                             <NumberBox Grid.Row="3"
                                        Grid.Column="5"
-                                       Value="NaN"
-                                       Visibility="Collapsed" />
+                                       Value="{x:Bind ViewModel.DKS.ACS.FAI_UX,Mode=OneWay}" />
                             <NumberBox Grid.Row="4"
                                        Grid.Column="2"
                                        Value="{x:Bind ViewModel.DKS.ACS.FAI_IA,Mode=OneWay}" />
@@ -235,8 +252,7 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.FAI_IC,Mode=OneWay}" />
                             <NumberBox Grid.Row="4"
                                        Grid.Column="5"
-                                       Value="NaN"
-                                       Visibility="Collapsed" />
+                                       Value="{x:Bind ViewModel.DKS.ACS.FAI_IX,Mode=OneWay}" />
                             <NumberBox Grid.Row="5"
                                        Grid.Column="2"
                                        Value="NaN"
@@ -253,6 +269,10 @@
                                        Grid.Column="5"
                                        Value="NaN"
                                        IsEnabled="False" />
+                            <NumberBox Grid.Row="5"
+                                       Grid.Column="6"
+                                       Value="NaN"
+                                       IsEnabled="False" />
                             <NumberBox Grid.Row="6"
                                        Grid.Column="2"
                                        Value="NaN"
@@ -267,6 +287,10 @@
                                        IsEnabled="False" />
                             <NumberBox Grid.Row="6"
                                        Grid.Column="5"
+                                       Value="NaN"
+                                       IsEnabled="False" />
+                            <NumberBox Grid.Row="6"
+                                       Grid.Column="6"
                                        Value="NaN"
                                        IsEnabled="False" />
                             <NumberBox Grid.Row="7"
@@ -280,6 +304,9 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.PC,Mode=OneWay}" />
                             <NumberBox Grid.Row="7"
                                        Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.PX,Mode=OneWay}" />
+                            <NumberBox Grid.Row="7"
+                                       Grid.Column="6"
                                        Value="{x:Bind ViewModel.DKS.ACS.P,Mode=OneWay}" />
                             <NumberBox Grid.Row="8"
                                        Grid.Column="2"
@@ -292,6 +319,9 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.QC,Mode=OneWay}" />
                             <NumberBox Grid.Row="8"
                                        Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.QX,Mode=OneWay}" />
+                            <NumberBox Grid.Row="8"
+                                       Grid.Column="6"
                                        Value="{x:Bind ViewModel.DKS.ACS.Q,Mode=OneWay}" />
                             <NumberBox Grid.Row="9"
                                        Grid.Column="2"
@@ -304,6 +334,9 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.SC,Mode=OneWay}" />
                             <NumberBox Grid.Row="9"
                                        Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.SX,Mode=OneWay}" />
+                            <NumberBox Grid.Row="9"
+                                       Grid.Column="6"
                                        Value="{x:Bind ViewModel.DKS.ACS.S,Mode=OneWay}" />
                             <NumberBox Grid.Row="10"
                                        Grid.Column="2"
@@ -316,6 +349,9 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.PFC,Mode=OneWay}" />
                             <NumberBox Grid.Row="10"
                                        Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.PFX,Mode=OneWay}" />
+                            <NumberBox Grid.Row="10"
+                                       Grid.Column="6"
                                        Value="{x:Bind ViewModel.DKS.ACS.PF,Mode=OneWay}" />
                             <NumberBox Grid.Row="11"
                                        Grid.Column="2"
@@ -328,6 +364,9 @@
                                        Value="{x:Bind ViewModel.DKS.ACS.Freq_C,Mode=OneWay}" />
                             <NumberBox Grid.Row="11"
                                        Grid.Column="5"
+                                       Value="{x:Bind ViewModel.DKS.ACS.Freq_C,Mode=OneWay}" />
+                            <NumberBox Grid.Row="11"
+                                       Grid.Column="6"
                                        Value="{x:Bind ViewModel.DKS.ACS.Freq,Mode=OneWay}" />
                             <!--#endregion-->
                         </Grid>
@@ -371,7 +410,8 @@
                     <NumberBox  Minimum="0"
                                 Value="{x:Bind ViewModel.ID,Mode=TwoWay}"
                                 Maximum="65535"
-                                MinWidth="100" ToolTipService.ToolTip="输入要连接的设备ID,默认值 0"/>
+                                MinWidth="100"
+                                ToolTipService.ToolTip="输入要连接的设备ID,默认值 0" />
                 </StackPanel>
                 <!--#endregion-->
                 <!--#region 源 串口参数设置 -->
@@ -391,7 +431,8 @@
                                   Toggled="ToggleSwitch_SS_Toggled"
                                   Padding="0"
                                   Width="auto" />
-                    <ProgressRing IsActive="{x:Bind ViewModel.ProgressRingWhenSwitching ,Mode=OneWay}" IsIndeterminate="True"/>
+                    <ProgressRing IsActive="{x:Bind ViewModel.ProgressRingWhenSwitching ,Mode=OneWay}"
+                                  IsIndeterminate="True" />
                 </StackPanel>
                 <!--串口参数折叠控件-->
                 <Expander MinWidth="200"
@@ -407,18 +448,19 @@
                     <Expander.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
-                            <ComboBox PlaceholderText="选择端口号" 
+                            <ComboBox PlaceholderText="选择端口号"
                                       VerticalAlignment="Center"
                                       ItemsSource="{x:Bind ViewModel.PortNames}"
-                                     HorizontalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch"
                                       SelectedIndex="0"
                                       ToolTipService.ToolTip="设置通信端口。"
                                       SelectedItem="{x:Bind ViewModel.PortName ,Mode=TwoWay}"
                                       IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}" />
-                            <AppBarButton  Icon="Refresh" Grid.Column="1"
+                            <AppBarButton  Icon="Refresh"
+                                           Grid.Column="1"
                                            Label="刷新"
                                            LabelPosition="Collapsed" />
                         </Grid>
