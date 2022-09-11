@@ -51,7 +51,7 @@ public partial class MainViewModel : ObservableObject
 
     #endregion 数据区》
 
-    #region 源串口打开Infobar绑定
+    #region 状态栏Infobar绑定
     /// <summary>
     /// 串口打开进度
     /// </summary>
@@ -75,7 +75,6 @@ public partial class MainViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private bool isOn_PortSwitch;
-    #endregion
 
     /// <summary>
     /// 丹迪克设备对象
@@ -101,15 +100,8 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private int baudRate;
 
-   
-
-
-    #region ComboBox初始化
-
-
-
     [ObservableProperty]
-    private string[]? portNames = SerialPort. GetPortNames();
+    private List<string> portNames = SerialPort. GetPortNames().ToList();
 
     [ObservableProperty]
     private int[]? baudRates = new int[] { 9600 , 19200 , 115200 };
@@ -132,7 +124,6 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Visibility visibilityFollowToggleSwitch = Visibility. Collapsed;
 
-    #endregion
     /// <summary>
     /// 指示打开串口后禁用的状态
     /// </summary>
@@ -144,6 +135,15 @@ public partial class MainViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     bool progressRingWhenSwitching;
+
+    [RelayCommand]
+    void RefreshPortNames()
+    {
+        PortNames. Clear();
+        PortNames= SerialPort. GetPortNames().ToList();
+        PortNames. Sort();
+    }
+    #endregion
 
     [RelayCommand]
     void Read ()
