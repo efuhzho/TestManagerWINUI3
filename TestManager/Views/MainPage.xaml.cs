@@ -17,6 +17,7 @@ public sealed partial class MainPage : Page
         ViewModel = App. GetService<MainViewModel>();
         InitializeComponent();
         Array. Sort(ViewModel. DandickModels);
+        
     }
 
 
@@ -30,6 +31,11 @@ public sealed partial class MainPage : Page
         else
         {
             ToggleSwitch_SS. IsOn = false;
-        }       
+        }        
+    }
+
+    private void Button_Click (object sender , Microsoft. UI. Xaml. RoutedEventArgs e)
+    {
+        ViewModel. DKS. ACS. ReadData();
     }
 }
