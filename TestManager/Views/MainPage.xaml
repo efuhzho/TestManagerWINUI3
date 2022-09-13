@@ -21,13 +21,13 @@
                  IsAddTabButtonVisible="False"
                  TabWidthMode="Equal"
                  CornerRadius="20">
-                <TabView.TabItems>
-                    <!--源控制选项卡-->
-                    <TabViewItem  Header="源控制"
-                                  IsClosable="False">
-                        <TabViewItem.IconSource>
-                            <SymbolIconSource Symbol="Home" />
-                        </TabViewItem.IconSource>
+            <TabView.TabItems>
+                <!--源控制选项卡-->
+                <TabViewItem  Header="源控制"
+                              IsClosable="False">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource Symbol="Home" />
+                    </TabViewItem.IconSource>
                     <ScrollViewer>
                         <!--boot-->
                         <Grid>
@@ -50,8 +50,6 @@
                                 <!--设置资源-->
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
-                                        <Setter Property="FontSize"
-                                                Value="{Binding ElementName=sliderFontSize, Path=Value, Mode=TwoWay}" />
                                         <Setter Property="VerticalAlignment"
                                                 Value="Center" />
                                         <Setter Property="HorizontalAlignment"
@@ -67,18 +65,34 @@
                                         <Setter Property="AcceptsExpression"
                                                 Value="True" />
                                     </Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="Margin"
+                                                Value="5" />
+                                        <Setter Property="IsReadOnly"
+                                                Value="True" />
+                                    </Style>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="Margin"
+                                                Value="5" />
+                                        <Setter Property="HorizontalAlignment"
+                                                Value="Stretch" />
+                                    </Style>
                                 </Grid.Resources>
                                 <!--行定义-->
                                 <Grid.RowDefinitions>
+                                    <!--R0-->
                                     <RowDefinition MinHeight="50" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
+                                    <!--R5-->
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
+                                    <RowDefinition Height="AUTO" />
+                                    <!--R10-->
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
@@ -191,13 +205,13 @@
                                            Value="{x:Bind ViewModel.UA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="1"
                                            Grid.Column="3"
-                                           Text="{x:Bind ViewModel.DKS.ACS.UB,Mode=OneWay}" />
+                                           Text="{x:Bind ViewModel.UB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="1"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.UC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.UC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="1"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.UX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.UX,Mode=OneWay}" />
                                 <!--交流电压档位列表-->
                                 <ComboBox Header="ACU Ranges"
                                           Grid.Row="1"
@@ -210,16 +224,16 @@
                                 <!--行2：交流电流数据-->
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.IA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.IB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.IC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.IX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IX,Mode=OneWay}" />
                                 <!--交流电流档位列表-->
                                 <ComboBox Header="ACI Ranges"
                                           Grid.Row="3"
@@ -231,161 +245,185 @@
                                           Margin="5" />
                                 <NumberBox Grid.Row="3"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_UA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiUA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="3"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_UB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiUB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="3"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_UC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiUC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="3"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_UX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiUX,Mode=OneWay}" />
                                 <NumberBox Grid.Row="4"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_IA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiIA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="4"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_IB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiIB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="4"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_IC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiIC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="4"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.FAI_IX,Mode=OneWay}" />
-                                <NumberBox Grid.Row="5"
-                                           Grid.Column="2"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="5"
-                                           Grid.Column="3"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="5"
-                                           Grid.Column="4"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="5"
-                                           Grid.Column="5"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="5"
-                                           Grid.Column="6"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="6"
-                                           Grid.Column="2"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="6"
-                                           Grid.Column="3"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="6"
-                                           Grid.Column="4"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="6"
-                                           Grid.Column="5"
-                                           Value="NaN"
-                                           IsEnabled="False" />
-                                <NumberBox Grid.Row="6"
-                                           Grid.Column="6"
-                                           Value="NaN"
-                                           IsEnabled="False" />
+                                           Value="{x:Bind ViewModel.FaiIX,Mode=OneWay}" />
+                                <TextBox Grid.Row="5"
+                                         Text="{x:Bind ViewModel.THDUA}"
+                                         Grid.Column="2" />
+                                <TextBox Grid.Row="5"
+                                         Grid.Column="3"
+                                         Text="{x:Bind ViewModel.THDUB}" />
+                                <TextBox Grid.Row="5"
+                                         Grid.Column="4"
+                                         Text="{x:Bind ViewModel.THDUC}" />
+                                <TextBox Grid.Row="5"
+                                         Grid.Column="5"
+                                         Text="{x:Bind ViewModel.THDUX}" />
+                                <TextBox Grid.Row="5"
+                                         Grid.Column="6"
+                                         Text="{x:Bind ViewModel.THDU}" />
+                                <TextBox Grid.Row="6"
+                                         Grid.Column="2"
+                                         Text="{x:Bind ViewModel.THDIA}" />
+                                <TextBox Grid.Row="6"
+                                         Grid.Column="3"
+                                         Text="{x:Bind ViewModel.THDIB}" />
+                                <TextBox Grid.Row="6"
+                                         Grid.Column="4"
+                                         Text="{x:Bind ViewModel.THDIC}" />
+                                <TextBox Grid.Row="6"
+                                         Grid.Column="5"
+                                         Text="{x:Bind ViewModel.THDIX}" />
+                                <TextBox Grid.Row="6"
+                                         Grid.Column="6"
+                                         Text="{x:Bind ViewModel.THDI}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PX,Mode=OneWay}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="6"
-                                           Value="{x:Bind ViewModel.DKS.ACS.P,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.P,Mode=OneWay}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.QA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.QA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.QB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.QB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.QC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.QC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.QX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.QX,Mode=OneWay}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="6"
-                                           Value="{x:Bind ViewModel.DKS.ACS.Q,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.Q,Mode=OneWay}" />
                                 <NumberBox Grid.Row="9"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.SA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.SA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="9"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.SB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.SB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="9"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.SC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.SC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="9"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.SX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.SX,Mode=OneWay}" />
                                 <NumberBox Grid.Row="9"
                                            Grid.Column="6"
-                                           Value="{x:Bind ViewModel.DKS.ACS.S,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.S,Mode=OneWay}" />
                                 <NumberBox Grid.Row="10"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PFA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PFA,Mode=OneWay}" />
                                 <NumberBox Grid.Row="10"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PFB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PFB,Mode=OneWay}" />
                                 <NumberBox Grid.Row="10"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PFC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PFC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="10"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PFX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PFX,Mode=OneWay}" />
                                 <NumberBox Grid.Row="10"
                                            Grid.Column="6"
-                                           Value="{x:Bind ViewModel.DKS.ACS.PF,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PF,Mode=OneWay}" />
                                 <NumberBox Grid.Row="11"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.DKS.ACS.Freq,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.Freq,Mode=OneWay}" />
                                 <NumberBox Grid.Row="11"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.DKS.ACS.Freq,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.Freq,Mode=OneWay}" />
                                 <NumberBox Grid.Row="11"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.DKS.ACS.Freq_C,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FreqC,Mode=OneWay}" />
                                 <NumberBox Grid.Row="11"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.DKS.ACS.Freq_C,Mode=OneWay}" />
-                                <NumberBox Grid.Row="11"
+                                           Value="{x:Bind ViewModel.FreqX,Mode=OneWay}" />
+                                <TextBlock Grid.Row="11"
                                            Grid.Column="6"
-                                           Value="{x:Bind ViewModel.DKS.ACS.Freq,Mode=OneWay}" />
+                                           Text="{x:Bind ViewModel.FrequencySync}" />
+                                <StackPanel Grid.Row="12"
+                                            Grid.Column="0"
+                                            Spacing="5"
+                                            Grid.ColumnSpan="7"
+                                            Orientation="Horizontal"
+                                            Margin="8">
+                                    <StackPanel.Background>
+                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
+                                                         Opacity="0.1" />
+                                    </StackPanel.Background>
+                                    <ComboBox HorizontalAlignment="Center"
+                                              SelectedIndex="0"
+                                              ItemsSource="{x:Bind ViewModel.ItemsWireMode }" />
+                                    <ComboBox HorizontalAlignment="Center"
+                                              SelectedIndex="0"
+                                              ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}" />
+                                    <ComboBox HorizontalAlignment="Center"
+                                              SelectedIndex="0"
+                                              ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}" />
+                                    <ComboBox HorizontalAlignment="Center"
+                                              SelectedIndex="0"
+                                              ItemsSource="{x:Bind ViewModel.ItemsQPMode}" />
+                                    <ComboBox HorizontalAlignment="Center"
+                                              SelectedIndex="0"
+                                              ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}" />
+                                </StackPanel>
+                                <Slider Grid.Row="13"
+                                        Grid.ColumnSpan="7"
+                                        Minimum="14"
+                                        Maximum="36"
+                                        Name="sliderOfFontsize"
+                                        IsEnabled="True"
+                                        TickFrequency="1"
+                                        TickPlacement="None" />
                                 <!--#endregion-->
                             </Grid>
                             <!--#endregion 数据显示区-->
                         </Grid>
                     </ScrollViewer>
                 </TabViewItem>
-                    <TabViewItem  Header="Tab 2 Has Longer Text"
-                                  IsClosable="False">
-                        <TabViewItem.IconSource>
-                            <SymbolIconSource Symbol="MusicInfo" />
-                        </TabViewItem.IconSource>
-                    </TabViewItem>
-                    <TabViewItem  Header="Third Tab"
-                                  IsClosable="False">
-                        <TabViewItem.IconSource>
-                            <SymbolIconSource Symbol="Placeholder" />
-                        </TabViewItem.IconSource>
-                    </TabViewItem>
+                <TabViewItem  Header="Tab 2 Has Longer Text"
+                              IsClosable="False">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource Symbol="MusicInfo" />
+                    </TabViewItem.IconSource>
+                </TabViewItem>
+                <TabViewItem  Header="Third Tab"
+                              IsClosable="False">
+                    <TabViewItem.IconSource>
+                        <SymbolIconSource Symbol="Placeholder" />
+                    </TabViewItem.IconSource>
+                </TabViewItem>
             </TabView.TabItems>
         </TabView>
         <!--#endregion TabView-->
@@ -416,7 +454,7 @@
                                MinWidth="200"
                                ToolTipService.ToolTip="选择您的设备型号"
                                ItemsSource="{x:Bind ViewModel.DandickModels}"
-                               SelectedValue="{x:Bind ViewModel.SS_Model ,Mode=TwoWay}"
+                               SelectedValue="{x:Bind ViewModel.ModelSelected ,Mode=TwoWay}"
                                SelectedIndex="0"
                                IsEnabled="{x:Bind ViewModel.DisableSerialPortEdit,Mode=OneWay}"
                                LightDismissOverlayMode="On"

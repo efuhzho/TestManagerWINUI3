@@ -34,8 +34,5 @@ public sealed partial class MainPage : Page
         }        
     }
 
-    private void Button_Click (object sender , Microsoft. UI. Xaml. RoutedEventArgs e)
-    {
-        ViewModel. DKS. ACS. ReadData();
-    }
+   
 }

@@ -13,6 +13,12 @@
 	<Nullable>enable</Nullable>
 	<UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxPackageDir>C:\Users\Fuhong Zhou\Desktop\</AppxPackageDir>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <AppxBundle>Never</AppxBundle>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,7 +43,7 @@
 
   <ItemGroup>
     <Reference Include="DKCommunicationNET">
-      <HintPath>..\..\..\Git\efuhzho\DKCommunicationNET\bin\Debug\net6.0\DKCommunicationNET.dll</HintPath>
+      <HintPath>..\..\..\Git\efuhzho\DKCommunicationNET\bin\Release\net6.0\win-x64\DKCommunicationNET.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

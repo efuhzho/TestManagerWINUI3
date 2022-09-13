@@ -2,7 +2,6 @@
 using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
 using DKCommunicationNET;
-using DKCommunicationNET. Module;
 using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
 
@@ -12,6 +11,7 @@ public partial class MainViewModel : ObservableObject
 {
     public MainViewModel ()
     {
+        portNames. Sort();
         portName = portNames[0];
         baudRate = baudRates[2];
     }
@@ -28,8 +28,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private string[] dandickModels = Enum. GetNames(typeof(DKCommunicationNET. Models));
 
-    #region 《数据区
-
+    #region 《数据区  
     /// <summary>
     /// 下位机回复的型号
     /// </summary>
@@ -47,8 +46,124 @@ public partial class MainViewModel : ObservableObject
     private float[]? ranges_ACI;
 
     [ObservableProperty]
-    float uA;
+    private float uA;
+    [ObservableProperty]
+    private float uB;
+    [ObservableProperty]
+    private float uC;
+    [ObservableProperty]
+    private float uX;
 
+    [ObservableProperty]
+    private float iA;
+    [ObservableProperty]
+    private float iB;
+    [ObservableProperty]
+    private float iC;
+    [ObservableProperty]
+    private float iX;
+
+    [ObservableProperty]
+    private float faiUA;
+    [ObservableProperty]
+    private float faiUB;
+    [ObservableProperty]
+    private float faiUC;
+    [ObservableProperty]
+    private float faiUX;
+
+    [ObservableProperty]
+    private float faiIA;
+    [ObservableProperty]
+    private float faiIB;
+    [ObservableProperty]
+    private float faiIC;
+    [ObservableProperty]
+    private float faiIX;
+
+    [ObservableProperty]
+    private float tHDUA;
+    [ObservableProperty]
+    private float tHDUB;
+    [ObservableProperty]
+    private float tHDUC;
+    [ObservableProperty]
+    private float tHDUX;
+    [ObservableProperty]
+    private float tHDU;
+    [ObservableProperty]
+    private float tHDIA;
+    [ObservableProperty]
+    private float tHDIB;
+    [ObservableProperty]
+    private float tHDIC;
+    [ObservableProperty]
+    private float tHDIX;
+    [ObservableProperty]
+    private float tHDI;
+
+    [ObservableProperty]
+    private float pA;
+    [ObservableProperty]
+    private float pB;
+    [ObservableProperty]
+    private float pC;
+    [ObservableProperty]
+    private float pX;
+    [ObservableProperty]
+    private float p;
+
+    [ObservableProperty]
+    private float qA;
+    [ObservableProperty]
+    private float qB;
+    [ObservableProperty]
+    private float qC;
+    [ObservableProperty]
+    private float qX;
+    [ObservableProperty]
+    private float q;
+
+    [ObservableProperty]
+    private float sA;
+    [ObservableProperty]
+    private float sB;
+    [ObservableProperty]
+    private float sC;
+    [ObservableProperty]
+    private float sX;
+    [ObservableProperty]
+    private float s;
+
+    [ObservableProperty]
+    private float pFA;
+    [ObservableProperty]
+    private float pFB;
+    [ObservableProperty]
+    private float pFC;
+    [ObservableProperty]
+    private float pFX;
+    [ObservableProperty]
+    private float pF;
+
+    [ObservableProperty]
+    private float freq;
+    [ObservableProperty]
+    private float freqC;
+    [ObservableProperty]
+    private float freqX;
+    [ObservableProperty]
+    private FrequencySync frequencySync;
+    [ObservableProperty]
+    private WireMode[] itemsWireMode=( WireMode[] )Enum.GetValues(typeof(WireMode));
+    [ObservableProperty]
+    private CloseLoopMode[] itemsCloseLoopMode=(CloseLoopMode[] )Enum.GetValues(typeof(CloseLoopMode));
+    [ObservableProperty]
+    private HarmonicMode[] itemsHarmonicMode=(HarmonicMode[] )Enum.GetValues(typeof(HarmonicMode));
+    [ObservableProperty]
+    private QP_Mode[] itemsQPMode=(QP_Mode[] )Enum.GetValues(typeof(QP_Mode));
+    [ObservableProperty]
+    private RangeSwitchMode[] itemsRangeSwitchMode=(RangeSwitchMode[] )Enum.GetValues(typeof(RangeSwitchMode));
     #endregion 数据区》
 
     #region 状态栏Infobar绑定
@@ -86,7 +201,7 @@ public partial class MainViewModel : ObservableObject
     /// 当前选择的设备型号
     /// </summary>
     [ObservableProperty]
-    private string? sS_Model;
+    private string? modelSelected;
 
     /// <summary>
     /// 当前选择的串口号
@@ -101,7 +216,7 @@ public partial class MainViewModel : ObservableObject
     private int baudRate;
 
     [ObservableProperty]
-    private List<string> portNames = SerialPort. GetPortNames().ToList();
+    private List<string> portNames = SerialPort. GetPortNames(). ToList();
 
     [ObservableProperty]
     private int[]? baudRates = new int[] { 9600 , 19200 , 115200 };
@@ -137,19 +252,55 @@ public partial class MainViewModel : ObservableObject
     bool progressRingWhenSwitching;
 
     [RelayCommand]
-    void RefreshPortNames()
+    private void RefreshPortNames ()
     {
         PortNames. Clear();
-        PortNames= SerialPort. GetPortNames().ToList();
+        PortNames = SerialPort. GetPortNames(). ToList();
         PortNames. Sort();
     }
     #endregion
 
     [RelayCommand]
-    void Read ()
+    private void ReadData_ACS ()
     {
         DKS?.ACS. ReadData();
         UA = DKS?.ACS. IA ?? 0;
+        UB = DKS?.ACS. UB ?? 0;
+        UC = DKS?.ACS. UC ?? 0;
+        UX = DKS?.ACS. UX ?? 0;
+        IA = DKS?.ACS. IA ?? 0;
+        IB = DKS?.ACS. IB ?? 0;
+        IC = DKS?.ACS. IC ?? 0;
+        IX = DKS?.ACS. IX ?? 0;
+        FaiUA = DKS?.ACS. FAI_UA ?? 0;
+        FaiUB = DKS?.ACS. FAI_UB ?? 0;
+        FaiUC = DKS?.ACS. FAI_UC ?? 0;
+        FaiIA = DKS?.ACS. FAI_IA ?? 0;
+        FaiIB = DKS?.ACS. FAI_IB ?? 0;
+        FaiIC = DKS?.ACS. FAI_IC ?? 0;
+        PA = DKS?.ACS. PA ?? 0;
+        PB = DKS?.ACS. PB ?? 0;
+        PC = DKS?.ACS. PC ?? 0;
+        PX = DKS?.ACS. PX ?? 0;
+        P = DKS?.ACS. P ?? 0;
+        QA = DKS?.ACS. QA ?? 0;
+        QB = DKS?.ACS. QB ?? 0;
+        QC = DKS?.ACS. QC ?? 0;
+        QX = DKS?.ACS. QX ?? 0;
+        Q = DKS?.ACS. Q ?? 0;
+        SA = DKS?.ACS. SA ?? 0;
+        SB = DKS?.ACS. SB ?? 0;
+        SC = DKS?.ACS. SC ?? 0;
+        SX = DKS?.ACS. SX ?? 0;
+        S = DKS?.ACS. S ?? 0;
+        PFA = DKS?.ACS. PFA ?? 0;
+        PFB = DKS?.ACS. PFB ?? 0;
+        PFC = DKS?.ACS. PFC ?? 0;
+        PFX = DKS?.ACS. PFX ?? 0;
+        PF = DKS?.ACS. PF ?? 0;
+        FreqC = DKS?.ACS. Freq_C ?? 0;
+        FreqX = DKS?.ACS. Freq_X ?? 0;
+        Freq = DKS?.ACS. Freq ?? 0;
     }
 
     /// <summary>
@@ -165,7 +316,7 @@ public partial class MainViewModel : ObservableObject
             case true:
 
                 //判断是否选择型号和串口号
-                if ( SS_Model == null || PortName == null )
+                if ( ModelSelected == null || PortName == null )
                 {
                     InfoBarSeverity = InfoBarSeverity. Warning;
                     IsInfobarShow = true;
@@ -176,7 +327,7 @@ public partial class MainViewModel : ObservableObject
                 }
 
                 //实例化对象
-                DKS = new DKStandardSource(( DKCommunicationNET. Models )Enum. Parse(typeof(DKCommunicationNET. Models) , SS_Model) , PortName , BaudRate , ID);
+                DKS = new DKStandardSource(Enum.Parse<DKCommunicationNET.Models> (ModelSelected), PortName , BaudRate , ID);
 
                 //打开串口并发送握手报文               
                 var result = DKS. Open();
@@ -188,6 +339,7 @@ public partial class MainViewModel : ObservableObject
                     InfobarTitle = "Success";
                     InfobarMessage = "【打开串口成功】";
                     IsOn_PortSwitch = true;
+
                     //开始转圈圈
                     ProgressRingWhenSwitching = true;
 
@@ -204,12 +356,15 @@ public partial class MainViewModel : ObservableObject
                     {
                         InfoBarSeverity = InfoBarSeverity. Error;
                         InfobarTitle = "Error";
-                        InfobarMessage += $"【联机失败，所有功能不可使用：{res1. Message}】";
+                        InfobarMessage += $"【联机失败，功能已禁用：{res1. Message}】";
+                        ProgressRingWhenSwitching = false;
+                        IsOn_PortSwitch = false;
+                        return;
                     }
                     //*****异步获取交流源档位
                     var res2 = await Task. Run(() =>
                       {
-                          return DKS. ACS?.GetRanges();
+                          return DKS. Settings. IsEnabled_ACS ? DKS. ACS. GetRanges() : null;
                       });
 
                     if ( res2 != null && !res2. IsSuccess )
@@ -229,7 +384,7 @@ public partial class MainViewModel : ObservableObject
                     //*****异步获取直流源档位
                     var res3 = await Task. Run(() =>
                     {
-                        return DKS. DCS?.GetRanges();
+                        return DKS. Settings. IsEnabled_DCS ? DKS. DCS. GetRanges() : null;
                     });
 
                     if ( res3 != null && !res3. IsSuccess )
