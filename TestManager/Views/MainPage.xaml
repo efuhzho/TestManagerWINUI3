@@ -377,26 +377,50 @@
                                             Spacing="5"
                                             Grid.ColumnSpan="7"
                                             Orientation="Horizontal"
-                                            Margin="8">
+                                            Margin="8" Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
                                     <StackPanel.Background>
                                         <SolidColorBrush Color="{StaticResource SystemAccentColor}"
                                                          Opacity="0.1" />
                                     </StackPanel.Background>
-                                    <ComboBox HorizontalAlignment="Center"
+                                    <ComboBox MinWidth="150"
                                               SelectedIndex="0"
-                                              ItemsSource="{x:Bind ViewModel.ItemsWireMode }" />
-                                    <ComboBox HorizontalAlignment="Center"
+                                              ItemsSource="{x:Bind ViewModel.ItemsWireMode }"
+                                              ToolTipService.Placement="Bottom"
+                                              ToolTipService.ToolTip="接线方式"
+                                              SelectedValue="{x:Bind ViewModel.WireMode,Mode=TwoWay}"
+                                              SelectedItem="{x:Bind ViewModel.WireMode,Mode=TwoWay}"
+                                              SelectionChanged="{x:Bind ViewModel.WireMode_SelectionChangedAsync}" />
+                                    <ComboBox MinWidth="120"
                                               SelectedIndex="0"
-                                              ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}" />
-                                    <ComboBox HorizontalAlignment="Center"
+                                              ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}"
+                                              ToolTipService.Placement="Bottom"
+                                              ToolTipService.ToolTip="闭环模式"
+                                              SelectedValue="{x:Bind ViewModel.CloseLoop,Mode=TwoWay}"
+                                              SelectionChanged="CloseLoopMode_SelectionChanged"
+                                              SelectedItem="{x:Bind ViewModel.CloseLoop,Mode=TwoWay}" />
+                                    <ComboBox MinWidth="190"
                                               SelectedIndex="0"
-                                              ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}" />
-                                    <ComboBox HorizontalAlignment="Center"
+                                              ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}"
+                                              SelectedValue="{x:Bind ViewModel.HarmonicMode,Mode=TwoWay}"
+                                              SelectedItem="{x:Bind ViewModel.HarmonicMode,Mode=TwoWay}"
+                                              ToolTipService.Placement="Bottom"
+                                              ToolTipService.ToolTip="谐波模式"
+                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                    <ComboBox MinWidth="80"
                                               SelectedIndex="0"
-                                              ItemsSource="{x:Bind ViewModel.ItemsQPMode}" />
-                                    <ComboBox HorizontalAlignment="Center"
+                                              ItemsSource="{x:Bind ViewModel.ItemsQPMode}"
+                                              SelectedValue="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
+                                              SelectedItem="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
+                                              SelectionChanged="ComboBox_SelectionChanged_1"
+                                              ToolTipService.Placement="Bottom"
+                                              ToolTipService.ToolTip="无功计算方法" IsEnabled="False"/>
+                                    <ComboBox MinWidth="90"
                                               SelectedIndex="0"
-                                              ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}" />
+                                              ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}"
+                                              SelectedValue="{x:Bind ViewModel.RangeSwitchMode,Mode=TwoWay}" SelectedItem="{x:Bind ViewModel.RangeSwitchMode}"
+                                              SelectionChanged="ComboBox_SelectionChanged_2"
+                                              ToolTipService.Placement="Bottom"
+                                              ToolTipService.ToolTip="档位切换模式" IsEnabled="False"/>
                                 </StackPanel>
                                 <Slider Grid.Row="13"
                                         Grid.ColumnSpan="7"
@@ -619,7 +643,8 @@
         <!--#region 底部状态栏 -->
         <Grid Grid.Row="2"
               Grid.ColumnSpan="2">
-            <InfoBar IsOpen="{x:Bind ViewModel.IsInfobarShow,Mode=TwoWay}"
+            <InfoBar Name="StatusInfoBar"
+                     IsOpen="{x:Bind ViewModel.IsInfobarShow,Mode=TwoWay}"
                      Title="{x:Bind ViewModel.InfobarTitle,Mode=OneWay}"
                      Message="{x:Bind ViewModel.InfobarMessage,Mode=OneWay}"
                      Severity="{x:Bind ViewModel.InfoBarSeverity,Mode=OneWay}"

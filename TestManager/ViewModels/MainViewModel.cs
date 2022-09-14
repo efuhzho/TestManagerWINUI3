@@ -1,9 +1,12 @@
-﻿using System. IO. Ports;
+﻿using System. ComponentModel;
+using System. IO. Ports;
 using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
 using DKCommunicationNET;
 using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
+using Newtonsoft. Json. Linq;
+using Windows. UI. WebUI;
 
 namespace TestManager. ViewModels;
 
@@ -154,17 +157,58 @@ public partial class MainViewModel : ObservableObject
     private float freqX;
     [ObservableProperty]
     private FrequencySync frequencySync;
+
     [ObservableProperty]
-    private WireMode[] itemsWireMode=( WireMode[] )Enum.GetValues(typeof(WireMode));
+    private WireMode[] itemsWireMode = ( WireMode[] )Enum. GetValues(typeof(WireMode));
     [ObservableProperty]
-    private CloseLoopMode[] itemsCloseLoopMode=(CloseLoopMode[] )Enum.GetValues(typeof(CloseLoopMode));
+    private WireMode wireMode;
+
     [ObservableProperty]
-    private HarmonicMode[] itemsHarmonicMode=(HarmonicMode[] )Enum.GetValues(typeof(HarmonicMode));
+    private CloseLoopMode[] itemsCloseLoopMode = ( CloseLoopMode[] )Enum. GetValues(typeof(CloseLoopMode));
     [ObservableProperty]
-    private QP_Mode[] itemsQPMode=(QP_Mode[] )Enum.GetValues(typeof(QP_Mode));
+    private CloseLoopMode closeLoop;
+
     [ObservableProperty]
-    private RangeSwitchMode[] itemsRangeSwitchMode=(RangeSwitchMode[] )Enum.GetValues(typeof(RangeSwitchMode));
+    private HarmonicMode[] itemsHarmonicMode = ( HarmonicMode[] )Enum. GetValues(typeof(HarmonicMode));
+    [ObservableProperty]
+    private HarmonicMode harmonicMode;
+
+    [ObservableProperty]
+    private QP_Mode[] itemsQPMode = ( QP_Mode[] )Enum. GetValues(typeof(QP_Mode));
+    [ObservableProperty]
+    private QP_Mode qP_Mode;
+
+    [ObservableProperty]
+    private RangeSwitchMode[] itemsRangeSwitchMode = ( RangeSwitchMode[] )Enum. GetValues(typeof(RangeSwitchMode));
+    [ObservableProperty]
+    private RangeSwitchMode rangeSwitchMode;
     #endregion 数据区》
+
+    #region 枚举设定    
+    public async Task WireMode_SelectionChangedAsync (object sender , SelectionChangedEventArgs e)
+    {
+        if ( DKS != null )
+        {
+            var result = await Task. Run(() =>
+            {
+                return DKS. ACS. SetWireMode(WireMode);
+            });
+            if ( result. IsSuccess )
+            {
+                InfoBarSeverity = InfoBarSeverity. Success;
+                InfobarTitle = result. Message;
+                InfobarMessage = $"已成功设置接线方式。";
+                return;
+            }
+            else
+            {
+                InfoBarSeverity = InfoBarSeverity. Error;
+                InfobarTitle = result. Message;
+                InfobarMessage = $"设置接线方式失败。";
+            }
+        }
+    }
+    #endregion
 
     #region 状态栏Infobar绑定
     /// <summary>
@@ -222,13 +266,13 @@ public partial class MainViewModel : ObservableObject
     private int[]? baudRates = new int[] { 9600 , 19200 , 115200 };
 
     [ObservableProperty]
-    private string[] paritys = Enum. GetNames(typeof(Parity));
+    private Parity[] paritys = ( Parity[] )Enum. GetValues(typeof(Parity));
 
     [ObservableProperty]
-    private string[] stopBits = Enum. GetNames(typeof(StopBits));
+    private StopBits[] stopBits = ( StopBits[] )Enum. GetValues(typeof(StopBits));
 
     [ObservableProperty]
-    private string[] handShakes = Enum. GetNames(typeof(Handshake));
+    private Handshake[] handShakes = ( Handshake[] )Enum. GetValues(typeof(Handshake));
 
     [ObservableProperty]
     private int[] dataBits = new int[] { 5 , 6 , 7 , 8 };
@@ -309,7 +353,6 @@ public partial class MainViewModel : ObservableObject
     /// <param name="isOn"></param>
     public async void ToggleSwitch_Toggled (bool isOn)
     {
-
         switch ( isOn )
         {
             //正在打开串口
@@ -327,7 +370,7 @@ public partial class MainViewModel : ObservableObject
                 }
 
                 //实例化对象
-                DKS = new DKStandardSource(Enum.Parse<DKCommunicationNET.Models> (ModelSelected), PortName , BaudRate , ID);
+                DKS = new DKStandardSource(Enum. Parse<DKCommunicationNET. Models>(ModelSelected) , PortName , BaudRate , ID);
 
                 //打开串口并发送握手报文               
                 var result = DKS. Open();
@@ -401,10 +444,27 @@ public partial class MainViewModel : ObservableObject
                         InfobarMessage += "【获取直流源档位成功】";
                     }
 
+                    //获取直流表档位
+                    var res4 = await Task. Run(() => DKS. Settings. IsEnabled_DCM ? DKS. DCM. GetRanges() : null);
+
+                    if ( res4!=null&&!res4.IsSuccess )
+                    {
+                        if ( infoBarSeverity < InfoBarSeverity. Warning )
+                        {
+                            InfobarTitle = "Warning";
+                            InfoBarSeverity = InfoBarSeverity. Warning;
+                        }
+                        InfobarMessage += "【获取直流表档位失败】";
+                    }
+                    else if ( res4!=null&&res4.IsSuccess )
+                    {
+                        InfobarMessage += "【获取直流表档位成功】";
+                    }                   
+
                     //交流电压档位集合初始化
-                    Ranges_ACU = DKS. ACS?.Ranges_ACU;
+                    Ranges_ACU = DKS. ACS. Ranges_ACU;
                     //交流电流档位集合初始化
-                    Ranges_ACI = DKS. ACS?.Ranges_ACI;
+                    Ranges_ACI = DKS. ACS. Ranges_ACI;
                     //禁用参数设置控件
                     DisableSerialPortEdit = false;
                     //打开串口超时参数设置控件
