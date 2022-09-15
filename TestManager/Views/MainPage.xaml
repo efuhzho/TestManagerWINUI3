@@ -377,50 +377,49 @@
                                             Spacing="5"
                                             Grid.ColumnSpan="7"
                                             Orientation="Horizontal"
-                                            Margin="8" Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
+                                            Margin="8"
+                                            Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
                                     <StackPanel.Background>
                                         <SolidColorBrush Color="{StaticResource SystemAccentColor}"
                                                          Opacity="0.1" />
                                     </StackPanel.Background>
-                                    <ComboBox MinWidth="150"
-                                              SelectedIndex="0"
+                                    <ComboBox Name="cbxWireMode"
+                                              MinWidth="150"
                                               ItemsSource="{x:Bind ViewModel.ItemsWireMode }"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="接线方式"
-                                              SelectedValue="{x:Bind ViewModel.WireMode,Mode=TwoWay}"
                                               SelectedItem="{x:Bind ViewModel.WireMode,Mode=TwoWay}"
                                               SelectionChanged="{x:Bind ViewModel.WireMode_SelectionChangedAsync}" />
-                                    <ComboBox MinWidth="120"
-                                              SelectedIndex="0"
+                                    <ComboBox Name="cbxCloseLoopMode"
+                                              MinWidth="120"
                                               ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="闭环模式"
-                                              SelectedValue="{x:Bind ViewModel.CloseLoop,Mode=TwoWay}"
-                                              SelectionChanged="CloseLoopMode_SelectionChanged"
-                                              SelectedItem="{x:Bind ViewModel.CloseLoop,Mode=TwoWay}" />
-                                    <ComboBox MinWidth="190"
-                                              SelectedIndex="0"
+                                              SelectedItem="{x:Bind ViewModel.CloseLoop,Mode=TwoWay}"
+                                              SelectionChanged="CloseLoopMode_SelectionChanged" />
+                                    <ComboBox Name="cbxHarmonicMode"
+                                              MinWidth="190"
                                               ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}"
-                                              SelectedValue="{x:Bind ViewModel.HarmonicMode,Mode=TwoWay}"
                                               SelectedItem="{x:Bind ViewModel.HarmonicMode,Mode=TwoWay}"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="谐波模式"
                                               SelectionChanged="ComboBox_SelectionChanged" />
-                                    <ComboBox MinWidth="80"
-                                              SelectedIndex="0"
+                                    <ComboBox Name="cbxQPMode"
+                                              MinWidth="80"
                                               ItemsSource="{x:Bind ViewModel.ItemsQPMode}"
-                                              SelectedValue="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
                                               SelectedItem="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
                                               SelectionChanged="ComboBox_SelectionChanged_1"
                                               ToolTipService.Placement="Bottom"
-                                              ToolTipService.ToolTip="无功计算方法" IsEnabled="False"/>
-                                    <ComboBox MinWidth="90"
-                                              SelectedIndex="0"
+                                              ToolTipService.ToolTip="无功计算方法"
+                                              IsEnabled="False" />
+                                    <ComboBox Name="cbxRangeSwitchMode"
+                                              MinWidth="90"
                                               ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}"
-                                              SelectedValue="{x:Bind ViewModel.RangeSwitchMode,Mode=TwoWay}" SelectedItem="{x:Bind ViewModel.RangeSwitchMode}"
+                                              SelectedItem="{x:Bind ViewModel.RangeSwitchMode,Mode=TwoWay}"
                                               SelectionChanged="ComboBox_SelectionChanged_2"
                                               ToolTipService.Placement="Bottom"
-                                              ToolTipService.ToolTip="档位切换模式" IsEnabled="False"/>
+                                              ToolTipService.ToolTip="档位切换模式"
+                                              IsEnabled="False" />
                                 </StackPanel>
                                 <Slider Grid.Row="13"
                                         Grid.ColumnSpan="7"
@@ -433,6 +432,32 @@
                                 <!--#endregion-->
                             </Grid>
                             <!--#endregion 数据显示区-->
+                            <!--操作区-->
+                            <Grid Grid.Column="1"
+                                  Grid.Row="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <VariableSizedWrapGrid Orientation="Horizontal"
+                                                       Margin="8">
+                                    <ToggleSwitch Header="ACS Reading"
+                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
+                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}" />
+                                    <ToggleSwitch Header="DCS Reading"
+                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
+                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}" />
+                                    <ToggleSwitch Header="DCM Reading"
+                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
+                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}" />
+                                    <ToggleSwitch Header="EPQ Reading"
+                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
+                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}" />
+                                    <ToggleSwitch Header="ACM Reading"
+                                                  Visibility="Collapsed"
+                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}" />
+                                </VariableSizedWrapGrid>
+                            </Grid>
                         </Grid>
                     </ScrollViewer>
                 </TabViewItem>

@@ -1,9 +1,6 @@
-﻿using System. IO;
-using DKCommunicationNET;
-using Microsoft. UI. Xaml. Controls;
+﻿using Microsoft. UI. Xaml. Controls;
 
 using TestManager. ViewModels;
-using Windows. UI. Popups;
 
 namespace TestManager. Views;
 
@@ -17,7 +14,7 @@ public sealed partial class MainPage : Page
     {
         ViewModel = App. GetService<MainViewModel>();
         InitializeComponent();
-        Array. Sort(ViewModel. DandickModels);
+        Array. Sort(ViewModel. DandickModels);       
     }
 
     /// <summary>
@@ -45,16 +42,12 @@ public sealed partial class MainPage : Page
             var result = await Task. Run(() => ViewModel. DKS. ACS. SetClosedLoop(ViewModel. CloseLoop));
             if ( result. IsSuccess )
             {
-                ViewModel. InfoBarSeverity = InfoBarSeverity. Success;
-                ViewModel. InfobarTitle = result. Message;
-                ViewModel. InfobarMessage = $"设置成功。";
+                ViewModel. InfobarTitle = $"设置闭环模式成功";
                 return;
             }
             else
             {
-                ViewModel. InfoBarSeverity = InfoBarSeverity. Error;
-                ViewModel. InfobarTitle = result. Message;
-                ViewModel.InfobarMessage = $"设置失败。";
+                ViewModel. InfobarTitle = $"设置闭环模式失败";
             }
         }
     }
@@ -71,16 +64,12 @@ public sealed partial class MainPage : Page
             var result = await Task. Run(() => ViewModel. DKS. ACS. SetHarmonicMode(ViewModel. HarmonicMode));
             if ( result. IsSuccess )
             {
-                ViewModel. InfoBarSeverity = InfoBarSeverity. Success;
-                ViewModel. InfobarTitle = result. Message;
-                ViewModel. InfobarMessage = $"设置成功。";
+                ViewModel. InfobarTitle = $"设置谐波模式成功";
                 return;
             }
             else
             {
-                ViewModel. InfoBarSeverity = InfoBarSeverity. Error;
-                ViewModel. InfobarTitle = result. Message;
-                ViewModel. InfobarMessage = $"设置失败。";
+                ViewModel. InfobarTitle = $"设置谐波模式失败";
             }
         }
     }
@@ -91,11 +80,11 @@ public sealed partial class MainPage : Page
     /// <param name="e"></param>
     private void ComboBox_SelectionChanged_1 (object sender , SelectionChangedEventArgs e)
     {
-       
+
     }
 
     private void ComboBox_SelectionChanged_2 (object sender , SelectionChangedEventArgs e)
     {
-       
+
     }
 }

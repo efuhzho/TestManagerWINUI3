@@ -1,12 +1,8 @@
-﻿using System. ComponentModel;
-using System. IO. Ports;
+﻿using System. IO. Ports;
 using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
-using DKCommunicationNET;
 using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
-using Newtonsoft. Json. Linq;
-using Windows. UI. WebUI;
 
 namespace TestManager. ViewModels;
 
@@ -184,6 +180,19 @@ public partial class MainViewModel : ObservableObject
     private RangeSwitchMode rangeSwitchMode;
     #endregion 数据区》
 
+    #region 《操作区
+    [ObservableProperty]
+    private bool isEnabled_ACS;
+    [ObservableProperty]
+    private bool isEnabled_DCS;
+    [ObservableProperty]
+    private bool isEnabled_ACM;
+    [ObservableProperty]
+    private bool isEnabled_DCM;
+    [ObservableProperty]
+    private bool isEnabled_EQP;
+    #endregion 操作区》
+
     #region 枚举设定    
     public async Task WireMode_SelectionChangedAsync (object sender , SelectionChangedEventArgs e)
     {
@@ -195,16 +204,12 @@ public partial class MainViewModel : ObservableObject
             });
             if ( result. IsSuccess )
             {
-                InfoBarSeverity = InfoBarSeverity. Success;
-                InfobarTitle = result. Message;
-                InfobarMessage = $"已成功设置接线方式。";
+                InfobarTitle = $"设置接线方式成功";
                 return;
             }
             else
             {
-                InfoBarSeverity = InfoBarSeverity. Error;
-                InfobarTitle = result. Message;
-                InfobarMessage = $"设置接线方式失败。";
+                InfobarTitle = $"设置接线方式失败";
             }
         }
     }
@@ -394,6 +399,11 @@ public partial class MainViewModel : ObservableObject
                     if ( res1. IsSuccess )
                     {
                         InfobarMessage += "【获取设备信息成功】";
+                        IsEnabled_ACS = DKS. Settings. IsEnabled_ACS;
+                        IsEnabled_ACM = DKS. Settings. IsEnabled_ACM;
+                        IsEnabled_DCS = DKS. Settings. IsEnabled_DCS;
+                        IsEnabled_DCM = DKS. Settings. IsEnabled_DCM;
+                        IsEnabled_EQP = DKS. Settings. IsEnabled_EPQ;
                     }
                     else
                     {
@@ -447,7 +457,7 @@ public partial class MainViewModel : ObservableObject
                     //获取直流表档位
                     var res4 = await Task. Run(() => DKS. Settings. IsEnabled_DCM ? DKS. DCM. GetRanges() : null);
 
-                    if ( res4!=null&&!res4.IsSuccess )
+                    if ( res4 != null && !res4. IsSuccess )
                     {
                         if ( infoBarSeverity < InfoBarSeverity. Warning )
                         {
@@ -456,10 +466,10 @@ public partial class MainViewModel : ObservableObject
                         }
                         InfobarMessage += "【获取直流表档位失败】";
                     }
-                    else if ( res4!=null&&res4.IsSuccess )
+                    else if ( res4 != null && res4. IsSuccess )
                     {
                         InfobarMessage += "【获取直流表档位成功】";
-                    }                   
+                    }
 
                     //交流电压档位集合初始化
                     Ranges_ACU = DKS. ACS. Ranges_ACU;
