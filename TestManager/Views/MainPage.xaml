@@ -448,7 +448,7 @@
                                         <StackPanel Orientation="Horizontal"
                                                     HorizontalAlignment="Stretch"
                                                     Spacing="8">
-                                            <TextBlock Text="型号"
+                                            <TextBlock Text="型号" 
                                                        VerticalAlignment="Center" />
                                             <TextBox Text="{x:Bind ViewModel.Model,Mode=OneWay}"
                                                      IsReadOnly="True" />
@@ -469,7 +469,11 @@
                                         <!--设置设备信息-->
                                         <StackPanel Spacing="16">
                                             <StackPanel Orientation="Horizontal"
-                                                        Spacing="8">
+                                                        Spacing="8" Padding="8">
+                                                <StackPanel.Background>
+                                                    <SolidColorBrush Color="{StaticResource SystemAccentColor}"
+                                                                     Opacity="0.1" />
+                                                </StackPanel.Background>
                                                 <NumberBox Header="设置ID"
                                                            MinWidth="100" />
                                                 <TextBox Header="设置编号"
@@ -481,50 +485,53 @@
                                             </StackPanel>
                                             <VariableSizedWrapGrid Orientation="Horizontal"
                                                                    MaximumRowsOrColumns="4">
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}"
-                                                          Content="交流源" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}"
-                                                          Content="直流源" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}"
-                                                          Content="直流表" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}"
-                                                          Content="电能"
+                                                <CheckBox Content="交流源"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}" />
+                                                <CheckBox Content="直流源"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}" />
+                                                <CheckBox Content="直流表"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}" />
+                                                <CheckBox Content="电能"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}"
-                                                          Content="标准表"
+                                                <CheckBox Content="标准表"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_ACM_Cap,Mode=OneWay}"
-                                                          Content="钳表"
+                                                <CheckBox Content="钳表"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_ACM_Cap,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_ACM_Cap,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCM_AUX,Mode=OneWay}"
-                                                          Content="辅助直流源"
-                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCM_AUX,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCM_RIP,Mode=OneWay}"
-                                                          Content="纹波表"
+                                                <CheckBox Content="辅助直流源"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_DCS_AUX,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCS_AUX,Mode=OneWay}" />
+                                                <CheckBox Content="纹波表"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_DCM_RIP,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_DCM_RIP,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_IO,Mode=OneWay}"
-                                                          Content="开关量"
+                                                <CheckBox Content="开关量"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_IO,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_IO,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DualFreqs,Mode=OneWay}"
-                                                          Content="双频输出"
+                                                <CheckBox Content="双频输出"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_DualFreqs,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_DualFreqs,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_IProtect,Mode=OneWay}"
-                                                          Content="保护电流"
+                                                <CheckBox Content="保护电流"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_IProtect,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_IProtect,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_PST,Mode=OneWay}"
-                                                          Content="闪变输出"
+                                                <CheckBox Content="闪变输出"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_PST,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_PST,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_YX,Mode=OneWay}"
-                                                          Content="遥信"
+                                                <CheckBox Content="遥信"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_YX,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_YX,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_HF,Mode=OneWay}"
-                                                          Content="高频输出"
+                                                <CheckBox Content="高频输出"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_HF,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_HF,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_PWM,Mode=OneWay}"
-                                                          Content="电机控制"
+                                                <CheckBox Content="电机控制"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_PWM,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_PWM,Mode=OneWay}" />
-                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_PPS,Mode=OneWay}"
-                                                          Content="对时"
+                                                <CheckBox Content="对时"
+                                                          IsChecked="{x:Bind ViewModel.IsEnabled_PPS,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_PPS,Mode=OneWay}" />
                                             </VariableSizedWrapGrid>
                                         </StackPanel>

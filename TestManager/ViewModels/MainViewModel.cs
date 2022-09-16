@@ -215,7 +215,7 @@ public partial class MainViewModel : ObservableObject
     /// 辅助直流源是否激活
     /// </summary>
     [ObservableProperty]
-    private bool isEnabled_DCM_AUX;
+    private bool isEnabled_DCS_AUX;
     /// <summary>
     /// 指示直流纹波表是否激活
     /// </summary>
@@ -589,6 +589,17 @@ public partial class MainViewModel : ObservableObject
                         IsEnabled_DCS = DKS. Settings. IsEnabled_DCS;
                         IsEnabled_DCM = DKS. Settings. IsEnabled_DCM;
                         IsEnabled_EQP = DKS. Settings. IsEnabled_EPQ;
+                        IsEnabled_ACM_Cap = DKS. Settings. IsEnabled_ACM_Cap;
+                        IsEnabled_DCS_AUX = DKS. Settings. IsEnabled_DCS_AUX;
+                        IsEnabled_DCM_RIP = DKS. Settings. IsEnabled_DCM_RIP;
+                        IsEnabled_IO = DKS. Settings. IsEnabled_IO;
+                        IsEnabled_DualFreqs = DKS. Settings. IsEnabled_DualFreqs;
+                        IsEnabled_IProtect = DKS. Settings. IsEnabled_IProtect;
+                        IsEnabled_PST = DKS. Settings. IsEnabled_PST;
+                        IsEnabled_YX = DKS. Settings. IsEnabled_YX;
+                        IsEnabled_HF = DKS. Settings. IsEnabled_HF;
+                        IsEnabled_PWM = DKS. Settings. IsEnabled_PWM;
+                        IsEnabled_PPS = DKS. Settings. IsEnabled_PPS;
                         SN = DKS. Settings. SN;
                         Model = DKS. Settings. Model;
                         FirmWare = DKS. Settings. Firmware;
