@@ -28,7 +28,9 @@
                     <TabViewItem.IconSource>
                         <SymbolIconSource Symbol="Home" />
                     </TabViewItem.IconSource>
-                    <ScrollViewer>
+                    <ScrollViewer HorizontalScrollMode="Enabled"
+                                  HorizontalScrollBarVisibility="Visible"
+                                  VerticalScrollBarVisibility="Visible">
                         <!--boot-->
                         <Grid>
                             <Grid.RowDefinitions>
@@ -36,6 +38,7 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
@@ -389,7 +392,7 @@
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="接线方式"
                                               SelectedItem="{x:Bind ViewModel.WireMode,Mode=TwoWay}"
-                                              SelectionChanged="{x:Bind ViewModel.WireMode_SelectionChangedAsync}" />
+                                              SelectionChanged="CbxWireMode_SelectionChanged" />
                                     <ComboBox Name="cbxCloseLoopMode"
                                               MinWidth="120"
                                               ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}"
@@ -433,31 +436,213 @@
                             </Grid>
                             <!--#endregion 数据显示区-->
                             <!--操作区-->
-                            <Grid Grid.Column="1"
-                                  Grid.Row="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition />
-                                </Grid.RowDefinitions>
-                                <VariableSizedWrapGrid Orientation="Horizontal"
-                                                       Margin="8">
-                                    <ToggleSwitch Header="ACS Reading"
-                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
-                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}" />
-                                    <ToggleSwitch Header="DCS Reading"
-                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
-                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}" />
-                                    <ToggleSwitch Header="DCM Reading"
-                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
-                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}" />
-                                    <ToggleSwitch Header="EPQ Reading"
-                                                  Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch}"
-                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}" />
-                                    <ToggleSwitch Header="ACM Reading"
-                                                  Visibility="Collapsed"
-                                                  IsEnabled="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}" />
-                                </VariableSizedWrapGrid>
-                            </Grid>
+                            <StackPanel Grid.Column="1"
+                                        Grid.Row="0"
+                                        Margin="8"
+                                        Spacing="8"
+                                        Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
+                                <!--设备信息-->
+                                <Expander HorizontalAlignment="Stretch">
+                                    <Expander.Header>
+                                        <!--标题栏-->
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Stretch"
+                                                    Spacing="8">
+                                            <TextBlock Text="型号"
+                                                       VerticalAlignment="Center" />
+                                            <TextBox Text="{x:Bind ViewModel.Model,Mode=OneWay}"
+                                                     IsReadOnly="True" />
+                                            <TextBlock Text="编号"
+                                                       Margin="8,0,0,0"
+                                                       VerticalAlignment="Center" />
+                                            <TextBox Text="{x:Bind ViewModel.SN,Mode=OneWay}"
+                                                     IsReadOnly="True" />
+                                            <TextBlock Text="固件版本"
+                                                       Margin="8,0,0,0"
+                                                       VerticalAlignment="Center" />
+                                            <TextBox Text="{x:Bind ViewModel.FirmWare,Mode=OneWay}"
+                                                     IsReadOnly="True" />
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <!--展开区-->
+                                    <Expander.Content>
+                                        <!--设置设备信息-->
+                                        <StackPanel Spacing="16">
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="8">
+                                                <NumberBox Header="设置ID"
+                                                           MinWidth="100" />
+                                                <TextBox Header="设置编号"
+                                                         MinWidth="180" />
+                                                <NumberBox Header="设置波特率"
+                                                           MinWidth="120" />
+                                                <Button Content="确认"
+                                                        VerticalAlignment="Stretch" />
+                                            </StackPanel>
+                                            <VariableSizedWrapGrid Orientation="Horizontal"
+                                                                   MaximumRowsOrColumns="4">
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}"
+                                                          Content="交流源" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}"
+                                                          Content="直流源" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}"
+                                                          Content="直流表" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}"
+                                                          Content="电能"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}"
+                                                          Content="标准表"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_ACM,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_ACM_Cap,Mode=OneWay}"
+                                                          Content="钳表"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_ACM_Cap,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCM_AUX,Mode=OneWay}"
+                                                          Content="辅助直流源"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCM_AUX,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DCM_RIP,Mode=OneWay}"
+                                                          Content="纹波表"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCM_RIP,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_IO,Mode=OneWay}"
+                                                          Content="开关量"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_IO,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_DualFreqs,Mode=OneWay}"
+                                                          Content="双频输出"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DualFreqs,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_IProtect,Mode=OneWay}"
+                                                          Content="保护电流"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_IProtect,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_PST,Mode=OneWay}"
+                                                          Content="闪变输出"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_PST,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_YX,Mode=OneWay}"
+                                                          Content="遥信"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_YX,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_HF,Mode=OneWay}"
+                                                          Content="高频输出"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_HF,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_PWM,Mode=OneWay}"
+                                                          Content="电机控制"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_PWM,Mode=OneWay}" />
+                                                <CheckBox IsChecked="{x:Bind ViewModel.IsEnabled_PPS,Mode=OneWay}"
+                                                          Content="对时"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_PPS,Mode=OneWay}" />
+                                            </VariableSizedWrapGrid>
+                                        </StackPanel>
+                                    </Expander.Content>
+                                </Expander >
+                                <!--交流源操作-->
+                                <Expander HorizontalAlignment="Stretch">
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="交流源"
+                                                       VerticalAlignment="Center" />
+                                            <ToggleSwitch Grid.Column="1"
+                                                          IsOn="{x:Bind ViewModel.IsOpenACS,Mode=TwoWay}"
+                                                          OffContent="Closed"
+                                                          Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}">
+                                                <ToggleSwitch.OnContent>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="8">
+                                                        <TextBlock Text="Working" />
+                                                        <ProgressRing IsActive="{x:Bind ViewModel.IsOpenACS,Mode=OneWay}"
+                                                                      Width="16"
+                                                                      Height="16" />
+                                                    </StackPanel>
+                                                </ToggleSwitch.OnContent>
+                                            </ToggleSwitch>
+                                        </Grid>
+                                    </Expander.Header>
+                                </Expander>
+                                <!--直流源操作-->
+                                <Expander HorizontalAlignment="Stretch">
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="直流源"
+                                                       VerticalAlignment="Center" />
+                                            <ToggleSwitch Grid.Column="1"
+                                                          IsOn="{x:Bind ViewModel.IsOpenDCS,Mode=TwoWay}"
+                                                          OffContent="Closed"
+                                                          Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCS,Mode=OneWay}">
+                                                <ToggleSwitch.OnContent>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="8">
+                                                        <TextBlock Text="Working" />
+                                                        <ProgressRing Width="16"
+                                                                      Height="16"
+                                                                      IsActive="{x:Bind ViewModel.IsOpenDCS,Mode=OneWay}" />
+                                                    </StackPanel>
+                                                </ToggleSwitch.OnContent>
+                                            </ToggleSwitch>
+                                        </Grid>
+                                    </Expander.Header>
+                                </Expander>
+                                <!--直流表操作-->
+                                <Expander HorizontalAlignment="Stretch">
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="直流表"
+                                                       VerticalAlignment="Center" />
+                                            <ToggleSwitch Grid.Column="1"
+                                                          IsOn="{x:Bind ViewModel.IsOpenDCM,Mode=TwoWay}"
+                                                          OffContent="Closed"
+                                                          Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_DCM,Mode=OneWay}">
+                                                <ToggleSwitch.OnContent>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="8">
+                                                        <TextBlock Text="Working" />
+                                                        <ProgressRing IsActive="{x:Bind ViewModel.IsOpenDCM,Mode=OneWay}"
+                                                                      Width="16"
+                                                                      Height="16" />
+                                                    </StackPanel>
+                                                </ToggleSwitch.OnContent>
+                                            </ToggleSwitch>
+                                        </Grid>
+                                    </Expander.Header>
+                                </Expander>
+                                <!--电能模块操作-->
+                                <Expander HorizontalAlignment="Stretch">
+                                    <Expander.Header>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="电能"
+                                                       VerticalAlignment="Center" />
+                                            <ToggleSwitch Grid.Column="1"
+                                                          IsOn="{x:Bind ViewModel.IsOpenEQP,Mode=TwoWay}"
+                                                          OffContent="Closed"
+                                                          Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}"
+                                                          IsEnabled="{x:Bind ViewModel.IsEnabled_EQP,Mode=OneWay}">
+                                                <ToggleSwitch.OnContent>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Spacing="8">
+                                                        <TextBlock Text="Working" />
+                                                        <ProgressRing IsActive="{x:Bind ViewModel.IsOpenEQP,Mode=OneWay}"
+                                                                      Width="16"
+                                                                      Height="16" />
+                                                    </StackPanel>
+                                                </ToggleSwitch.OnContent>
+                                            </ToggleSwitch>
+                                        </Grid>
+                                    </Expander.Header>
+                                </Expander>
+                            </StackPanel>
                         </Grid>
                     </ScrollViewer>
                 </TabViewItem>

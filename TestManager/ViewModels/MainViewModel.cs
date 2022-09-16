@@ -33,6 +33,10 @@ public partial class MainViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private string? model;
+    [ObservableProperty]
+    private string? sN;
+    [ObservableProperty]
+    private string? firmWare;
     /// <summary>
     /// 下位机回复的交流电压档位集合
     /// </summary>
@@ -187,33 +191,203 @@ public partial class MainViewModel : ObservableObject
     private bool isEnabled_DCS;
     [ObservableProperty]
     private bool isEnabled_ACM;
+    /// <summary>
+    /// 指示直流表功能是否激活
+    /// </summary>
     [ObservableProperty]
     private bool isEnabled_DCM;
+    /// <summary>
+    /// 指示电能校验功能是否激活
+    /// </summary>
     [ObservableProperty]
     private bool isEnabled_EQP;
-    #endregion 操作区》
+    /// <summary>
+    /// 指示开关量功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_IO;
+    /// <summary>
+    /// 指示标准表钳表功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_ACM_Cap;
+    /// <summary>
+    /// 辅助直流源是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_DCM_AUX;
+    /// <summary>
+    /// 指示直流纹波表是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_DCM_RIP;
+    /// <summary>
+    /// 指示双频输出功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_DualFreqs;
 
-    #region 枚举设定    
-    public async Task WireMode_SelectionChangedAsync (object sender , SelectionChangedEventArgs e)
+    /// <summary>
+    /// 指示保护电流功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_IProtect;
+
+    /// <summary>
+    /// 指示闪变输出功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_PST;
+
+    /// <summary>
+    /// 指示遥信功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_YX;
+
+    /// <summary>
+    /// 指示高频输出功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_HF;
+
+    /// <summary>
+    /// 指示电机控制功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_PWM;
+
+    /// <summary>
+    /// 指示对时功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_PPS;
+
+    /// <summary>
+    /// 指示ACS开关状态.
+    /// </summary>
+    [ObservableProperty]
+    private bool isOpenACS;
+
+    [ObservableProperty]
+    private bool isOpenDCS;
+
+    [ObservableProperty]
+    private bool isOpenEQP;
+
+    [ObservableProperty]
+    private bool isOpenDCM;
+    partial void OnIsOpenACSChanged (bool value)
     {
-        if ( DKS != null )
+        if ( value )
         {
-            var result = await Task. Run(() =>
+            Task. Run(new Action(OpenACS));
+        }
+    }
+    partial void OnIsOpenDCSChanged (bool value)
+    {
+        if ( value )
+        {
+            Task. Run(new Action(OpenDCS));
+        }
+    }
+    partial void OnIsOpenEQPChanged (bool value)
+    {
+        if ( value )
+        {
+            Task. Run(new Action(OpenEQP));
+        }
+    }
+
+    partial void OnIsOpenDCMChanged (bool value)
+    {
+        if ( value )
+        {
+            Task. Run(new Action(OpenDCM));
+        }
+    }
+
+    private void OpenACS ()
+    {
+        while ( IsOpenACS )
+        {
+            DKS?.ACS. ReadData();
+            UA = DKS?.ACS. IA ?? 0;
+            UB = DKS?.ACS. UB ?? 0;
+            UC = DKS?.ACS. UC ?? 0;
+            UX = DKS?.ACS. UX ?? 0;
+            IA = DKS?.ACS. IA ?? 0;
+            IB = DKS?.ACS. IB ?? 0;
+            IC = DKS?.ACS. IC ?? 0;
+            IX = DKS?.ACS. IX ?? 0;
+            FaiUA = DKS?.ACS. FAI_UA ?? 0;
+            FaiUB = DKS?.ACS. FAI_UB ?? 0;
+            FaiUC = DKS?.ACS. FAI_UC ?? 0;
+            FaiIA = DKS?.ACS. FAI_IA ?? 0;
+            FaiIB = DKS?.ACS. FAI_IB ?? 0;
+            FaiIC = DKS?.ACS. FAI_IC ?? 0;
+            PA = DKS?.ACS. PA ?? 0;
+            PB = DKS?.ACS. PB ?? 0;
+            PC = DKS?.ACS. PC ?? 0;
+            PX = DKS?.ACS. PX ?? 0;
+            P = DKS?.ACS. P ?? 0;
+            QA = DKS?.ACS. QA ?? 0;
+            QB = DKS?.ACS. QB ?? 0;
+            QC = DKS?.ACS. QC ?? 0;
+            QX = DKS?.ACS. QX ?? 0;
+            Q = DKS?.ACS. Q ?? 0;
+            SA = DKS?.ACS. SA ?? 0;
+            SB = DKS?.ACS. SB ?? 0;
+            SC = DKS?.ACS. SC ?? 0;
+            SX = DKS?.ACS. SX ?? 0;
+            S = DKS?.ACS. S ?? 0;
+            PFA = DKS?.ACS. PFA ?? 0;
+            PFB = DKS?.ACS. PFB ?? 0;
+            PFC = DKS?.ACS. PFC ?? 0;
+            PFX = DKS?.ACS. PFX ?? 0;
+            PF = DKS?.ACS. PF ?? 0;
+            FreqC = DKS?.ACS. Freq_C ?? 0;
+            FreqX = DKS?.ACS. Freq_X ?? 0;
+            Freq = DKS?.ACS. Freq ?? 0;
+        }
+
+    }
+    private void OpenDCS ()
+    {
+        while ( IsOpenDCS )
+        {
+            var result = DKS?.DCS. ReadData();
+            if ( result?.IsSuccess ?? false )
             {
-                return DKS. ACS. SetWireMode(WireMode);
-            });
-            if ( result. IsSuccess )
-            {
-                InfobarTitle = $"设置接线方式成功";
-                return;
-            }
-            else
-            {
-                InfobarTitle = $"设置接线方式失败";
+
             }
         }
     }
-    #endregion
+
+    private void OpenDCM ()
+    {
+        while ( IsOpenDCM )
+        {
+            var result = DKS?.DCM. ReadData();
+            if ( result?.IsSuccess ?? false )
+            {
+
+            }
+        }
+    }
+
+    private void OpenEQP ()
+    {
+        while ( IsOpenEQP )
+        {
+            var result = DKS?.EPQ. ReadData();
+            if ( result?.IsSuccess ?? false )
+            {
+
+            }
+        }
+    }
+    #endregion 操作区》
 
     #region 状态栏Infobar绑定
     /// <summary>
@@ -235,10 +409,21 @@ public partial class MainViewModel : ObservableObject
 
     #region 串口开关绑定
     /// <summary>
-    /// 开关的状态属性
+    /// 总开关的状态属性
     /// </summary>
     [ObservableProperty]
     private bool isOn_PortSwitch;
+    partial void OnIsOn_PortSwitchChanging (bool value)
+    {
+        if ( !value )
+        {
+            IsOpenACS = false;
+            IsOpenDCM = false;
+            IsOpenEQP = false;
+            IsOpenDCS = false;
+        }
+    }
+
 
     /// <summary>
     /// 丹迪克设备对象
@@ -404,6 +589,9 @@ public partial class MainViewModel : ObservableObject
                         IsEnabled_DCS = DKS. Settings. IsEnabled_DCS;
                         IsEnabled_DCM = DKS. Settings. IsEnabled_DCM;
                         IsEnabled_EQP = DKS. Settings. IsEnabled_EPQ;
+                        SN = DKS. Settings. SN;
+                        Model = DKS. Settings. Model;
+                        FirmWare = DKS. Settings. Firmware;
                     }
                     else
                     {
@@ -505,7 +693,23 @@ public partial class MainViewModel : ObservableObject
 
 
     #region 自动界面处理方法
-
+    public void UpdateInfoBar (OperateResult? result)
+    {
+        if ( result?.IsSuccess ?? false )
+        {
+            InfoBarSeverity = InfoBarSeverity. Success;
+        }
+        else if ( !result?.IsSuccess ?? false )
+        {
+            InfoBarSeverity = InfoBarSeverity. Error;
+        }
+        else if ( result is null )
+        {
+            InfoBarSeverity = InfoBarSeverity. Informational;
+        }
+        InfobarTitle = result?.IsSuccess. ToString();
+        InfobarMessage = result?.Message;
+    }
     #endregion
 
 }

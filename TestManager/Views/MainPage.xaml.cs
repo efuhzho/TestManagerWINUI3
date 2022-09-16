@@ -87,4 +87,24 @@ public sealed partial class MainPage : Page
     {
 
     }
+
+    private async void CbxWireMode_SelectionChanged (object sender , SelectionChangedEventArgs e)
+    {
+        if (ViewModel. DKS != null )
+        {
+            var result = await Task. Run(() =>
+            {
+                return ViewModel. DKS. ACS. SetWireMode(ViewModel.WireMode);
+            });
+            if ( result. IsSuccess )
+            {
+                ViewModel. InfobarTitle = $"设置接线方式成功";
+                return;
+            }
+            else
+            {
+                ViewModel. InfobarTitle = $"设置接线方式失败";
+            }
+        }
+    }
 }
