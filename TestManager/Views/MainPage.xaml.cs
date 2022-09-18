@@ -14,7 +14,7 @@ public sealed partial class MainPage : Page
     {
         ViewModel = App. GetService<MainViewModel>();
         InitializeComponent();
-        Array. Sort(ViewModel. DandickModels);       
+        Array. Sort(ViewModel. DandickModels);
     }
 
     /// <summary>
@@ -35,76 +35,13 @@ public sealed partial class MainPage : Page
         }
     }
 
-    private async void CloseLoopMode_SelectionChanged (object sender , SelectionChangedEventArgs e)
+    private async void UA_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
-        if ( ViewModel. DKS != null )
-        {
-            var result = await Task. Run(() => ViewModel. DKS. ACS. SetClosedLoop(ViewModel. CloseLoop));
-            if ( result. IsSuccess )
-            {
-                ViewModel. InfobarTitle = $"设置闭环模式成功";
-                return;
-            }
-            else
-            {
-                ViewModel. InfobarTitle = $"设置闭环模式失败";
-            }
-        }
+        await Task. Run(() => ViewModel. DKS?.ACS. SetAmplitude(( float )args. NewValue , ViewModel. UB , ViewModel. UC , ViewModel. IA , ViewModel. IB , ViewModel. IC));
     }
 
-    /// <summary>
-    /// 谐波模式设置
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private async void ComboBox_SelectionChanged (object sender , SelectionChangedEventArgs e)
+    private async void UB_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
-        if ( ViewModel. DKS != null )
-        {
-            var result = await Task. Run(() => ViewModel. DKS. ACS. SetHarmonicMode(ViewModel. HarmonicMode));
-            if ( result. IsSuccess )
-            {
-                ViewModel. InfobarTitle = $"设置谐波模式成功";
-                return;
-            }
-            else
-            {
-                ViewModel. InfobarTitle = $"设置谐波模式失败";
-            }
-        }
-    }
-    /// <summary>
-    /// 无功计算方法设置
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ComboBox_SelectionChanged_1 (object sender , SelectionChangedEventArgs e)
-    {
-
-    }
-
-    private void ComboBox_SelectionChanged_2 (object sender , SelectionChangedEventArgs e)
-    {
-
-    }
-
-    private async void CbxWireMode_SelectionChanged (object sender , SelectionChangedEventArgs e)
-    {
-        if (ViewModel. DKS != null )
-        {
-            var result = await Task. Run(() =>
-            {
-                return ViewModel. DKS. ACS. SetWireMode(ViewModel.WireMode);
-            });
-            if ( result. IsSuccess )
-            {
-                ViewModel. InfobarTitle = $"设置接线方式成功";
-                return;
-            }
-            else
-            {
-                ViewModel. InfobarTitle = $"设置接线方式失败";
-            }
-        }
+        await Task. Run(() => ViewModel. DKS?.ACS. SetAmplitude(ViewModel. UA , ( float )args. NewValue , ViewModel. UC , ViewModel. IA , ViewModel. IB , ViewModel. IC));
     }
 }

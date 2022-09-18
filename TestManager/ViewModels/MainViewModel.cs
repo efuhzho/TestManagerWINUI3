@@ -3,6 +3,8 @@ using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
 using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
+using Windows. Globalization. NumberFormatting;
+using Windows. UI. WebUI;
 
 namespace TestManager. ViewModels;
 
@@ -13,6 +15,9 @@ public partial class MainViewModel : ObservableObject
         portNames. Sort();
         portName = portNames[0];
         baudRate = baudRates[2];
+        Formatter_ACU = new();
+        rounder_ACU = new();
+        SetNumberBoxNumberFormatter_ACU();
     }
 
     /// <summary>
@@ -37,19 +42,34 @@ public partial class MainViewModel : ObservableObject
     private string? sN;
     [ObservableProperty]
     private string? firmWare;
+
+    #region 《交流电压档位集合
     /// <summary>
     /// 下位机回复的交流电压档位集合
     /// </summary>
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SmallChange_U))]
+    [NotifyPropertyChangedFor(nameof(LargeChange_U))]
     private float[]? ranges_ACU;
+    partial void OnRanges_ACUChanging (float[]? value) => MaxValue_U = ( float )( value != null ? value[rangeIndex_Ua] * 1.2 : 1000 );
+    #endregion  交流电压档位集合》
+
+    #region 《交流电流档位集合
     /// <summary>
     /// 交流电流档位集合
     /// </summary>
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(SmallChange_I))]
+    [NotifyPropertyChangedFor(nameof(LargeChange_I))]
     private float[]? ranges_ACI;
+    partial void OnRanges_ACIChanged (float[]? value) => MaxValue_I = ( float )( value != null ? value[rangeIndex_Ia] * 1.2 : 100 );
+    #endregion 交流电流档位集合》
 
+    #region UA
     [ObservableProperty]
     private float uA;
+    #endregion
+
     [ObservableProperty]
     private float uB;
     [ObservableProperty]
@@ -158,20 +178,89 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private FrequencySync frequencySync;
 
+    #region 《设置接线方式
     [ObservableProperty]
     private WireMode[] itemsWireMode = ( WireMode[] )Enum. GetValues(typeof(WireMode));
     [ObservableProperty]
-    private WireMode wireMode;
+    private byte wireModeIndex;
+    private byte wireModeIndex_Temp;
+    partial void OnWireModeIndexChanging (byte value)
+    {
+        wireModeIndex_Temp = WireModeIndex;
+        this. OnWireModeIndexChange(value);
+    }
+    partial void OnWireModeIndexChanged (byte value)
+    {
+        wireModeIndex = wireModeIndex_Temp;
+    }
+    private async void OnWireModeIndexChange (byte value)
+    {
+        var result = await Task. Run(() =>
+        {
+            var result = DKS?.ACS. SetWireMode(( WireMode )value);
+            if ( result?.IsSuccess ?? false )
+            {
+                wireModeIndex_Temp = value;
+            }
+            return result;
+        });
+        UpdateInfoBar("设置接线方式" , result);
+    }
+    #endregion 设置接线方式》
 
+    #region 《设置闭环模式
     [ObservableProperty]
     private CloseLoopMode[] itemsCloseLoopMode = ( CloseLoopMode[] )Enum. GetValues(typeof(CloseLoopMode));
     [ObservableProperty]
-    private CloseLoopMode closeLoop;
+    private byte loopModeIndex;
+    private byte loopModeIndex_Temp;
+    partial void OnLoopModeIndexChanging (byte value)
+    {
+        loopModeIndex_Temp = loopModeIndex;
+        SetCloseLoopMode(value);
+    }
+    partial void OnLoopModeIndexChanged (byte value)
+    {
+        loopModeIndex = loopModeIndex_Temp;
+    }
+    private async void SetCloseLoopMode (byte value)
+    {
+        var result = await Task. Run(() => DKS?.ACS. SetClosedLoop(( CloseLoopMode )value , ( HarmonicMode )HarmonicModeIndex));
+        if ( result?.IsSuccess ?? false )
+        {
 
+            loopModeIndex_Temp ^= value;
+        }
+        UpdateInfoBar("设置闭环模式" , result);
+    }
+    #endregion 设置闭环模式》
+
+    #region 《设置谐波模式
     [ObservableProperty]
     private HarmonicMode[] itemsHarmonicMode = ( HarmonicMode[] )Enum. GetValues(typeof(HarmonicMode));
     [ObservableProperty]
-    private HarmonicMode harmonicMode;
+    private byte harmonicModeIndex;
+    private byte harmonicModeIndex_Temp;
+    partial void OnHarmonicModeIndexChanging (byte value)
+    {
+        harmonicModeIndex_Temp = harmonicModeIndex;
+        SetHarmonicMode(value);
+    }
+    partial void OnHarmonicModeIndexChanged (byte value)
+    {
+        harmonicModeIndex = harmonicModeIndex_Temp;
+    }
+
+    private async void SetHarmonicMode (byte harmonicMode)
+    {
+        var result = await Task. Run(() => DKS?.ACS. SetHarmonicMode(( HarmonicMode )harmonicMode , ( CloseLoopMode )loopModeIndex));
+        if ( result?.IsSuccess ?? false )
+        {
+            harmonicModeIndex_Temp = harmonicMode;
+        }
+        UpdateInfoBar("设置谐波模式" , result);
+    }
+    #endregion 设置谐波模式》
 
     [ObservableProperty]
     private QP_Mode[] itemsQPMode = ( QP_Mode[] )Enum. GetValues(typeof(QP_Mode));
@@ -277,6 +366,79 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     private bool isOpenDCM;
+
+    #region 《电压档位索引值
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MaxValue_U))]
+    [NotifyPropertyChangedFor(nameof(SmallChange_U))]
+    [NotifyPropertyChangedFor(nameof(LargeChange_U))]
+    private byte rangeIndex_Ua;
+    [ObservableProperty]
+    private float maxValue_U;
+    public float SmallChange_U => ( float )( ranges_ACU != null ? ranges_ACU[rangeIndex_Ua] * 0.1 : 0 );
+    public float LargeChange_U => ( float )( ranges_ACU != null ? ranges_ACU[rangeIndex_Ua] * 0.2 : 0 );
+
+    /// <summary>
+    /// 【备份】用于设置失败时恢复设置前的值；
+    /// </summary>
+    private byte rangeIndex_Ua_Backup;
+    partial void OnRangeIndex_UaChanging (byte value)
+    {
+        rangeIndex_Ua_Backup = rangeIndex_Ua;
+        SetRange_ACU(value);
+    }
+    partial void OnRangeIndex_UaChanged (byte value)
+    {
+        rangeIndex_Ua = rangeIndex_Ua_Backup;
+    }
+
+    private async void SetRange_ACU (byte index)
+    {
+        var result = await Task. Run(() => DKS?.ACS. SetRanges(index , rangeIndex_Ia));
+        if ( result?.IsSuccess ?? false )
+        {
+            rangeIndex_Ua_Backup = index;
+        }
+        UpdateInfoBar("设置交流电压档位" , result);
+    }
+    #endregion 电压档位索引值》
+
+    #region 《电流档位索引值
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MaxValue_I))]
+    [NotifyPropertyChangedFor(nameof(SmallChange_I))]
+    [NotifyPropertyChangedFor(nameof(LargeChange_I))]
+    private byte rangeIndex_Ia;
+    [ObservableProperty]
+    private float maxValue_I;
+    public float SmallChange_I => ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 0.1 : 0 );
+    public float LargeChange_I => ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 0.2 : 0 );
+    /// <summary>
+    /// 【备份】用于设置失败时恢复设置前的值；
+    /// </summary>
+    private byte rangeIndex_Ia_Temp;
+    partial void OnRangeIndex_IaChanging (byte value)
+    {
+        rangeIndex_Ia_Temp = rangeIndex_Ia;
+        SetRange_ACI(value);
+    }
+    partial void OnRangeIndex_IaChanged (byte value)
+    {
+        rangeIndex_Ia = rangeIndex_Ia_Temp;
+       // MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
+    }
+    private async void SetRange_ACI (byte index)
+    {
+        var result = await Task. Run(() => DKS?.ACS. SetRanges(rangeIndex_Ua , index));
+        if ( result?.IsSuccess ?? false )
+        {
+            rangeIndex_Ia_Temp = index;
+        }
+        UpdateInfoBar("设置交流电流档位" , result);
+    }
+    #endregion 电流档位索引值》
+
+
     partial void OnIsOpenACSChanged (bool value)
     {
         if ( value )
@@ -284,6 +446,8 @@ public partial class MainViewModel : ObservableObject
             Task. Run(new Action(OpenACS));
         }
     }
+
+
     partial void OnIsOpenDCSChanged (bool value)
     {
         if ( value )
@@ -298,7 +462,6 @@ public partial class MainViewModel : ObservableObject
             Task. Run(new Action(OpenEQP));
         }
     }
-
     partial void OnIsOpenDCMChanged (bool value)
     {
         if ( value )
@@ -349,6 +512,8 @@ public partial class MainViewModel : ObservableObject
             FreqC = DKS?.ACS. Freq_C ?? 0;
             FreqX = DKS?.ACS. Freq_X ?? 0;
             Freq = DKS?.ACS. Freq ?? 0;
+            RangeIndex_Ia = DKS?.ACS. RangeIndex_Ia ?? 0;
+            RangeIndex_Ua = DKS?.ACS. RangeIndex_Ua ?? 0;
         }
 
     }
@@ -363,7 +528,6 @@ public partial class MainViewModel : ObservableObject
             }
         }
     }
-
     private void OpenDCM ()
     {
         while ( IsOpenDCM )
@@ -375,7 +539,6 @@ public partial class MainViewModel : ObservableObject
             }
         }
     }
-
     private void OpenEQP ()
     {
         while ( IsOpenEQP )
@@ -394,16 +557,16 @@ public partial class MainViewModel : ObservableObject
     /// 串口打开进度
     /// </summary>
     [ObservableProperty]
-    private bool isInfobarShow;
+    public bool isInfobarShow;
 
     [ObservableProperty]
-    private string? infobarTitle;
+    public string? infobarTitle;
 
     [ObservableProperty]
-    private string? infobarMessage;
+    public string? infobarMessage;
 
     [ObservableProperty]
-    private InfoBarSeverity infoBarSeverity = InfoBarSeverity. Success;
+    public InfoBarSeverity infoBarSeverity = InfoBarSeverity. Success;
 
     #endregion
 
@@ -704,7 +867,7 @@ public partial class MainViewModel : ObservableObject
 
 
     #region 自动界面处理方法
-    public void UpdateInfoBar (OperateResult? result)
+    public void UpdateInfoBar (string title , OperateResult? result)
     {
         if ( result?.IsSuccess ?? false )
         {
@@ -718,8 +881,55 @@ public partial class MainViewModel : ObservableObject
         {
             InfoBarSeverity = InfoBarSeverity. Informational;
         }
-        InfobarTitle = result?.IsSuccess. ToString();
+        InfobarTitle = title;
         InfobarMessage = result?.Message;
+    }
+    /// <summary>
+    /// 交流电压显示格式
+    /// </summary>
+
+    public DecimalFormatter Formatter_ACU
+    {
+        get; set;
+    }
+
+    private readonly IncrementNumberRounder rounder_ACU;
+    
+    private void SetNumberBoxNumberFormatter_ACU ()
+    {
+        rounder_ACU. Increment =0.001;
+        rounder_ACU. RoundingAlgorithm = RoundingAlgorithm. RoundHalfUp;
+        Formatter_ACU. IntegerDigits = 1;
+        Formatter_ACU. FractionDigits = 3;
+        Formatter_ACU. NumberRounder = rounder_ACU;
+    }
+    /// <summary>
+    /// 交流电流显示格式
+    /// </summary>
+    [ObservableProperty]
+    private DecimalFormatter formatter_ACI;
+    private void SetNumberBoxNumberFormatter_ACI ()
+    {
+        IncrementNumberRounder rounder = new IncrementNumberRounder();
+        rounder. Increment = maxValue_I * 0.00001;
+        rounder. RoundingAlgorithm = RoundingAlgorithm. RoundHalfUp;
+        formatter_ACI = new();
+        formatter_ACI. IntegerDigits = 1;
+        formatter_ACI. FractionDigits = 3;
+        formatter_ACI. NumberRounder = rounder;
+    }
+
+    [ObservableProperty]
+    private DecimalFormatter formatter_PQ;
+    private void SetNumberBoxNumberFormatter_PQ ()
+    {
+        IncrementNumberRounder rounder = new IncrementNumberRounder();
+        rounder. Increment = maxValue_I * maxValue_U * 0.00001;
+        rounder. RoundingAlgorithm = RoundingAlgorithm. RoundHalfUp;
+        formatter_PQ = new();
+        formatter_PQ. IntegerDigits = 1;
+        formatter_PQ. FractionDigits = 3;
+        formatter_PQ. NumberRounder = rounder;
     }
     #endregion
 

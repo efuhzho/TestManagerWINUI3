@@ -12,7 +12,7 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
         <!--#endregion 网格行列定义-->
@@ -39,8 +39,8 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto"
+                                                  MaxWidth="1000" />
                             </Grid.ColumnDefinitions>
                             <!--#region 交流源数据显示网格 -->
                             <Grid Margin="8"
@@ -106,15 +106,15 @@
                                     <ColumnDefinition Width="AUTO" />
                                     <ColumnDefinition Width="AUTO" />
                                     <ColumnDefinition MinWidth="130"
-                                                      Width="auto" />
+                                                      Width="130" />
                                     <ColumnDefinition MinWidth="130"
-                                                      Width="auto" />
+                                                      Width="130" />
                                     <ColumnDefinition MinWidth="130"
-                                                      Width="auto" />
+                                                      Width="130" />
                                     <ColumnDefinition MinWidth="130"
-                                                      Width="auto" />
+                                                      Width="130" />
                                     <ColumnDefinition MinWidth="130"
-                                                      Width="auto" />
+                                                      Width="130" />
                                 </Grid.ColumnDefinitions>
                                 <!--#region 表头 -->
                                 <TextBlock Grid.Column="2"
@@ -205,16 +205,29 @@
                                 <NumberBox Grid.Row="1"
                                            Grid.Column="2"
                                            x:Name="UA"
-                                           Value="{x:Bind ViewModel.UA,Mode=OneWay}" />
-                                <NumberBox Grid.Row="1"
+                                           Value="{x:Bind ViewModel.UA,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
+                                           ValueChanged="UA_ValueChanged" NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}"/>
+                                <NumberBox Name="UB" Grid.Row="1"
                                            Grid.Column="3"
-                                           Text="{x:Bind ViewModel.UB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.UB,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}" ValueChanged="UB_ValueChanged"/>
                                 <NumberBox Grid.Row="1"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.UC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.UC,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}" />
                                 <NumberBox Grid.Row="1"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.UX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.UX,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}" />
                                 <!--交流电压档位列表-->
                                 <ComboBox Header="ACU Ranges"
                                           Grid.Row="1"
@@ -227,16 +240,28 @@
                                 <!--行2：交流电流数据-->
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.IA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IA,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.IB,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IB,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.IC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IC,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
                                 <NumberBox Grid.Row="2"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.IX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.IX,Mode=OneWay}"
+                                           Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
+                                           SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
                                 <!--交流电流档位列表-->
                                 <ComboBox Header="ACI Ranges"
                                           Grid.Row="3"
@@ -391,27 +416,23 @@
                                               ItemsSource="{x:Bind ViewModel.ItemsWireMode }"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="接线方式"
-                                              SelectedItem="{x:Bind ViewModel.WireMode,Mode=TwoWay}"
-                                              SelectionChanged="CbxWireMode_SelectionChanged" />
+                                              SelectedIndex="{x:Bind ViewModel.WireModeIndex,Mode=TwoWay}" />
                                     <ComboBox Name="cbxCloseLoopMode"
                                               MinWidth="120"
                                               ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="闭环模式"
-                                              SelectedItem="{x:Bind ViewModel.CloseLoop,Mode=TwoWay}"
-                                              SelectionChanged="CloseLoopMode_SelectionChanged" />
+                                              SelectedIndex="{x:Bind ViewModel.LoopModeIndex,Mode=TwoWay}" />
                                     <ComboBox Name="cbxHarmonicMode"
                                               MinWidth="190"
                                               ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}"
-                                              SelectedItem="{x:Bind ViewModel.HarmonicMode,Mode=TwoWay}"
+                                              SelectedIndex="{x:Bind ViewModel.HarmonicModeIndex,Mode=TwoWay}"
                                               ToolTipService.Placement="Bottom"
-                                              ToolTipService.ToolTip="谐波模式"
-                                              SelectionChanged="ComboBox_SelectionChanged" />
+                                              ToolTipService.ToolTip="谐波模式" />
                                     <ComboBox Name="cbxQPMode"
                                               MinWidth="80"
                                               ItemsSource="{x:Bind ViewModel.ItemsQPMode}"
                                               SelectedItem="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
-                                              SelectionChanged="ComboBox_SelectionChanged_1"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="无功计算方法"
                                               IsEnabled="False" />
@@ -419,7 +440,6 @@
                                               MinWidth="90"
                                               ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}"
                                               SelectedItem="{x:Bind ViewModel.RangeSwitchMode,Mode=TwoWay}"
-                                              SelectionChanged="ComboBox_SelectionChanged_2"
                                               ToolTipService.Placement="Bottom"
                                               ToolTipService.ToolTip="档位切换模式"
                                               IsEnabled="False" />
@@ -437,6 +457,7 @@
                             <!--#endregion 数据显示区-->
                             <!--操作区-->
                             <StackPanel Grid.Column="1"
+                                        Grid.RowSpan="10"
                                         Grid.Row="0"
                                         Margin="8"
                                         Spacing="8"
@@ -448,7 +469,7 @@
                                         <StackPanel Orientation="Horizontal"
                                                     HorizontalAlignment="Stretch"
                                                     Spacing="8">
-                                            <TextBlock Text="型号" 
+                                            <TextBlock Text="型号"
                                                        VerticalAlignment="Center" />
                                             <TextBox Text="{x:Bind ViewModel.Model,Mode=OneWay}"
                                                      IsReadOnly="True" />
@@ -464,22 +485,25 @@
                                                      IsReadOnly="True" />
                                         </StackPanel>
                                     </Expander.Header>
-                                    <!--展开区-->
+                                    <!--设备信息展开区-->
                                     <Expander.Content>
                                         <!--设置设备信息-->
                                         <StackPanel Spacing="16">
                                             <StackPanel Orientation="Horizontal"
-                                                        Spacing="8" Padding="8">
+                                                        Spacing="8"
+                                                        Padding="8">
                                                 <StackPanel.Background>
                                                     <SolidColorBrush Color="{StaticResource SystemAccentColor}"
                                                                      Opacity="0.1" />
                                                 </StackPanel.Background>
                                                 <NumberBox Header="设置ID"
-                                                           MinWidth="100" />
+                                                           MinWidth="100"
+                                                           Maximum="65535" />
                                                 <TextBox Header="设置编号"
                                                          MinWidth="180" />
                                                 <NumberBox Header="设置波特率"
-                                                           MinWidth="120" />
+                                                           MinWidth="120"
+                                                           Maximum="115200" />
                                                 <Button Content="确认"
                                                         VerticalAlignment="Stretch" />
                                             </StackPanel>
@@ -538,7 +562,8 @@
                                     </Expander.Content>
                                 </Expander >
                                 <!--交流源操作-->
-                                <Expander HorizontalAlignment="Stretch">
+                                <Expander HorizontalAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch">
                                     <Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -564,6 +589,105 @@
                                             </ToggleSwitch>
                                         </Grid>
                                     </Expander.Header>
+                                    <!--交流源操作展开区-->
+                                    <StackPanel Spacing="8">
+                                        <Grid>
+                                            <Grid.Background>
+                                                <SolidColorBrush Color="{ThemeResource SystemAccentColor}"
+                                                                 Opacity="0.1" />
+                                            </Grid.Background>
+                                            <Grid.Resources>
+                                                <Style TargetType="NumberBox">
+                                                    <Setter Property="Minimum"
+                                                            Value="0" />
+                                                    <Setter Property="Margin"
+                                                            Value="8" />
+                                                    <Setter Property="AcceptsExpression"
+                                                            Value="True" />
+                                                    <Setter Property="SpinButtonPlacementMode"
+                                                            Value="Inline" />
+                                                </Style>
+                                            </Grid.Resources>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="8"
+                                                        Spacing="8">
+                                                <TextBlock Text="输出通道"
+                                                           VerticalAlignment="Center" />
+                                                <ComboBox  MinWidth="150" />
+                                                <CheckBox Content="自定义通道"
+                                                          Margin="20,0,0,0" />
+                                            </StackPanel >
+                                            <StackPanel Grid.Row="1"
+                                                        Orientation="Horizontal"
+                                                        Margin="8"
+                                                        Spacing="8">
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ua" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ub" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Uc" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ux" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ia" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ib" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ic" />
+                                                <CheckBox MinWidth="60"
+                                                          Content="Ix" />
+                                            </StackPanel>
+                                            <Grid Grid.Row="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto" />
+                                                    <ColumnDefinition Width="auto"
+                                                                      MinWidth="200" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <!--电压幅值-->
+                                                <ComboBox Header="电压档位"
+                                                          Margin="8"
+                                                          MinWidth="120"
+                                                          ItemsSource="{x:Bind ViewModel.Ranges_ACU,Mode=OneWay}"
+                                                          SelectedIndex="{x:Bind ViewModel.RangeIndex_Ua,Mode=TwoWay}" />
+                                                <NumberBox Header="幅值"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V"
+                                                           SmallChange="10" />
+                                                <!--电流幅值-->
+                                                <ComboBox Header="电流档位"
+                                                          Grid.Row="1"
+                                                          Margin="8"
+                                                          HorizontalAlignment="Stretch"
+                                                          ItemsSource="{x:Bind ViewModel.Ranges_ACI,Mode=OneWay}"
+                                                          SelectedIndex="{x:Bind ViewModel.RangeIndex_Ia,Mode=TwoWay}" />
+                                                <NumberBox Header="幅值"
+                                                           Grid.Column="1"
+                                                           Grid.Row="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：A"
+                                                           SmallChange="1" />
+                                                <Button Content="立即输出"
+                                                        Grid.Column="4"
+                                                        Grid.Row="0"
+                                                        Grid.RowSpan="5"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8" />
+                                            </Grid>
+                                        </Grid>
+                                    </StackPanel>
                                 </Expander>
                                 <!--直流源操作-->
                                 <Expander HorizontalAlignment="Stretch">
@@ -669,7 +793,7 @@
         </TabView>
         <!--#endregion TabView-->
         <!--#region 边栏 -->
-        <ScrollViewer Grid.Column="1">
+        <ScrollViewer Grid.Column="2">
             <StackPanel Spacing="16"
                         Margin="10,0,0,0">
                 <TextBlock Text="标准源"
@@ -858,14 +982,14 @@
         </ScrollViewer>
         <!--#endregion 边栏-->
         <!--#region 底部状态栏 -->
-        <Grid Grid.Row="2"
+        <Grid Grid.Row="1"
               Grid.ColumnSpan="2">
             <InfoBar Name="StatusInfoBar"
                      IsOpen="{x:Bind ViewModel.IsInfobarShow,Mode=TwoWay}"
                      Title="{x:Bind ViewModel.InfobarTitle,Mode=OneWay}"
                      Message="{x:Bind ViewModel.InfobarMessage,Mode=OneWay}"
                      Severity="{x:Bind ViewModel.InfoBarSeverity,Mode=OneWay}"
-                     IsClosable="True"
+                     IsClosable="False"
                      HorizontalAlignment="Stretch" />
         </Grid>
         <!--#endregion-->
