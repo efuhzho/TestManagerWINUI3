@@ -209,92 +209,121 @@
                                            Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                            LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                           ValueChanged="UA_ValueChanged" NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}"/>
-                                <NumberBox Name="UB" Grid.Row="1"
+                                           ValueChanged="UA_ValueChanged"
+                                           NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
+                                <NumberBox Name="UB"
+                                           Grid.Row="1"
                                            Grid.Column="3"
                                            Value="{x:Bind ViewModel.UB,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}" ValueChanged="UB_ValueChanged"/>
-                                <NumberBox Grid.Row="1"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
+                                           ValueChanged="UB_ValueChanged" />
+                                <NumberBox Name="UC"
+                                           Grid.Row="1"
                                            Grid.Column="4"
                                            Value="{x:Bind ViewModel.UC,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}" />
-                                <NumberBox Grid.Row="1"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
+                                           ValueChanged="UC_ValueChanged" />
+                                <NumberBox Name="UX"
+                                           Grid.Row="1"
                                            Grid.Column="5"
                                            Value="{x:Bind ViewModel.UX,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}" />
+                                           LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
+                                           ValueChanged="UX_ValueChanged" />
                                 <!--交流电压档位列表-->
                                 <ComboBox Header="ACU Ranges"
                                           Grid.Row="1"
                                           Grid.RowSpan="2"
                                           Grid.Column="6"
                                           ItemsSource="{x:Bind ViewModel.Ranges_ACU,Mode=OneWay}"
-                                          SelectedIndex="0"
+                                          SelectedIndex="{x:Bind ViewModel.RangeIndex_Ua,Mode=TwoWay}"
                                           HorizontalAlignment="Stretch"
                                           Margin="5" />
                                 <!--行2：交流电流数据-->
-                                <NumberBox Grid.Row="2"
+                                <NumberBox Name="IA"
+                                           Grid.Row="2"
                                            Grid.Column="2"
                                            Value="{x:Bind ViewModel.IA,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
-                                <NumberBox Grid.Row="2"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
+                                           NumberFormatter="{x:Bind ViewModel.Formatter_ACI,Mode=OneWay}"
+                                           ValueChanged="IA_ValueChanged" />
+                                <NumberBox Name="IB"
+                                           Grid.Row="2"
                                            Grid.Column="3"
                                            Value="{x:Bind ViewModel.IB,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
-                                <NumberBox Grid.Row="2"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
+                                           ValueChanged="IB_ValueChanged" />
+                                <NumberBox Name="IC"
+                                           Grid.Row="2"
                                            Grid.Column="4"
                                            Value="{x:Bind ViewModel.IC,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
-                                <NumberBox Grid.Row="2"
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
+                                           ValueChanged="IC_ValueChanged" />
+                                <NumberBox Name="IX"
+                                           Grid.Row="2"
                                            Grid.Column="5"
                                            Value="{x:Bind ViewModel.IX,Mode=OneWay}"
                                            Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                            SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
-                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}" />
+                                           LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
+                                           ValueChanged="IX_ValueChanged" />
                                 <!--交流电流档位列表-->
                                 <ComboBox Header="ACI Ranges"
                                           Grid.Row="3"
                                           Grid.RowSpan="2"
                                           Grid.Column="6"
                                           ItemsSource="{x:Bind ViewModel.Ranges_ACI,Mode=OneWay}"
-                                          SelectedIndex="0"
+                                          SelectedIndex="{x:Bind ViewModel.RangeIndex_Ia,Mode=TwoWay}"
                                           HorizontalAlignment="Stretch"
                                           Margin="5" />
-                                <NumberBox Grid.Row="3"
-                                           Grid.Column="2"
-                                           Value="{x:Bind ViewModel.FaiUA,Mode=OneWay}" />
-                                <NumberBox Grid.Row="3"
+                                <TextBox Name="FaiUA"
+                                         Grid.Row="3"
+                                         Grid.Column="2"
+                                         Text="{x:Bind ViewModel.FaiUA,Mode=OneWay}" />
+                                <NumberBox Name="FaiUB"
+                                           Grid.Row="3"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.FaiUB,Mode=OneWay}" />
-                                <NumberBox Grid.Row="3"
+                                           Value="{x:Bind ViewModel.FaiUB,Mode=OneWay}"
+                                           ValueChanged="FaiUB_ValueChanged" />
+                                <NumberBox Name="FaiUC"
+                                           Grid.Row="3"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.FaiUC,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiUC,Mode=OneWay}"
+                                           ValueChanged="FaiUC_ValueChanged" />
                                 <NumberBox Grid.Row="3"
                                            Grid.Column="5"
                                            Value="{x:Bind ViewModel.FaiUX,Mode=OneWay}" />
-                                <NumberBox Grid.Row="4"
+                                <NumberBox Name="FaiIA"
+                                           Grid.Row="4"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.FaiIA,Mode=OneWay}" />
-                                <NumberBox Grid.Row="4"
+                                           Value="{x:Bind ViewModel.FaiIA,Mode=OneWay}"
+                                           ValueChanged="FaiIA_ValueChanged" />
+                                <NumberBox Name="FaiIB"
+                                           Grid.Row="4"
                                            Grid.Column="3"
-                                           Value="{x:Bind ViewModel.FaiIB,Mode=OneWay}" />
-                                <NumberBox Grid.Row="4"
+                                           Value="{x:Bind ViewModel.FaiIB,Mode=OneWay}"
+                                           ValueChanged="FaiIB_ValueChanged" />
+                                <NumberBox Name="FaiIC"
+                                           Grid.Row="4"
                                            Grid.Column="4"
-                                           Value="{x:Bind ViewModel.FaiIC,Mode=OneWay}" />
-                                <NumberBox Grid.Row="4"
+                                           Value="{x:Bind ViewModel.FaiIC,Mode=OneWay}"
+                                           ValueChanged="FaiIC_ValueChanged" />
+                                <NumberBox Name="FaiIX"
+                                           Grid.Row="4"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.FaiIX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FaiIX,Mode=OneWay}"
+                                           ValueChanged="FaiIX_ValueChanged" />
                                 <TextBox Grid.Row="5"
                                          Text="{x:Bind ViewModel.THDUA}"
                                          Grid.Column="2" />
@@ -327,7 +356,8 @@
                                          Text="{x:Bind ViewModel.THDI}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.PA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.PA,Mode=OneWay}"
+                                           NumberFormatter="{x:Bind ViewModel.Formatter_PQ}" />
                                 <NumberBox Grid.Row="7"
                                            Grid.Column="3"
                                            Value="{x:Bind ViewModel.PB,Mode=OneWay}" />
@@ -342,7 +372,8 @@
                                            Value="{x:Bind ViewModel.P,Mode=OneWay}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.QA,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.QA,Mode=OneWay}"
+                                           NumberFormatter="{x:Bind ViewModel.Formatter_PQ}" />
                                 <NumberBox Grid.Row="8"
                                            Grid.Column="3"
                                            Value="{x:Bind ViewModel.QB,Mode=OneWay}" />
@@ -385,18 +416,22 @@
                                 <NumberBox Grid.Row="10"
                                            Grid.Column="6"
                                            Value="{x:Bind ViewModel.PF,Mode=OneWay}" />
-                                <NumberBox Grid.Row="11"
+                                <NumberBox Name="Freq"
+                                           Grid.Row="11"
                                            Grid.Column="2"
-                                           Value="{x:Bind ViewModel.Freq,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.Freq,Mode=OneWay}"
+                                           ValueChanged="Freq_ValueChanged" />
                                 <NumberBox Grid.Row="11"
                                            Grid.Column="3"
                                            Value="{x:Bind ViewModel.Freq,Mode=OneWay}" />
                                 <NumberBox Grid.Row="11"
                                            Grid.Column="4"
                                            Value="{x:Bind ViewModel.FreqC,Mode=OneWay}" />
-                                <NumberBox Grid.Row="11"
+                                <NumberBox Name="FreqX"
+                                           Grid.Row="11"
                                            Grid.Column="5"
-                                           Value="{x:Bind ViewModel.FreqX,Mode=OneWay}" />
+                                           Value="{x:Bind ViewModel.FreqX,Mode=OneWay}"
+                                           ValueChanged="FreqX_ValueChanged" />
                                 <TextBlock Grid.Row="11"
                                            Grid.Column="6"
                                            Text="{x:Bind ViewModel.FrequencySync}" />
@@ -590,8 +625,8 @@
                                         </Grid>
                                     </Expander.Header>
                                     <!--交流源操作展开区-->
-                                    <StackPanel Spacing="8">
-                                        <Grid>
+                                    <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}">
+                                        <Grid >
                                             <Grid.Background>
                                                 <SolidColorBrush Color="{ThemeResource SystemAccentColor}"
                                                                  Opacity="0.1" />
@@ -613,36 +648,6 @@
                                                 <RowDefinition />
                                                 <RowDefinition />
                                             </Grid.RowDefinitions>
-                                            <StackPanel Orientation="Horizontal"
-                                                        Margin="8"
-                                                        Spacing="8">
-                                                <TextBlock Text="输出通道"
-                                                           VerticalAlignment="Center" />
-                                                <ComboBox  MinWidth="150" />
-                                                <CheckBox Content="自定义通道"
-                                                          Margin="20,0,0,0" />
-                                            </StackPanel >
-                                            <StackPanel Grid.Row="1"
-                                                        Orientation="Horizontal"
-                                                        Margin="8"
-                                                        Spacing="8">
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ua" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ub" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Uc" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ux" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ia" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ib" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ic" />
-                                                <CheckBox MinWidth="60"
-                                                          Content="Ix" />
-                                            </StackPanel>
                                             <Grid Grid.Row="2">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition />
@@ -650,41 +655,52 @@
                                                 </Grid.RowDefinitions>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="auto" />
-                                                    <ColumnDefinition Width="auto"
-                                                                      MinWidth="200" />
+                                                    <ColumnDefinition Width="auto" />
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <!--电压幅值-->
-                                                <ComboBox Header="电压档位"
-                                                          Margin="8"
-                                                          MinWidth="120"
-                                                          ItemsSource="{x:Bind ViewModel.Ranges_ACU,Mode=OneWay}"
-                                                          SelectedIndex="{x:Bind ViewModel.RangeIndex_Ua,Mode=TwoWay}" />
-                                                <NumberBox Header="幅值"
+                                                <!--通道1-->
+                                                <ComboBox Header="通道1"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_1,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值1-->
+                                                <NumberBox Header="幅值1"
+                                                           MinWidth="180"
                                                            Grid.Column="1"
                                                            Margin="8"
-                                                           PlaceholderText="单位：V"
-                                                           SmallChange="10" />
-                                                <!--电流幅值-->
-                                                <ComboBox Header="电流档位"
-                                                          Grid.Row="1"
-                                                          Margin="8"
-                                                          HorizontalAlignment="Stretch"
-                                                          ItemsSource="{x:Bind ViewModel.Ranges_ACI,Mode=OneWay}"
-                                                          SelectedIndex="{x:Bind ViewModel.RangeIndex_Ia,Mode=TwoWay}" />
-                                                <NumberBox Header="幅值"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10" Value="{x:Bind ViewModel.SetAmplitudeValue_1,Mode=TwoWay}"/>
+                                                <Button Grid.Column="2"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.SetAmplitude_1Command}"/>
+                                                <!--通道2-->
+                                                <ComboBox Header="通道2" Grid.Row="1"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值2-->
+                                                <NumberBox Header="幅值2" Grid.Row="1"
+                                                           MinWidth="180"
                                                            Grid.Column="1"
-                                                           Grid.Row="1"
                                                            Margin="8"
-                                                           PlaceholderText="单位：A"
-                                                           SmallChange="1" />
-                                                <Button Content="立即输出"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10" Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}"/>
+                                                <Button Grid.Column="2" Grid.Row="1"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.SetAmplitude_2Command}"/>
+                                                <Button Content="同时设定"
                                                         Grid.Column="4"
                                                         Grid.Row="0"
                                                         Grid.RowSpan="5"
                                                         VerticalAlignment="Stretch"
-                                                        Margin="8" />
+                                                        Margin="8" Command="{x:Bind ViewModel.SetAmplitude_DualCommand}"/>
                                             </Grid>
                                         </Grid>
                                     </StackPanel>

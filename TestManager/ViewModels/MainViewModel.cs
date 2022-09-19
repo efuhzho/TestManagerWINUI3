@@ -18,6 +18,8 @@ public partial class MainViewModel : ObservableObject
         Formatter_ACU = new();
         rounder_ACU = new();
         SetNumberBoxNumberFormatter_ACU();
+        SetNumberBoxNumberFormatter_ACI();
+        SetNumberBoxNumberFormatter_PQ();
     }
 
     /// <summary>
@@ -51,7 +53,7 @@ public partial class MainViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SmallChange_U))]
     [NotifyPropertyChangedFor(nameof(LargeChange_U))]
     private float[]? ranges_ACU;
-    partial void OnRanges_ACUChanging (float[]? value) => MaxValue_U = ( float )( value != null ? value[rangeIndex_Ua] * 1.2 : 1000 );
+    partial void OnRanges_ACUChanged (float[]? value) => MaxValue_U = ( float )( value != null ? value[rangeIndex_Ua] * 1.2 : 1000 );
     #endregion  交流电压档位集合》
 
     #region 《交流电流档位集合
@@ -270,10 +272,66 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private RangeSwitchMode[] itemsRangeSwitchMode = ( RangeSwitchMode[] )Enum. GetValues(typeof(RangeSwitchMode));
     [ObservableProperty]
-    private RangeSwitchMode rangeSwitchMode;
+    private RangeSwitchMode rangeSwitchMode=RangeSwitchMode.Manual;
     #endregion 数据区》
 
     #region 《操作区
+
+    #region 《电压电流幅值设置
+    [ObservableProperty]
+    private Channels[] channels = ( Channels[] )Enum. GetValues(typeof(Channels));
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_1Command))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    private Channels channel_1;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_2;
+    [ObservableProperty]
+    private float setAmplitudeValue_1;
+    [ObservableProperty]
+    private float setAmplitudeValue_2;
+
+    /// <summary>
+    /// 当打开交流源开关则显示相关操作菜单
+    /// </summary>
+    [ObservableProperty]
+    private Visibility visibility_ACS = Visibility. Collapsed;
+
+    /// <summary>
+    /// 通道 1 的幅值设定方法
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanExecute_1))]
+    private void SetAmplitude_1 ()
+    {
+        Task. Run(() => DKS?.ACS. SetAmplitude(channel_1 , setAmplitudeValue_1));
+    }
+    [RelayCommand(CanExecute = nameof(CanExecute_2))]
+    private void SetAmplitude_2 ()
+    {
+        Task. Run(() => DKS?.ACS. SetAmplitude(channel_2 , setAmplitudeValue_2));
+    }
+    [RelayCommand(CanExecute = nameof(CanExecute_Dual))]
+    private void SetAmplitude_Dual ()
+    {
+        SetAmplitude_1();
+        SetAmplitude_2();
+    }
+    private bool CanExecute_1 ()
+    {
+        return channel_1 == 0 ? false : true;
+    }
+    private bool CanExecute_2 ()
+    {
+        return channel_2 == 0 ? false : true;
+    }
+    private bool CanExecute_Dual ()
+    {
+        return channel_1 == 0 || channel_2 == 0 ? false : true;
+    }
+    #endregion 电压电流幅值设置》
+
     [ObservableProperty]
     private bool isEnabled_ACS;
     [ObservableProperty]
@@ -425,7 +483,7 @@ public partial class MainViewModel : ObservableObject
     partial void OnRangeIndex_IaChanged (byte value)
     {
         rangeIndex_Ia = rangeIndex_Ia_Temp;
-       // MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
+        // MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
     }
     private async void SetRange_ACI (byte index)
     {
@@ -444,6 +502,12 @@ public partial class MainViewModel : ObservableObject
         if ( value )
         {
             Task. Run(new Action(OpenACS));
+            Visibility_ACS = Visibility. Visible;
+        }
+        else
+        {
+            Task. Run(() => DKS?.ACS. Stop());
+            Visibility_ACS = Visibility. Collapsed;
         }
     }
 
@@ -453,6 +517,15 @@ public partial class MainViewModel : ObservableObject
         if ( value )
         {
             Task. Run(new Action(OpenDCS));
+        }
+        else
+        {
+            Task. Run(() =>
+            {
+                DKS?.DCS. Stop_DCI();
+                DKS?.DCS. Stop_DCU();
+                DKS?.DCS. Stop_DCR();
+            });
         }
     }
     partial void OnIsOpenEQPChanged (bool value)
@@ -472,6 +545,7 @@ public partial class MainViewModel : ObservableObject
 
     private void OpenACS ()
     {
+        DKS?.ACS. Open();
         while ( IsOpenACS )
         {
             DKS?.ACS. ReadData();
@@ -515,7 +589,6 @@ public partial class MainViewModel : ObservableObject
             RangeIndex_Ia = DKS?.ACS. RangeIndex_Ia ?? 0;
             RangeIndex_Ua = DKS?.ACS. RangeIndex_Ua ?? 0;
         }
-
     }
     private void OpenDCS ()
     {
@@ -894,10 +967,10 @@ public partial class MainViewModel : ObservableObject
     }
 
     private readonly IncrementNumberRounder rounder_ACU;
-    
+
     private void SetNumberBoxNumberFormatter_ACU ()
     {
-        rounder_ACU. Increment =0.001;
+        rounder_ACU. Increment = 0.001;
         rounder_ACU. RoundingAlgorithm = RoundingAlgorithm. RoundHalfUp;
         Formatter_ACU. IntegerDigits = 1;
         Formatter_ACU. FractionDigits = 3;
@@ -911,11 +984,11 @@ public partial class MainViewModel : ObservableObject
     private void SetNumberBoxNumberFormatter_ACI ()
     {
         IncrementNumberRounder rounder = new IncrementNumberRounder();
-        rounder. Increment = maxValue_I * 0.00001;
+        rounder. Increment = 0.00001;
         rounder. RoundingAlgorithm = RoundingAlgorithm. RoundHalfUp;
         formatter_ACI = new();
         formatter_ACI. IntegerDigits = 1;
-        formatter_ACI. FractionDigits = 3;
+        formatter_ACI. FractionDigits = 4;
         formatter_ACI. NumberRounder = rounder;
     }
 
@@ -924,7 +997,7 @@ public partial class MainViewModel : ObservableObject
     private void SetNumberBoxNumberFormatter_PQ ()
     {
         IncrementNumberRounder rounder = new IncrementNumberRounder();
-        rounder. Increment = maxValue_I * maxValue_U * 0.00001;
+        rounder. Increment = 0.001;
         rounder. RoundingAlgorithm = RoundingAlgorithm. RoundHalfUp;
         formatter_PQ = new();
         formatter_PQ. IntegerDigits = 1;
