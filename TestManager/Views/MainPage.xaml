@@ -100,6 +100,8 @@
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
                                     <RowDefinition Height="AUTO" />
+                                    <RowDefinition Height="AUTO" />
+                                    <RowDefinition Height="AUTO" />
                                 </Grid.RowDefinitions>
                                 <!--列定义-->
                                 <Grid.ColumnDefinitions>
@@ -479,7 +481,41 @@
                                               ToolTipService.ToolTip="档位切换模式"
                                               IsEnabled="False" />
                                 </StackPanel>
-                                <Slider Grid.Row="13"
+                                <StackPanel Grid.Row="13"
+                                            Spacing="8"
+                                            Margin="8"
+                                            Grid.ColumnSpan="10"
+                                            Orientation="Horizontal"
+                                            Visibility="{x:Bind ViewModel.Visibility_DCS,Mode=OneWay}">
+                                    <StackPanel.Background>
+                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
+                                                         Opacity="0.1" />
+                                    </StackPanel.Background>
+                                    <NumberBox Header="直流电压输出"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCU,Mode=OneWay}" />
+                                    <NumberBox Header="直流电流输出"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCI,Mode=OneWay}" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="14"
+                                            Spacing="8"
+                                            Margin="8"
+                                            Grid.ColumnSpan="10"
+                                            Orientation="Horizontal"
+                                            Visibility="{x:Bind ViewModel.Visibility_DCM,Mode=OneWay}">
+                                    <StackPanel.Background>
+                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
+                                                         Opacity="0.1" />
+                                    </StackPanel.Background>
+                                    <NumberBox Header="直流电压测量"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCMU,Mode=OneWay}" />
+                                    <NumberBox Header="直流电流测量"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCMI,Mode=OneWay}" />
+                                </StackPanel>
+                                <Slider Grid.Row="15"
                                         Grid.ColumnSpan="7"
                                         Minimum="14"
                                         Maximum="36"
@@ -598,7 +634,8 @@
                                 </Expander >
                                 <!--交流源操作-->
                                 <Expander HorizontalAlignment="Stretch"
-                                          HorizontalContentAlignment="Stretch">
+                                          HorizontalContentAlignment="Stretch"
+                                          Visibility="{x:Bind ViewModel.ModuleVisibility_ACS,Mode=OneWay}">
                                     <Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -625,8 +662,9 @@
                                         </Grid>
                                     </Expander.Header>
                                     <!--交流源操作展开区-->
-                                    <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}">
-                                        <Grid >
+                                    <StackPanel Spacing="8"
+                                                Visibility="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}">
+                                        <Grid>
                                             <Grid.Background>
                                                 <SolidColorBrush Color="{ThemeResource SystemAccentColor}"
                                                                  Opacity="0.1" />
@@ -671,42 +709,51 @@
                                                            Grid.Column="1"
                                                            Margin="8"
                                                            PlaceholderText="单位：V 或 A"
-                                                           SmallChange="10" Value="{x:Bind ViewModel.SetAmplitudeValue_1,Mode=TwoWay}"/>
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_1,Mode=TwoWay}" />
                                                 <Button Grid.Column="2"
                                                         Content="立即输出"
                                                         VerticalAlignment="Stretch"
                                                         Margin="8"
-                                                        HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.SetAmplitude_1Command}"/>
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_1Command}" />
                                                 <!--通道2-->
-                                                <ComboBox Header="通道2" Grid.Row="1"
+                                                <ComboBox Header="通道2"
+                                                          Grid.Row="1"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
                                                 <!--幅值2-->
-                                                <NumberBox Header="幅值2" Grid.Row="1"
+                                                <NumberBox Header="幅值2"
+                                                           Grid.Row="1"
                                                            MinWidth="180"
                                                            Grid.Column="1"
                                                            Margin="8"
                                                            PlaceholderText="单位：V 或 A"
-                                                           SmallChange="10" Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}"/>
-                                                <Button Grid.Column="2" Grid.Row="1"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="1"
                                                         Content="立即输出"
                                                         VerticalAlignment="Stretch"
                                                         Margin="8"
-                                                        HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.SetAmplitude_2Command}"/>
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
                                                 <Button Content="同时设定"
                                                         Grid.Column="4"
                                                         Grid.Row="0"
                                                         Grid.RowSpan="5"
                                                         VerticalAlignment="Stretch"
-                                                        Margin="8" Command="{x:Bind ViewModel.SetAmplitude_DualCommand}"/>
+                                                        Margin="8"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_DualCommand}" />
                                             </Grid>
                                         </Grid>
                                     </StackPanel>
                                 </Expander>
                                 <!--直流源操作-->
-                                <Expander HorizontalAlignment="Stretch">
+                                <Expander HorizontalAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch" Visibility="{x:Bind ViewModel.ModuleVisibility_DCS,Mode=OneWay}">
                                     <Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -732,9 +779,59 @@
                                             </ToggleSwitch>
                                         </Grid>
                                     </Expander.Header>
+                                    <!--直流源展开区-->
+                                    <StackPanel Margin="8"
+                                                Visibility="{x:Bind ViewModel.Visibility_DCS,Mode=OneWay}">
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <ComboBox ItemsSource="{x:Bind ViewModel.Ranges_DCU,Mode=OneWay}"
+                                                      Header="电压档位"
+                                                      Margin="8"
+                                                      MinWidth="100"
+                                                      SelectedIndex="{x:Bind ViewModel.RangeIndex_DCU,Mode=TwoWay}" />
+                                            <NumberBox Grid.Column="1"
+                                                       Header="幅值"
+                                                       Margin="8"
+                                                       MinWidth="180"
+                                                       Value="{x:Bind ViewModel.Value_DCU,Mode=TwoWay}" />
+                                            <Button Grid.Column="3"
+                                                    Content="立即输出"
+                                                    VerticalAlignment="Stretch"
+                                                    Margin="8"
+                                                    HorizontalAlignment="Stretch"
+                                                    Command="{x:Bind ViewModel.SetAmplitude_DCUCommand}" />
+                                            <ComboBox Grid.Row="1"
+                                                      ItemsSource="{x:Bind ViewModel.Ranges_DCU,Mode=OneWay}"
+                                                      SelectedIndex="{x:Bind ViewModel.RangeIndex_DCI,Mode=TwoWay}"
+                                                      Header="电流档位"
+                                                      Margin="8"
+                                                      MinWidth="100" />
+                                            <NumberBox Grid.Column="1"
+                                                       Grid.Row="1"
+                                                       Header="幅值"
+                                                       Margin="8"
+                                                       MinWidth="180"
+                                                       Value="{x:Bind ViewModel.Value_DCI,Mode=TwoWay}" />
+                                            <Button Grid.Column="3"
+                                                    Grid.Row="1"
+                                                    Content="立即输出"
+                                                    VerticalAlignment="Stretch"
+                                                    Margin="8"
+                                                    HorizontalAlignment="Stretch"
+                                                    Command="{x:Bind ViewModel.SetAmplitude_DCICommand}" />
+                                        </Grid>
+                                    </StackPanel>
                                 </Expander>
                                 <!--直流表操作-->
-                                <Expander HorizontalAlignment="Stretch">
+                                <Expander HorizontalAlignment="Stretch" Visibility="{x:Bind ViewModel.ModuleVisibility_DCM,Mode=OneWay}">
                                     <Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -762,7 +859,7 @@
                                     </Expander.Header>
                                 </Expander>
                                 <!--电能模块操作-->
-                                <Expander HorizontalAlignment="Stretch">
+                                <Expander HorizontalAlignment="Stretch" Visibility="{x:Bind ViewModel.ModuleVisibility_EPQ,Mode=OneWay}">
                                     <Expander.Header>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -793,14 +890,16 @@
                         </Grid>
                     </ScrollViewer>
                 </TabViewItem>
-                <TabViewItem  Header="Tab 2 Has Longer Text"
-                              IsClosable="False">
+                <TabViewItem  Header="自动校准"
+                              IsClosable="False"
+                              IsEnabled="False">
                     <TabViewItem.IconSource>
-                        <SymbolIconSource Symbol="MusicInfo" />
+                        <SymbolIconSource Symbol="Admin" />
                     </TabViewItem.IconSource>
                 </TabViewItem>
-                <TabViewItem  Header="Third Tab"
-                              IsClosable="False">
+                <TabViewItem  Header="日志"
+                              IsClosable="False"
+                              IsEnabled="False">
                     <TabViewItem.IconSource>
                         <SymbolIconSource Symbol="Placeholder" />
                     </TabViewItem.IconSource>

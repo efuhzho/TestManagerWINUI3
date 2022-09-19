@@ -17,6 +17,7 @@ public partial class MainViewModel : ObservableObject
         baudRate = baudRates[2];
         Formatter_ACU = new();
         rounder_ACU = new();
+
         SetNumberBoxNumberFormatter_ACU();
         SetNumberBoxNumberFormatter_ACI();
         SetNumberBoxNumberFormatter_PQ();
@@ -66,6 +67,20 @@ public partial class MainViewModel : ObservableObject
     private float[]? ranges_ACI;
     partial void OnRanges_ACIChanged (float[]? value) => MaxValue_I = ( float )( value != null ? value[rangeIndex_Ia] * 1.2 : 100 );
     #endregion 交流电流档位集合》
+
+    #region 《直流源档位集合
+    [ObservableProperty]
+    private float[]? ranges_DCU;
+    [ObservableProperty]
+    private float[]? ranges_DCI;
+    #endregion 直流源档位集合》
+
+    #region 《直流表档位集合
+    [ObservableProperty]
+    private float[]? ranges_DCMU;
+    [ObservableProperty]
+    private float[]? ranges_DCMI;
+    #endregion 直流表档位集合》
 
     #region UA
     [ObservableProperty]
@@ -272,82 +287,84 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private RangeSwitchMode[] itemsRangeSwitchMode = ( RangeSwitchMode[] )Enum. GetValues(typeof(RangeSwitchMode));
     [ObservableProperty]
-    private RangeSwitchMode rangeSwitchMode=RangeSwitchMode.Manual;
+    private RangeSwitchMode rangeSwitchMode = RangeSwitchMode. Manual;
     #endregion 数据区》
 
     #region 《操作区
-
-    #region 《电压电流幅值设置
-    [ObservableProperty]
-    private Channels[] channels = ( Channels[] )Enum. GetValues(typeof(Channels));
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_1Command))]
-    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
-    private Channels channel_1;
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
-    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
-    private Channels channel_2;
-    [ObservableProperty]
-    private float setAmplitudeValue_1;
-    [ObservableProperty]
-    private float setAmplitudeValue_2;
-
-    /// <summary>
-    /// 当打开交流源开关则显示相关操作菜单
-    /// </summary>
-    [ObservableProperty]
-    private Visibility visibility_ACS = Visibility. Collapsed;
-
-    /// <summary>
-    /// 通道 1 的幅值设定方法
-    /// </summary>
-    [RelayCommand(CanExecute = nameof(CanExecute_1))]
-    private void SetAmplitude_1 ()
-    {
-        Task. Run(() => DKS?.ACS. SetAmplitude(channel_1 , setAmplitudeValue_1));
-    }
-    [RelayCommand(CanExecute = nameof(CanExecute_2))]
-    private void SetAmplitude_2 ()
-    {
-        Task. Run(() => DKS?.ACS. SetAmplitude(channel_2 , setAmplitudeValue_2));
-    }
-    [RelayCommand(CanExecute = nameof(CanExecute_Dual))]
-    private void SetAmplitude_Dual ()
-    {
-        SetAmplitude_1();
-        SetAmplitude_2();
-    }
-    private bool CanExecute_1 ()
-    {
-        return channel_1 == 0 ? false : true;
-    }
-    private bool CanExecute_2 ()
-    {
-        return channel_2 == 0 ? false : true;
-    }
-    private bool CanExecute_Dual ()
-    {
-        return channel_1 == 0 || channel_2 == 0 ? false : true;
-    }
-    #endregion 电压电流幅值设置》
-
+    #region 《设置
     [ObservableProperty]
     private bool isEnabled_ACS;
+    partial void OnIsEnabled_ACSChanged (bool value)
+    {
+        switch ( value )
+        {
+            case true: ModuleVisibility_ACS = Visibility. Visible; break;
+            case false: ModuleVisibility_ACS = Visibility. Collapsed; break;
+        }
+    }
+    [ObservableProperty]
+    private Visibility moduleVisibility_ACS = Visibility. Collapsed;
+    /// <summary>
+    /// 
+    /// </summary>
     [ObservableProperty]
     private bool isEnabled_DCS;
     [ObservableProperty]
+    private Visibility moduleVisibility_DCS = Visibility. Collapsed;
+    partial void OnIsEnabled_DCSChanged (bool value)
+    {
+        switch ( value )
+        {
+            case true: ModuleVisibility_DCS = Visibility. Visible; break;
+            case false: ModuleVisibility_DCS = Visibility. Collapsed; break;
+        }
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    [ObservableProperty]
     private bool isEnabled_ACM;
+    [ObservableProperty]
+    private Visibility moduleVisibility_ACM = Visibility. Collapsed;
+    partial void OnIsEnabled_ACMChanged (bool value)
+    {
+        switch ( value )
+        {
+            case true: ModuleVisibility_ACM = Visibility. Visible; break;
+            case false: ModuleVisibility_ACM = Visibility. Collapsed; break;
+        }
+    }
+
     /// <summary>
     /// 指示直流表功能是否激活
     /// </summary>
     [ObservableProperty]
     private bool isEnabled_DCM;
+    [ObservableProperty]
+    private Visibility moduleVisibility_DCM = Visibility. Collapsed;
+    partial void OnIsEnabled_DCMChanged (bool value)
+    {
+        switch ( value )
+        {
+            case true: ModuleVisibility_DCM = Visibility. Visible; break;
+            case false: ModuleVisibility_DCM = Visibility. Collapsed; break;
+        }
+    }
     /// <summary>
     /// 指示电能校验功能是否激活
     /// </summary>
     [ObservableProperty]
     private bool isEnabled_EQP;
+    [ObservableProperty]
+    private Visibility moduleVisibility_EPQ = Visibility. Collapsed;
+    partial void OnIsEnabled_EQPChanged (bool value)
+    {
+        switch ( value )
+        {
+            case true: ModuleVisibility_EPQ = Visibility. Visible; break;
+            case false: ModuleVisibility_EPQ= Visibility. Collapsed; break;
+        }
+    }
     /// <summary>
     /// 指示开关量功能是否激活
     /// </summary>
@@ -410,6 +427,107 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool isEnabled_PPS;
 
+    #endregion 设置》
+
+    #region 《交流源
+    [ObservableProperty]
+    private Channels[] channels = ( Channels[] )Enum. GetValues(typeof(Channels));
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_1Command))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    private Channels channel_1;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_2;
+    [ObservableProperty]
+    private float setAmplitudeValue_1;
+    [ObservableProperty]
+    private float setAmplitudeValue_2;
+
+    /// <summary>
+    /// 当打开交流源开关则显示相关操作菜单
+    /// </summary>
+    [ObservableProperty]
+    private Visibility visibility_ACS = Visibility. Collapsed;
+
+    /// <summary>
+    /// 通道 1 的幅值设定方法
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanExecute_1))]
+    private void SetAmplitude_1 ()
+    {
+        Task. Run(() => DKS?.ACS. SetAmplitude(channel_1 , setAmplitudeValue_1));
+    }
+    [RelayCommand(CanExecute = nameof(CanExecute_2))]
+    private void SetAmplitude_2 ()
+    {
+        Task. Run(() => DKS?.ACS. SetAmplitude(channel_2 , setAmplitudeValue_2));
+    }
+    [RelayCommand(CanExecute = nameof(CanExecute_Dual))]
+    private void SetAmplitude_Dual ()
+    {
+        SetAmplitude_1();
+        SetAmplitude_2();
+    }
+    private bool CanExecute_1 ()
+    {
+        return channel_1 == 0 ? false : true;
+    }
+    private bool CanExecute_2 ()
+    {
+        return channel_2 == 0 ? false : true;
+    }
+    private bool CanExecute_Dual ()
+    {
+        return channel_1 == 0 || channel_2 == 0 ? false : true;
+    }
+
+    #endregion 交流源》
+
+    #region 《直流电压电流幅值设置
+    [ObservableProperty]
+    private byte rangeIndex_DCU;
+    partial void OnRangeIndex_DCUChanged (byte value) => Task. Run(() => DKS?.DCS. SetRange_DCU(value));
+
+    [ObservableProperty]
+    private byte rangeIndex_DCI;
+    partial void OnRangeIndex_DCIChanged (byte value) => Task. Run(() => DKS?.DCS. SetRange_DCI(value));
+
+    [ObservableProperty]
+    private float value_DCU;
+    [RelayCommand]
+    private void SetAmplitude_DCU ()
+    {
+        Task. Run(() => DKS?.DCS. SetAmplitude_DCU(value_DCU));    //TODO 将档位和幅值一起设置
+    }
+
+    [ObservableProperty]
+    private float value_DCI;
+    [RelayCommand]
+    private void SetAmplitude_DCI ()
+    {
+        Task. Run(() => DKS?.DCS. SetAmplitude_DCI(value_DCI));
+    }
+    [ObservableProperty]
+    private Visibility visibility_DCS = Visibility. Collapsed;
+    [ObservableProperty]
+    private float dCU;
+    [ObservableProperty]
+    private float dCI;
+    #endregion 直流电压电流幅值设置》
+
+    #region 《直流表操作
+    [ObservableProperty]
+    private float dCMU;
+    [ObservableProperty]
+    private float dCMI;
+    [ObservableProperty]
+    private Visibility visibility_DCM = Visibility. Collapsed;
+    #endregion 直流表操作》
+
+   
+
     /// <summary>
     /// 指示ACS开关状态.
     /// </summary>
@@ -425,7 +543,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool isOpenDCM;
 
-    #region 《电压档位索引值
+    #region 《选择交流电压档位索引值
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MaxValue_U))]
     [NotifyPropertyChangedFor(nameof(SmallChange_U))]
@@ -461,7 +579,7 @@ public partial class MainViewModel : ObservableObject
     }
     #endregion 电压档位索引值》
 
-    #region 《电流档位索引值
+    #region 《选择交流电流档位索引值
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MaxValue_I))]
     [NotifyPropertyChangedFor(nameof(SmallChange_I))]
@@ -496,12 +614,13 @@ public partial class MainViewModel : ObservableObject
     }
     #endregion 电流档位索引值》
 
+    #region 《功能模块开关操作
 
     partial void OnIsOpenACSChanged (bool value)
     {
         if ( value )
         {
-            Task. Run(new Action(OpenACS));
+            ReadDataACS();
             Visibility_ACS = Visibility. Visible;
         }
         else
@@ -511,12 +630,12 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-
     partial void OnIsOpenDCSChanged (bool value)
     {
         if ( value )
         {
-            Task. Run(new Action(OpenDCS));
+            ReadDataDCS();
+            Visibility_DCS = Visibility. Visible;
         }
         else
         {
@@ -526,103 +645,129 @@ public partial class MainViewModel : ObservableObject
                 DKS?.DCS. Stop_DCU();
                 DKS?.DCS. Stop_DCR();
             });
+            Visibility_DCS = Visibility. Collapsed;
         }
     }
     partial void OnIsOpenEQPChanged (bool value)
     {
         if ( value )
         {
-            Task. Run(new Action(OpenEQP));
+            ReadDataEQP();
+        }
+        else
+        {
         }
     }
     partial void OnIsOpenDCMChanged (bool value)
     {
         if ( value )
         {
-            Task. Run(new Action(OpenDCM));
+            ReadDataDCM();
+            Visibility_DCM = Visibility. Visible;
+        }
+        else
+        {
+            Visibility_DCM = Visibility. Collapsed;
         }
     }
 
-    private void OpenACS ()
+    private async void ReadDataACS ()
     {
-        DKS?.ACS. Open();
+        // DKS?.ACS. Open();
         while ( IsOpenACS )
         {
-            DKS?.ACS. ReadData();
-            UA = DKS?.ACS. IA ?? 0;
-            UB = DKS?.ACS. UB ?? 0;
-            UC = DKS?.ACS. UC ?? 0;
-            UX = DKS?.ACS. UX ?? 0;
-            IA = DKS?.ACS. IA ?? 0;
-            IB = DKS?.ACS. IB ?? 0;
-            IC = DKS?.ACS. IC ?? 0;
-            IX = DKS?.ACS. IX ?? 0;
-            FaiUA = DKS?.ACS. FAI_UA ?? 0;
-            FaiUB = DKS?.ACS. FAI_UB ?? 0;
-            FaiUC = DKS?.ACS. FAI_UC ?? 0;
-            FaiIA = DKS?.ACS. FAI_IA ?? 0;
-            FaiIB = DKS?.ACS. FAI_IB ?? 0;
-            FaiIC = DKS?.ACS. FAI_IC ?? 0;
-            PA = DKS?.ACS. PA ?? 0;
-            PB = DKS?.ACS. PB ?? 0;
-            PC = DKS?.ACS. PC ?? 0;
-            PX = DKS?.ACS. PX ?? 0;
-            P = DKS?.ACS. P ?? 0;
-            QA = DKS?.ACS. QA ?? 0;
-            QB = DKS?.ACS. QB ?? 0;
-            QC = DKS?.ACS. QC ?? 0;
-            QX = DKS?.ACS. QX ?? 0;
-            Q = DKS?.ACS. Q ?? 0;
-            SA = DKS?.ACS. SA ?? 0;
-            SB = DKS?.ACS. SB ?? 0;
-            SC = DKS?.ACS. SC ?? 0;
-            SX = DKS?.ACS. SX ?? 0;
-            S = DKS?.ACS. S ?? 0;
-            PFA = DKS?.ACS. PFA ?? 0;
-            PFB = DKS?.ACS. PFB ?? 0;
-            PFC = DKS?.ACS. PFC ?? 0;
-            PFX = DKS?.ACS. PFX ?? 0;
-            PF = DKS?.ACS. PF ?? 0;
-            FreqC = DKS?.ACS. Freq_C ?? 0;
-            FreqX = DKS?.ACS. Freq_X ?? 0;
-            Freq = DKS?.ACS. Freq ?? 0;
-            RangeIndex_Ia = DKS?.ACS. RangeIndex_Ia ?? 0;
-            RangeIndex_Ua = DKS?.ACS. RangeIndex_Ua ?? 0;
+            var result = await Task. Run(() => DKS?.ACS. ReadData());
+            if ( result?.IsSuccess ?? false )
+            {
+                UA = DKS?.ACS. IA ?? 0;
+                UB = DKS?.ACS. UB ?? 0;
+                UC = DKS?.ACS. UC ?? 0;
+                UX = DKS?.ACS. UX ?? 0;
+                IA = DKS?.ACS. IA ?? 0;
+                IB = DKS?.ACS. IB ?? 0;
+                IC = DKS?.ACS. IC ?? 0;
+                IX = DKS?.ACS. IX ?? 0;
+                FaiUA = DKS?.ACS. FAI_UA ?? 0;
+                FaiUB = DKS?.ACS. FAI_UB ?? 0;
+                FaiUC = DKS?.ACS. FAI_UC ?? 0;
+                FaiIA = DKS?.ACS. FAI_IA ?? 0;
+                FaiIB = DKS?.ACS. FAI_IB ?? 0;
+                FaiIC = DKS?.ACS. FAI_IC ?? 0;
+                PA = DKS?.ACS. PA ?? 0;
+                PB = DKS?.ACS. PB ?? 0;
+                PC = DKS?.ACS. PC ?? 0;
+                PX = DKS?.ACS. PX ?? 0;
+                P = DKS?.ACS. P ?? 0;
+                QA = DKS?.ACS. QA ?? 0;
+                QB = DKS?.ACS. QB ?? 0;
+                QC = DKS?.ACS. QC ?? 0;
+                QX = DKS?.ACS. QX ?? 0;
+                Q = DKS?.ACS. Q ?? 0;
+                SA = DKS?.ACS. SA ?? 0;
+                SB = DKS?.ACS. SB ?? 0;
+                SC = DKS?.ACS. SC ?? 0;
+                SX = DKS?.ACS. SX ?? 0;
+                S = DKS?.ACS. S ?? 0;
+                PFA = DKS?.ACS. PFA ?? 0;
+                PFB = DKS?.ACS. PFB ?? 0;
+                PFC = DKS?.ACS. PFC ?? 0;
+                PFX = DKS?.ACS. PFX ?? 0;
+                PF = DKS?.ACS. PF ?? 0;
+                FreqC = DKS?.ACS. Freq_C ?? 0;
+                FreqX = DKS?.ACS. Freq_X ?? 0;
+                Freq = DKS?.ACS. Freq ?? 0;
+                RangeIndex_Ia = DKS?.ACS. RangeIndex_Ia ?? 0;
+                RangeIndex_Ua = DKS?.ACS. RangeIndex_Ua ?? 0;
+            }
+
+            UpdateInfoBar("读取【交流源】数据" , result);
         }
     }
-    private void OpenDCS ()
+    private async void ReadDataDCS ()
     {
         while ( IsOpenDCS )
         {
-            var result = DKS?.DCS. ReadData();
+            var result = await Task. Run(() => DKS?.DCS. ReadData());
             if ( result?.IsSuccess ?? false )
             {
-
+                DCU = DKS?.DCS. DCU ?? 0;
+                DCI = DKS?.DCS. DCI ?? 0;
             }
+
+            UpdateInfoBar("读取【直流源】数据" , result);
+
         }
     }
-    private void OpenDCM ()
+    private async void ReadDataDCM ()
     {
         while ( IsOpenDCM )
         {
-            var result = DKS?.DCM. ReadData();
+            var result = await Task. Run(() => DKS?.DCM. ReadData());
             if ( result?.IsSuccess ?? false )
             {
-
+                DCMU = DKS?.DCM. DCMU ?? 0;
+                DCMI = DKS?.DCM. DCMI ?? 0;
             }
+
+            UpdateInfoBar("读取【直流表】数据" , result);
         }
     }
-    private void OpenEQP ()
+    private async void ReadDataEQP ()
     {
         while ( IsOpenEQP )
         {
-            var result = DKS?.EPQ. ReadData();
+            var result = await Task. Run(() => DKS?.EPQ. ReadData());
             if ( result?.IsSuccess ?? false )
             {
 
             }
+            UpdateInfoBar("读取【电能误差】数据" , result);
+
         }
     }
+    #endregion 功能模块开关操作》
+
+
     #endregion 操作区》
 
     #region 状态栏Infobar绑定
@@ -910,6 +1055,12 @@ public partial class MainViewModel : ObservableObject
                     Ranges_ACU = DKS. ACS. Ranges_ACU;
                     //交流电流档位集合初始化
                     Ranges_ACI = DKS. ACS. Ranges_ACI;
+                    //直流源量程
+                    Ranges_DCU = DKS. DCS. Ranges_DCU;
+                    Ranges_DCI = DKS. DCS. Ranges_DCI;
+                    //直流表量程
+                    Ranges_DCMU = DKS. DCM. Ranges_DCMU;
+                    Ranges_DCMI = DKS. DCM. Ranges_DCMI;
                     //禁用参数设置控件
                     DisableSerialPortEdit = false;
                     //打开串口超时参数设置控件
