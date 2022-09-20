@@ -1,10 +1,12 @@
-﻿using System. IO. Ports;
+﻿using System. Drawing;
+using System. IO. Ports;
 using CommunityToolkit. Mvvm. ComponentModel;
 using CommunityToolkit. Mvvm. Input;
 using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
+using Microsoft. UI. Xaml. Media;
 using Windows. Globalization. NumberFormatting;
-using Windows. UI. WebUI;
+using Brush = Microsoft. UI. Xaml. Media. Brush;
 
 namespace TestManager. ViewModels;
 
@@ -365,7 +367,7 @@ public partial class MainViewModel : ObservableObject
         switch ( value )
         {
             case true: ModuleVisibility_EPQ = Visibility. Visible; break;
-            case false: ModuleVisibility_EPQ= Visibility. Collapsed; break;
+            case false: ModuleVisibility_EPQ = Visibility. Collapsed; break;
         }
     }
 
@@ -375,7 +377,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool isEnabled_Calibrate;
     [ObservableProperty]
-    private Visibility moduleVisibility_Calibrate= Visibility. Collapsed;
+    private Visibility moduleVisibility_Calibrate = Visibility. Collapsed;
     partial void OnIsEnabled_CalibrateChanged (bool value)
     {
         switch ( value )
@@ -456,14 +458,14 @@ public partial class MainViewModel : ObservableObject
     private async void SetDeviceInfo ()
     {
         var pwd = new char[] { '6' , '3' , '8' , '3' , '6' };
-        var result =await Task. Run(() => DKS?. Settings. SetDeviceInfo(pwd,settingID,settingSN));
-        UpdateInfoBar("设置装置信息",result);
+        var result = await Task. Run(() => DKS?.Settings. SetDeviceInfo(pwd , settingID , settingSN));
+        UpdateInfoBar("设置装置信息" , result);
     }
     [RelayCommand]
     private async void SetBaudRate ()
     {
-      var result=  await Task.Run(()=>DKS?.Settings.SetBaudRate(settingBaudRate));
-        UpdateInfoBar("设置装置波特率",result);
+        var result = await Task. Run(() => DKS?.Settings. SetBaudRate(settingBaudRate));
+        UpdateInfoBar("设置装置波特率" , result);
     }
 
     #endregion 设置》
@@ -531,13 +533,13 @@ public partial class MainViewModel : ObservableObject
     partial void OnRangeIndex_DCUChanged (byte value) => Task. Run(() => DKS?.DCS. SetRange_DCU(value));
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof (SetAmplitude_DCICommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DCICommand))]
     private byte rangeIndex_DCI;
     partial void OnRangeIndex_DCIChanged (byte value) => Task. Run(() => DKS?.DCS. SetRange_DCI(value));
 
     [ObservableProperty]
     private float value_DCU;
-    [RelayCommand(CanExecute =nameof(CanExecute_SetAmplitudeDCU))]
+    [RelayCommand(CanExecute = nameof(CanExecute_SetAmplitudeDCU))]
     private void SetAmplitude_DCU ()
     {
         Task. Run(() => DKS?.DCS. SetAmplitude_DCU(value_DCU));    //TODO 将档位和幅值一起设置
@@ -545,17 +547,17 @@ public partial class MainViewModel : ObservableObject
 
     private bool CanExecute_SetAmplitudeDCU ()
     {
-        return Ranges_DCU !=null;
+        return Ranges_DCU != null;
     }
 
     private bool CanExecute_SetAmplitudeDCI ()
     {
-        return ranges_DCI!=null;
+        return ranges_DCI != null;
     }
 
     [ObservableProperty]
     private float value_DCI;
-    [RelayCommand(CanExecute =nameof(CanExecute_SetAmplitudeDCI))]
+    [RelayCommand(CanExecute = nameof(CanExecute_SetAmplitudeDCI))]
     private void SetAmplitude_DCI ()
     {
         Task. Run(() => DKS?.DCS. SetAmplitude_DCI(value_DCI));
@@ -577,7 +579,7 @@ public partial class MainViewModel : ObservableObject
     private Visibility visibility_DCM = Visibility. Collapsed;
     #endregion 直流表操作》
 
-   
+
 
     /// <summary>
     /// 指示ACS开关状态.
@@ -602,8 +604,8 @@ public partial class MainViewModel : ObservableObject
     private byte rangeIndex_Ua;
     [ObservableProperty]
     private float maxValue_U;
-    public float SmallChange_U => ( float )( ranges_ACU != null ? ranges_ACU[rangeIndex_Ua] * 0.1 : 0 );
-    public float LargeChange_U => ( float )( ranges_ACU != null ? ranges_ACU[rangeIndex_Ua] * 0.2 : 0 );
+    public float SmallChange_U => ( float )( ranges_ACU != null && rangeIndex_Ua != 0XFF ? ranges_ACU[rangeIndex_Ua] * 0.1 : 0 );
+    public float LargeChange_U => ( float )( ranges_ACU != null && rangeIndex_Ua != 0XFF ? ranges_ACU[rangeIndex_Ua] * 0.2 : 0 );
 
     /// <summary>
     /// 【备份】用于设置失败时恢复设置前的值；
@@ -611,13 +613,21 @@ public partial class MainViewModel : ObservableObject
     private byte rangeIndex_Ua_Backup;
     partial void OnRangeIndex_UaChanging (byte value)
     {
+        if ( value == 0xff )
+        {
+            return;
+        }
         rangeIndex_Ua_Backup = rangeIndex_Ua;
         SetRange_ACU(value);
     }
     partial void OnRangeIndex_UaChanged (byte value)
     {
+        if ( value == 0xff )
+        {
+            return;
+        }
         rangeIndex_Ua = rangeIndex_Ua_Backup;
-        MaxValue_U = ( float )(ranges_ACU!=null? ranges_ACU[value] * 1.2 :0);
+        MaxValue_U = ( float )( ranges_ACU != null ? ranges_ACU[value] * 1.2 : 0 );
     }
 
     private async void SetRange_ACU (byte index)
@@ -639,19 +649,27 @@ public partial class MainViewModel : ObservableObject
     private byte rangeIndex_Ia;
     [ObservableProperty]
     private float maxValue_I;
-    public float SmallChange_I => ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 0.1 : 0 );
-    public float LargeChange_I => ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 0.2 : 0 );
+    public float SmallChange_I => ( float )( ranges_ACI != null && rangeIndex_Ia != 0XFF ? ranges_ACI[rangeIndex_Ia] * 0.1 : 0 );
+    public float LargeChange_I => ( float )( ranges_ACI != null && rangeIndex_Ia != 0XFF ? ranges_ACI[rangeIndex_Ia] * 0.2 : 0 );
     /// <summary>
     /// 【备份】用于设置失败时恢复设置前的值；
     /// </summary>
     private byte rangeIndex_Ia_Temp;
     partial void OnRangeIndex_IaChanging (byte value)
     {
+        if ( value == 0xff )
+        {
+            return;
+        }
         rangeIndex_Ia_Temp = rangeIndex_Ia;
         SetRange_ACI(value);
     }
     partial void OnRangeIndex_IaChanged (byte value)
     {
+        if ( value == 0xff )
+        {
+            return;
+        }
         rangeIndex_Ia = rangeIndex_Ia_Temp;
         MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
     }
@@ -667,18 +685,25 @@ public partial class MainViewModel : ObservableObject
     #endregion 电流档位索引值》
 
     #region 《功能模块开关操作
-
+    [ObservableProperty]
+    private  Brush progressRingColor_ACS;
+    [ObservableProperty]
+    private Brush progressRingColor_DCS;
+    [ObservableProperty]
+    private Brush progressRingColor_DCM;
+    [ObservableProperty]
+    private Brush progressRingColor_EPQ;
     partial void OnIsOpenACSChanged (bool value)
     {
         if ( value )
         {
             ReadDataACS();
-            Visibility_ACS = Visibility. Visible;
+            Visibility_ACS = Visibility. Visible;  
         }
         else
         {
             Task. Run(() => DKS?.ACS. Stop());
-            Visibility_ACS = Visibility. Collapsed;
+            Visibility_ACS = Visibility. Collapsed; 
         }
     }
 
@@ -770,9 +795,14 @@ public partial class MainViewModel : ObservableObject
                 Freq = DKS?.ACS. Freq ?? 0;
                 RangeIndex_Ia = DKS?.ACS. RangeIndex_Ia ?? 0;
                 RangeIndex_Ua = DKS?.ACS. RangeIndex_Ua ?? 0;
+                ProgressRingColor_ACS = new SolidColorBrush(Windows.UI.Color.FromArgb(255,0,255,0));
+            }
+            else
+            {
+                ProgressRingColor_ACS = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
             }
 
-            UpdateInfoBar("读取【交流源】数据" , result);
+            UpdateInfoBar("Read ACS" , result);
         }
     }
     private async void ReadDataDCS ()
@@ -784,10 +814,14 @@ public partial class MainViewModel : ObservableObject
             {
                 DCU = DKS?.DCS. DCU ?? 0;
                 DCI = DKS?.DCS. DCI ?? 0;
+                ProgressRingColor_DCS = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 0 , 255 , 0));
+            }
+            else
+            {
+                ProgressRingColor_DCS = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
             }
 
-            UpdateInfoBar("读取【直流源】数据" , result);
-
+            UpdateInfoBar("Read DCS" , result);
         }
     }
     private async void ReadDataDCM ()
@@ -799,9 +833,13 @@ public partial class MainViewModel : ObservableObject
             {
                 DCMU = DKS?.DCM. DCMU ?? 0;
                 DCMI = DKS?.DCM. DCMI ?? 0;
+                ProgressRingColor_DCM = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 0 , 255 , 0));
             }
-
-            UpdateInfoBar("读取【直流表】数据" , result);
+            else
+            {
+                ProgressRingColor_DCM= new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
+            }
+            UpdateInfoBar("Read DCM" , result);
         }
     }
     private async void ReadDataEQP ()
@@ -811,10 +849,14 @@ public partial class MainViewModel : ObservableObject
             var result = await Task. Run(() => DKS?.EPQ. ReadData());
             if ( result?.IsSuccess ?? false )
             {
-
+                ProgressRingColor_EPQ = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 0 , 255 , 0));
             }
-            UpdateInfoBar("读取【电能误差】数据" , result);
+            else
+            {
+                ProgressRingColor_EPQ = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
+            }
 
+            UpdateInfoBar("Read EPQ" , result);
         }
     }
     #endregion 功能模块开关操作》
@@ -853,7 +895,7 @@ public partial class MainViewModel : ObservableObject
             IsOpenACS = false;
             IsOpenDCM = false;
             IsOpenEQP = false;
-            IsOpenDCS = false;   
+            IsOpenDCS = false;
         }
     }
 
@@ -1033,7 +1075,7 @@ public partial class MainViewModel : ObservableObject
                         IsEnabled_HF = DKS. Settings. IsEnabled_HF;
                         IsEnabled_PWM = DKS. Settings. IsEnabled_PWM;
                         IsEnabled_PPS = DKS. Settings. IsEnabled_PPS;
-                        IsEnabled_Calibrate=DKS.Settings.IsEnabled_Calibrate;
+                        IsEnabled_Calibrate = DKS. Settings. IsEnabled_Calibrate;
                         SN = DKS. Settings. SN;
                         Model = DKS. Settings. Model;
                         FirmWare = DKS. Settings. Firmware;
@@ -1144,22 +1186,24 @@ public partial class MainViewModel : ObservableObject
 
 
     #region 自动界面处理方法
+   
     public void UpdateInfoBar (string title , OperateResult? result)
     {
         if ( result?.IsSuccess ?? false )
         {
-            InfoBarSeverity = InfoBarSeverity. Success;
+            //InfoBarSeverity = InfoBarSeverity. Success;
         }
         else if ( !result?.IsSuccess ?? false )
         {
+            IsInfobarShow = true;
             InfoBarSeverity = InfoBarSeverity. Error;
+            InfobarMessage = title + "：" + result?.Message;
+            InfobarTitle = DateTime. Now. ToString();
         }
         else if ( result is null )
         {
             InfoBarSeverity = InfoBarSeverity. Informational;
         }
-        InfobarTitle = title;
-        InfobarMessage = result?.Message;
     }
     /// <summary>
     /// 交流电压显示格式

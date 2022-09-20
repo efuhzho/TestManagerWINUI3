@@ -41,6 +41,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.1.4" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.8" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.IO.Ports" Version="6.0.0" />
     <PackageReference Include="WinUIEx" Version="1.8.0" />
   </ItemGroup>
@@ -51,7 +52,7 @@
 
   <ItemGroup>
     <Reference Include="DKCommunicationNET">
-      <HintPath>..\..\..\Git\efuhzho\DKCommunicationNET\bin\Release\net6.0\DKCommunicationNET.dll</HintPath>
+      <HintPath>..\..\..\Git\efuhzho\DKCommunicationNET\bin\Debug\net6.0\DKCommunicationNET.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

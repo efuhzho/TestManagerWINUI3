@@ -713,7 +713,7 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing IsActive="{x:Bind ViewModel.IsOpenACS,Mode=OneWay}"
                                                                       Width="16"
-                                                                      Height="16" />
+                                                                      Height="16" Foreground="{x:Bind ViewModel.ProgressRingColor_ACS,Mode=OneWay}"/>
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
@@ -832,7 +832,7 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing Width="16"
                                                                       Height="16"
-                                                                      IsActive="{x:Bind ViewModel.IsOpenDCS,Mode=OneWay}" />
+                                                                      IsActive="{x:Bind ViewModel.IsOpenDCS,Mode=OneWay}" Foreground="{x:Bind ViewModel.ProgressRingColor_DCS,Mode=OneWay}"/>
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
@@ -910,7 +910,7 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing IsActive="{x:Bind ViewModel.IsOpenDCM,Mode=OneWay}"
                                                                       Width="16"
-                                                                      Height="16" />
+                                                                      Height="16" Foreground="{x:Bind ViewModel.ProgressRingColor_DCM,Mode=OneWay}"/>
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
@@ -939,13 +939,13 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing IsActive="{x:Bind ViewModel.IsOpenEQP,Mode=OneWay}"
                                                                       Width="16"
-                                                                      Height="16" />
+                                                                      Height="16" Foreground="{x:Bind ViewModel.ProgressRingColor_EPQ,Mode=OneWay}"/>
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
                                         </Grid>
                                     </Expander.Header>
-                                </Expander>
+                                </Expander>                                
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
@@ -1164,7 +1164,7 @@
                      Title="{x:Bind ViewModel.InfobarTitle,Mode=OneWay}"
                      Message="{x:Bind ViewModel.InfobarMessage,Mode=OneWay}"
                      Severity="{x:Bind ViewModel.InfoBarSeverity,Mode=OneWay}"
-                     IsClosable="False"
+                     IsClosable="True"
                      HorizontalAlignment="Stretch" />
         </Grid>
         <!--#endregion-->
