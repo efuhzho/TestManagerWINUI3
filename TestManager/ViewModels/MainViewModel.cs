@@ -57,7 +57,7 @@ public partial class MainViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SmallChange_U))]
     [NotifyPropertyChangedFor(nameof(LargeChange_U))]
     private float[]? ranges_ACU;
-    partial void OnRanges_ACUChanged (float[]? value) => MaxValue_U = ( float )( value != null && rangeIndex_Ua != 0XFF ? value[rangeIndex_Ua] * 1.2 : 1000 );
+    partial void OnRanges_ACUChanged (float[]? value) => MaxValue_U = ( float )( ( value != null && rangeIndex_Ua != 0XFF ) ? value[rangeIndex_Ua] * 1.2 : 0 );
     #endregion  交流电压档位集合》
 
     #region 《交流电流档位集合
@@ -68,7 +68,7 @@ public partial class MainViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SmallChange_I))]
     [NotifyPropertyChangedFor(nameof(LargeChange_I))]
     private float[]? ranges_ACI;
-    partial void OnRanges_ACIChanged (float[]? value) => MaxValue_I = ( float )( value != null && rangeIndex_Ia != 0XFF ? value[rangeIndex_Ia] * 1.2 : 100 );
+    partial void OnRanges_ACIChanged (float[]? value) => MaxValue_I = ( float )( ( value != null && rangeIndex_Ia != 0XFF ) ? value[rangeIndex_Ia] * 1.2 : 0 );
     #endregion 交流电流档位集合》
 
     #region 《直流源档位集合
@@ -605,8 +605,8 @@ public partial class MainViewModel : ObservableObject
     private byte rangeIndex_Ua;
     [ObservableProperty]
     private float maxValue_U;
-    public float SmallChange_U => ( float )( ranges_ACU != null && rangeIndex_Ua != 0XFF ? ranges_ACU[rangeIndex_Ua] * 0.1 : 0 );
-    public float LargeChange_U => ( float )( ranges_ACU != null && rangeIndex_Ua != 0XFF ? ranges_ACU[rangeIndex_Ua] * 0.2 : 0 );
+    public float SmallChange_U => ( float )( (ranges_ACU != null && rangeIndex_Ua != 0XFF )? ranges_ACU[rangeIndex_Ua] * 0.1 : 0 );
+    public float LargeChange_U => ( float )(( ranges_ACU != null && rangeIndex_Ua != 0XFF )? ranges_ACU[rangeIndex_Ua] * 0.2 : 0 );
 
     /// <summary>
     /// 【备份】用于设置失败时恢复设置前的值；
@@ -628,7 +628,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         rangeIndex_Ua = rangeIndex_Ua_Backup;
-        MaxValue_U = ( float )( ranges_ACU != null && rangeIndex_Ua != 0XFF ? ranges_ACU[rangeIndex_Ua] * 1.2 : 0 );
+        MaxValue_U = ( float )( (ranges_ACU != null && rangeIndex_Ua != 0XFF )? ranges_ACU[rangeIndex_Ua] * 1.2 : 0 );
     }
 
     private async void SetRange_ACU (byte index)
@@ -651,8 +651,8 @@ public partial class MainViewModel : ObservableObject
     private byte rangeIndex_Ia;
     [ObservableProperty]
     private float maxValue_I;
-    public float SmallChange_I => ( float )( ranges_ACI != null && rangeIndex_Ia != 0XFF ? ranges_ACI[rangeIndex_Ia] * 0.1 : 0 );
-    public float LargeChange_I => ( float )( ranges_ACI != null && rangeIndex_Ia != 0XFF ? ranges_ACI[rangeIndex_Ia] * 0.2 : 0 );
+    public float SmallChange_I => ( float )(( ranges_ACI != null && rangeIndex_Ia != 0XFF )? ranges_ACI[rangeIndex_Ia] * 0.1 : 0 );
+    public float LargeChange_I => ( float )( (ranges_ACI != null && rangeIndex_Ia != 0XFF) ? ranges_ACI[rangeIndex_Ia] * 0.2 : 0 );
     /// <summary>
     /// 【备份】用于设置失败时恢复设置前的值；
     /// </summary>
@@ -673,7 +673,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         rangeIndex_Ia = rangeIndex_Ia_Temp;
-        MaxValue_I = ( float )( ranges_ACI != null && rangeIndex_Ia != 0XFF ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
+        MaxValue_I = ( float )( (ranges_ACI != null && rangeIndex_Ia != 0XFF )? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
     }
     private async void SetRange_ACI (byte index)
     {
@@ -1150,15 +1150,37 @@ public partial class MainViewModel : ObservableObject
                     }
 
                     //交流电压档位集合初始化
-                    Ranges_ACU = DKS. ACS. Ranges_ACU;
+
+                    if ( (DKS. ACS. Ranges_ACU!=null)&&(!Ranges_ACU?.SequenceEqual(DKS. ACS. Ranges_ACU)??true ) )
+                    {
+                        Ranges_ACU = DKS. ACS. Ranges_ACU;
+                    }
+
+
                     //交流电流档位集合初始化
-                    Ranges_ACI = DKS. ACS. Ranges_ACI;
+                    if ( ( DKS. ACS. Ranges_ACI != null ) && ( !Ranges_ACI?.SequenceEqual(DKS. ACS. Ranges_ACI) ?? true ) )
+                    {
+                        Ranges_ACI = DKS. ACS. Ranges_ACI;
+                    }
                     //直流源量程
-                    Ranges_DCU = DKS. DCS. Ranges_DCU;
-                    Ranges_DCI = DKS. DCS. Ranges_DCI;
+                    if ( ( DKS. DCS. Ranges_DCI != null ) && ( !Ranges_DCI?.SequenceEqual(DKS. DCS. Ranges_DCI) ?? true ) )
+                    {
+                        Ranges_DCI = DKS. DCS. Ranges_DCI;
+                    }
+                    if ( ( DKS. DCS. Ranges_DCU != null ) && ( !Ranges_DCU?.SequenceEqual(DKS. DCS. Ranges_DCU) ?? true ) )
+                    {
+                        Ranges_DCU = DKS. DCS. Ranges_DCU;
+                    }
+
                     //直流表量程
-                    Ranges_DCMU = DKS. DCM. Ranges_DCMU;
-                    Ranges_DCMI = DKS. DCM. Ranges_DCMI;
+                    if ( ( DKS. DCM. Ranges_DCMI != null ) && ( !Ranges_DCMI?.SequenceEqual(DKS. DCM. Ranges_DCMI) ?? true ) )
+                    {
+                        Ranges_DCMI = DKS. DCM. Ranges_DCMI;
+                    }
+                    if ( ( DKS. DCM. Ranges_DCMU != null ) && ( !Ranges_DCMU?.SequenceEqual(DKS. DCM. Ranges_DCMU) ?? true ) )
+                    {
+                        Ranges_DCMU = DKS. DCM. Ranges_DCMU;
+                    }
                     //禁用参数设置控件
                     DisableSerialPortEdit = false;
                     //打开串口超时参数设置控件

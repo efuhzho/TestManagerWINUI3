@@ -553,7 +553,8 @@
                                       Grid.RowSpan="10"
                                       HorizontalScrollMode="Enabled"
                                       HorizontalScrollBarVisibility="Auto"
-                                      HorizontalContentAlignment="Stretch">
+                                      HorizontalContentAlignment="Stretch"
+                                      Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
                             <StackPanel Grid.Column="1"
                                         Grid.RowSpan="10"
                                         Grid.Row="0"
