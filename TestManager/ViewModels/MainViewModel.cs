@@ -472,39 +472,51 @@ public partial class MainViewModel : ObservableObject
     }
     private bool CanExecute_1 ()
     {
-        return channel_1 == 0 ? false : true;
+        return channel_1 != 0;
     }
     private bool CanExecute_2 ()
     {
-        return channel_2 == 0 ? false : true;
+        return channel_2 != 0;
     }
     private bool CanExecute_Dual ()
     {
-        return channel_1 == 0 || channel_2 == 0 ? false : true;
+        return channel_1 != 0 && channel_2 != 0;
     }
 
     #endregion 交流源》
 
     #region 《直流电压电流幅值设置
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DCUCommand))]
     private byte rangeIndex_DCU;
     partial void OnRangeIndex_DCUChanged (byte value) => Task. Run(() => DKS?.DCS. SetRange_DCU(value));
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof (SetAmplitude_DCICommand))]
     private byte rangeIndex_DCI;
     partial void OnRangeIndex_DCIChanged (byte value) => Task. Run(() => DKS?.DCS. SetRange_DCI(value));
 
     [ObservableProperty]
     private float value_DCU;
-    [RelayCommand]
+    [RelayCommand(CanExecute =nameof(CanExecute_SetAmplitudeDCU))]
     private void SetAmplitude_DCU ()
     {
         Task. Run(() => DKS?.DCS. SetAmplitude_DCU(value_DCU));    //TODO 将档位和幅值一起设置
     }
 
+    private bool CanExecute_SetAmplitudeDCU ()
+    {
+        return Ranges_DCU !=null;
+    }
+
+    private bool CanExecute_SetAmplitudeDCI ()
+    {
+        return ranges_DCI!=null;
+    }
+
     [ObservableProperty]
     private float value_DCI;
-    [RelayCommand]
+    [RelayCommand(CanExecute =nameof(CanExecute_SetAmplitudeDCI))]
     private void SetAmplitude_DCI ()
     {
         Task. Run(() => DKS?.DCS. SetAmplitude_DCI(value_DCI));
@@ -802,6 +814,7 @@ public partial class MainViewModel : ObservableObject
             IsOpenDCM = false;
             IsOpenEQP = false;
             IsOpenDCS = false;
+            InfoBarSeverity= InfoBarSeverity. Informational;           
         }
     }
 

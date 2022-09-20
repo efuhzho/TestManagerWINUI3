@@ -28,9 +28,9 @@
                     <TabViewItem.IconSource>
                         <SymbolIconSource Symbol="Home" />
                     </TabViewItem.IconSource>
-                    <ScrollViewer HorizontalScrollMode="Enabled"
+                    <!--<ScrollViewer HorizontalScrollMode="Enabled"
                                   HorizontalScrollBarVisibility="Visible"
-                                  VerticalScrollBarVisibility="Visible">
+                                  VerticalScrollBarVisibility="Visible">-->
                         <!--boot-->
                         <Grid>
                             <Grid.RowDefinitions>
@@ -40,8 +40,10 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto"
-                                                  MaxWidth="1000" />
+                                                  MaxWidth="1000" MinWidth="600"/>
                             </Grid.ColumnDefinitions>
+                            <ScrollViewer Grid.RowSpan="10">
+                            <StackPanel>
                             <!--#region 交流源数据显示网格 -->
                             <Grid Margin="8"
                                   CornerRadius="10">
@@ -481,40 +483,7 @@
                                               ToolTipService.ToolTip="档位切换模式"
                                               IsEnabled="False" />
                                 </StackPanel>
-                                <StackPanel Grid.Row="13"
-                                            Spacing="8"
-                                            Margin="8"
-                                            Grid.ColumnSpan="10"
-                                            Orientation="Horizontal"
-                                            Visibility="{x:Bind ViewModel.Visibility_DCS,Mode=OneWay}">
-                                    <StackPanel.Background>
-                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
-                                                         Opacity="0.1" />
-                                    </StackPanel.Background>
-                                    <NumberBox Header="直流电压输出"
-                                               MinWidth="150"
-                                               Value="{x:Bind ViewModel.DCU,Mode=OneWay}" />
-                                    <NumberBox Header="直流电流输出"
-                                               MinWidth="150"
-                                               Value="{x:Bind ViewModel.DCI,Mode=OneWay}" />
-                                </StackPanel>
-                                <StackPanel Grid.Row="14"
-                                            Spacing="8"
-                                            Margin="8"
-                                            Grid.ColumnSpan="10"
-                                            Orientation="Horizontal"
-                                            Visibility="{x:Bind ViewModel.Visibility_DCM,Mode=OneWay}">
-                                    <StackPanel.Background>
-                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
-                                                         Opacity="0.1" />
-                                    </StackPanel.Background>
-                                    <NumberBox Header="直流电压测量"
-                                               MinWidth="150"
-                                               Value="{x:Bind ViewModel.DCMU,Mode=OneWay}" />
-                                    <NumberBox Header="直流电流测量"
-                                               MinWidth="150"
-                                               Value="{x:Bind ViewModel.DCMI,Mode=OneWay}" />
-                                </StackPanel>
+                                
                                 <Slider Grid.Row="15"
                                         Grid.ColumnSpan="7"
                                         Minimum="14"
@@ -525,8 +494,55 @@
                                         TickPlacement="None" />
                                 <!--#endregion-->
                             </Grid>
-                            <!--#endregion 数据显示区-->
+                                <StackPanel Grid.Row="13"
+                                            Spacing="8"
+                                            Margin="8"
+                                            Grid.ColumnSpan="10"
+                                            Orientation="Horizontal"
+                                            Visibility="{x:Bind ViewModel.Visibility_DCS,Mode=OneWay}"
+                                            CornerRadius="10">
+                                    <StackPanel.Background>
+                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
+                                                         Opacity="0.1" />
+                                    </StackPanel.Background>
+                                    <TextBlock Text="直流源"
+                                               FontSize="24"
+                                               Opacity="0.5" Margin="8" VerticalAlignment="Center"/>
+                                    <NumberBox Header="DCU"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCU,Mode=OneWay}" Margin="8"/>
+                                    <NumberBox Header="DCI"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCI,Mode=OneWay}" Margin="8"/>
+                                </StackPanel>
+                                <StackPanel Grid.Row="14"
+                                            Spacing="8"
+                                            Margin="8"
+                                            Grid.ColumnSpan="10"
+                                            Orientation="Horizontal"
+                                            Visibility="{x:Bind ViewModel.Visibility_DCM,Mode=OneWay}"
+                                            CornerRadius="10">
+                                    <StackPanel.Background>
+                                        <SolidColorBrush Color="{StaticResource SystemAccentColor}"
+                                                         Opacity="0.1" />
+                                    </StackPanel.Background>
+                                    <TextBlock Text="直流表"
+                                               VerticalAlignment="Center"
+                                               FontSize="24"
+                                               Opacity="0.5" Margin="8" />
+                                    <NumberBox Header="DCMU"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCMU,Mode=OneWay}" Margin="8"/>
+                                    <NumberBox Header="DCMI"
+                                               MinWidth="150"
+                                               Value="{x:Bind ViewModel.DCMI,Mode=OneWay}" Margin="8"/>
+                                </StackPanel>
+                                <!--#endregion 数据显示区-->
+                            </StackPanel>
+                        </ScrollViewer>
+                            
                             <!--操作区-->
+                            <ScrollViewer Grid.Column="1" Grid.RowSpan="10">                                
                             <StackPanel Grid.Column="1"
                                         Grid.RowSpan="10"
                                         Grid.Row="0"
@@ -780,7 +796,7 @@
                                         </Grid>
                                     </Expander.Header>
                                     <!--直流源展开区-->
-                                    <StackPanel Margin="8"
+                                    <StackPanel 
                                                 Visibility="{x:Bind ViewModel.Visibility_DCS,Mode=OneWay}">
                                         <Grid HorizontalAlignment="Stretch">
                                             <Grid.RowDefinitions>
@@ -887,8 +903,9 @@
                                     </Expander.Header>
                                 </Expander>
                             </StackPanel>
+                            </ScrollViewer>
                         </Grid>
-                    </ScrollViewer>
+                    <!--</ScrollViewer>-->
                 </TabViewItem>
                 <TabViewItem  Header="自动校准"
                               IsClosable="False"

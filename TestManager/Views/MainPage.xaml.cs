@@ -73,9 +73,7 @@ public sealed partial class MainPage : Page
     private async void IX_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
         await Task. Run(() => ViewModel. DKS?.ACS. SetAmplitude(Channels. Ix , ( float )args. NewValue));
-    }
-
-   
+    }       
 
     private async void FaiUB_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
