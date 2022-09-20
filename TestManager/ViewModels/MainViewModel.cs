@@ -5,6 +5,7 @@ using CommunityToolkit. Mvvm. Input;
 using Microsoft. UI. Xaml;
 using Microsoft. UI. Xaml. Controls;
 using Microsoft. UI. Xaml. Media;
+using Newtonsoft. Json. Linq;
 using Windows. Globalization. NumberFormatting;
 using Brush = Microsoft. UI. Xaml. Media. Brush;
 
@@ -56,7 +57,7 @@ public partial class MainViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SmallChange_U))]
     [NotifyPropertyChangedFor(nameof(LargeChange_U))]
     private float[]? ranges_ACU;
-    partial void OnRanges_ACUChanged (float[]? value) => MaxValue_U = ( float )( value != null ? value[rangeIndex_Ua] * 1.2 : 1000 );
+    partial void OnRanges_ACUChanged (float[]? value) => MaxValue_U = ( float )( value != null && rangeIndex_Ua != 0XFF ? value[rangeIndex_Ua] * 1.2 : 1000 );
     #endregion  交流电压档位集合》
 
     #region 《交流电流档位集合
@@ -67,7 +68,7 @@ public partial class MainViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(SmallChange_I))]
     [NotifyPropertyChangedFor(nameof(LargeChange_I))]
     private float[]? ranges_ACI;
-    partial void OnRanges_ACIChanged (float[]? value) => MaxValue_I = ( float )( value != null ? value[rangeIndex_Ia] * 1.2 : 100 );
+    partial void OnRanges_ACIChanged (float[]? value) => MaxValue_I = ( float )( value != null && rangeIndex_Ia != 0XFF ? value[rangeIndex_Ia] * 1.2 : 100 );
     #endregion 交流电流档位集合》
 
     #region 《直流源档位集合
@@ -627,7 +628,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         rangeIndex_Ua = rangeIndex_Ua_Backup;
-        MaxValue_U = ( float )( ranges_ACU != null ? ranges_ACU[value] * 1.2 : 0 );
+        MaxValue_U = ( float )( ranges_ACU != null && rangeIndex_Ua != 0XFF ? ranges_ACU[rangeIndex_Ua] * 1.2 : 0 );
     }
 
     private async void SetRange_ACU (byte index)
@@ -636,7 +637,8 @@ public partial class MainViewModel : ObservableObject
         if ( result?.IsSuccess ?? false )
         {
             rangeIndex_Ua_Backup = index;
-        }
+        }     
+
         UpdateInfoBar("设置交流电压档位" , result);
     }
     #endregion 电压档位索引值》
@@ -671,7 +673,7 @@ public partial class MainViewModel : ObservableObject
             return;
         }
         rangeIndex_Ia = rangeIndex_Ia_Temp;
-        MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
+        MaxValue_I = ( float )( ranges_ACI != null && rangeIndex_Ia != 0XFF ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
     }
     private async void SetRange_ACI (byte index)
     {
@@ -818,6 +820,7 @@ public partial class MainViewModel : ObservableObject
             }
             else
             {
+
                 ProgressRingColor_DCS = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
             }
 
@@ -837,7 +840,7 @@ public partial class MainViewModel : ObservableObject
             }
             else
             {
-                ProgressRingColor_DCM= new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
+                ProgressRingColor_DCM = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
             }
             UpdateInfoBar("Read DCM" , result);
         }

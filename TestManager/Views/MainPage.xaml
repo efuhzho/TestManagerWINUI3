@@ -540,10 +540,10 @@
                                              Text="{x:Bind ViewModel.DCMU,Mode=OneWay}"
                                              Margin="8"
                                              IsReadOnly="True" />
-                                    <NumberBox Header="DCMI"
+                                    <TextBox Header="DCMI"
                                                MinWidth="150"
-                                               Text="{x:Bind ViewModel.DCMI,Mode=OneWay}"
-                                               Margin="8" />
+                                               Text="{x:Bind ViewModel.DCMI,Mode=TwoWay}"
+                                               Margin="8" IsReadOnly="True"/>
                                 </StackPanel>
                                 <!--#endregion 数据显示区-->
                             </StackPanel>
