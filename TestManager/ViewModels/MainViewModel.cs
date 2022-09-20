@@ -292,6 +292,9 @@ public partial class MainViewModel : ObservableObject
 
     #region 《操作区
     #region 《设置
+    /// <summary>
+    /// 指示交流源是否激活
+    /// </summary>
     [ObservableProperty]
     private bool isEnabled_ACS;
     partial void OnIsEnabled_ACSChanged (bool value)
@@ -305,7 +308,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Visibility moduleVisibility_ACS = Visibility. Collapsed;
     /// <summary>
-    /// 
+    /// 指示直流源是否激活
     /// </summary>
     [ObservableProperty]
     private bool isEnabled_DCS;
@@ -320,7 +323,7 @@ public partial class MainViewModel : ObservableObject
         }
     }
     /// <summary>
-    /// 
+    /// 指示交流标准表是否激活
     /// </summary>
     [ObservableProperty]
     private bool isEnabled_ACM;
@@ -363,6 +366,22 @@ public partial class MainViewModel : ObservableObject
         {
             case true: ModuleVisibility_EPQ = Visibility. Visible; break;
             case false: ModuleVisibility_EPQ= Visibility. Collapsed; break;
+        }
+    }
+
+    /// <summary>
+    /// 指示校准功能是否激活
+    /// </summary>
+    [ObservableProperty]
+    private bool isEnabled_Calibrate;
+    [ObservableProperty]
+    private Visibility moduleVisibility_Calibrate= Visibility. Collapsed;
+    partial void OnIsEnabled_CalibrateChanged (bool value)
+    {
+        switch ( value )
+        {
+            case true: ModuleVisibility_Calibrate = Visibility. Visible; break;
+            case false: ModuleVisibility_Calibrate = Visibility. Collapsed; break;
         }
     }
     /// <summary>
@@ -426,6 +445,26 @@ public partial class MainViewModel : ObservableObject
     /// </summary>
     [ObservableProperty]
     private bool isEnabled_PPS;
+
+    [ObservableProperty]
+    private byte settingID;
+    [ObservableProperty]
+    private string settingSN;
+    [ObservableProperty]
+    private ushort settingBaudRate;
+    [RelayCommand]
+    private async void SetDeviceInfo ()
+    {
+        var pwd = new char[] { '6' , '3' , '8' , '3' , '6' };
+        var result =await Task. Run(() => DKS?. Settings. SetDeviceInfo(pwd,settingID,settingSN));
+        UpdateInfoBar("设置装置信息",result);
+    }
+    [RelayCommand]
+    private async void SetBaudRate ()
+    {
+      var result=  await Task.Run(()=>DKS?.Settings.SetBaudRate(settingBaudRate));
+        UpdateInfoBar("设置装置波特率",result);
+    }
 
     #endregion 设置》
 
@@ -578,6 +617,7 @@ public partial class MainViewModel : ObservableObject
     partial void OnRangeIndex_UaChanged (byte value)
     {
         rangeIndex_Ua = rangeIndex_Ua_Backup;
+        MaxValue_U = ( float )(ranges_ACU!=null? ranges_ACU[value] * 1.2 :0);
     }
 
     private async void SetRange_ACU (byte index)
@@ -613,7 +653,7 @@ public partial class MainViewModel : ObservableObject
     partial void OnRangeIndex_IaChanged (byte value)
     {
         rangeIndex_Ia = rangeIndex_Ia_Temp;
-        // MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
+        MaxValue_I = ( float )( ranges_ACI != null ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0 );
     }
     private async void SetRange_ACI (byte index)
     {
@@ -813,8 +853,7 @@ public partial class MainViewModel : ObservableObject
             IsOpenACS = false;
             IsOpenDCM = false;
             IsOpenEQP = false;
-            IsOpenDCS = false;
-            InfoBarSeverity= InfoBarSeverity. Informational;           
+            IsOpenDCS = false;   
         }
     }
 
@@ -994,6 +1033,7 @@ public partial class MainViewModel : ObservableObject
                         IsEnabled_HF = DKS. Settings. IsEnabled_HF;
                         IsEnabled_PWM = DKS. Settings. IsEnabled_PWM;
                         IsEnabled_PPS = DKS. Settings. IsEnabled_PPS;
+                        IsEnabled_Calibrate=DKS.Settings.IsEnabled_Calibrate;
                         SN = DKS. Settings. SN;
                         Model = DKS. Settings. Model;
                         FirmWare = DKS. Settings. Firmware;

@@ -12,7 +12,7 @@
   <Identity
     Name="E89F5876-0D8D-42A2-B928-2459B4D9FE85"
     Publisher="CN=Fuhong Zhou"
-    Version="1.0.0.0" />
+    Version="1.0.3.0" />
 
   <Properties>
     <DisplayName>TestManager</DisplayName>
