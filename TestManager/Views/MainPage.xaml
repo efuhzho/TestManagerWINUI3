@@ -37,9 +37,9 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="auto"
-                                              MaxWidth="1000"
-                                              MinWidth="600" />
-                            <ColumnDefinition Width="*" />
+                                              MaxWidth="500" />
+                            <ColumnDefinition Width="*"
+                                              MaxWidth="600" />
                         </Grid.ColumnDefinitions>
                         <ScrollViewer Grid.RowSpan="10"
                                       HorizontalScrollMode="Enabled"
@@ -61,33 +61,33 @@
                                             <Setter Property="HorizontalAlignment"
                                                     Value="Center" />
                                             <Setter Property="Margin"
-                                                    Value="5" />
+                                                    Value="4" />
                                         </Style>
                                         <Style TargetType="NumberBox">
                                             <Setter Property="Minimum"
                                                     Value="0" />
                                             <Setter Property="Margin"
-                                                    Value="5" />
+                                                    Value="4" />
                                             <Setter Property="AcceptsExpression"
                                                     Value="True" />
                                         </Style>
                                         <Style TargetType="TextBox">
                                             <Setter Property="Margin"
-                                                    Value="5" />
+                                                    Value="4" />
                                             <Setter Property="IsReadOnly"
                                                     Value="True" />
                                         </Style>
                                         <Style TargetType="ComboBox">
                                             <Setter Property="Margin"
-                                                    Value="5" />
+                                                    Value="4" />
                                             <Setter Property="HorizontalAlignment"
-                                                    Value="Stretch" /> 
+                                                    Value="Stretch" />
                                         </Style>
                                     </Grid.Resources>
                                     <!--行定义-->
                                     <Grid.RowDefinitions>
                                         <!--R0-->
-                                        <RowDefinition MinHeight="50" />
+                                        <RowDefinition MinHeight="40" />
                                         <RowDefinition Height="AUTO" />
                                         <RowDefinition Height="AUTO" />
                                         <RowDefinition Height="AUTO" />
@@ -110,16 +110,16 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="AUTO" />
                                         <ColumnDefinition Width="AUTO" />
-                                        <ColumnDefinition MinWidth="130"
-                                                          Width="130" />
-                                        <ColumnDefinition MinWidth="130"
-                                                          Width="130" />
-                                        <ColumnDefinition MinWidth="130"
-                                                          Width="130" />
-                                        <ColumnDefinition MinWidth="130"
-                                                          Width="130" />
-                                        <ColumnDefinition MinWidth="130"
-                                                          Width="130" />
+                                        <ColumnDefinition MaxWidth="130"
+                                                          Width="120" />
+                                        <ColumnDefinition MaxWidth="130"
+                                                          Width="120" />
+                                        <ColumnDefinition MaxWidth="130"
+                                                          Width="120" />
+                                        <ColumnDefinition MaxWidth="130"
+                                                          Width="120" />
+                                        <ColumnDefinition MaxWidth="130"
+                                                          Width="120" />
                                     </Grid.ColumnDefinitions>
                                     <!--#region 表头 -->
                                     <TextBlock Grid.Column="2"
@@ -464,7 +464,6 @@
                                                Text="{x:Bind ViewModel.FrequencySync}" />
                                     <StackPanel Grid.Row="12"
                                                 Grid.Column="0"
-                                                Spacing="5"
                                                 Grid.ColumnSpan="7"
                                                 Orientation="Horizontal"
                                                 Margin="8"
@@ -474,37 +473,42 @@
                                                              Opacity="0.1" />
                                         </StackPanel.Background>
                                         <ComboBox Name="cbxWireMode"
-                                                  MinWidth="150"
+                                                  MinWidth="100"
                                                   ItemsSource="{x:Bind ViewModel.ItemsWireMode }"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="接线方式"
-                                                  SelectedIndex="{x:Bind ViewModel.WireModeIndex,Mode=TwoWay}" />
+                                                  SelectedIndex="{x:Bind ViewModel.WireModeIndex,Mode=TwoWay}" VerticalAlignment="Center"/>
                                         <ComboBox Name="cbxCloseLoopMode"
-                                                  MinWidth="120"
+                                                  MinWidth="110"
                                                   ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="闭环模式"
-                                                  SelectedIndex="{x:Bind ViewModel.LoopModeIndex,Mode=TwoWay}" />
+                                                  SelectedIndex="{x:Bind ViewModel.LoopModeIndex,Mode=TwoWay}" VerticalAlignment="Center"/>
                                         <ComboBox Name="cbxHarmonicMode"
-                                                  MinWidth="190"
+                                                  MinWidth="130"
                                                   ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}"
                                                   SelectedIndex="{x:Bind ViewModel.HarmonicModeIndex,Mode=TwoWay}"
                                                   ToolTipService.Placement="Bottom"
-                                                  ToolTipService.ToolTip="谐波模式" />
+                                                  ToolTipService.ToolTip="谐波模式" VerticalAlignment="Center"/>
                                         <ComboBox Name="cbxQPMode"
                                                   MinWidth="80"
                                                   ItemsSource="{x:Bind ViewModel.ItemsQPMode}"
                                                   SelectedItem="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="无功计算方法"
-                                                  IsEnabled="False" />
+                                                  IsEnabled="False" VerticalAlignment="Center"/>
                                         <ComboBox Name="cbxRangeSwitchMode"
-                                                  MinWidth="90"
                                                   ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}"
                                                   SelectedItem="{x:Bind ViewModel.RangeSwitchMode,Mode=TwoWay}"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="档位切换模式"
-                                                  IsEnabled="False" />
+                                                  IsEnabled="False" VerticalAlignment="Center"/>
+                                        <AppBarButton Icon="Stop"
+                                                      IsCompact="True"
+                                                      LabelPosition="Collapsed"
+                                                      VerticalAlignment="Center"
+                                                      Width="100"
+                                                      Foreground="#ff99a4" Command="{x:Bind ViewModel.StopACSCommand}" Background="#442726"/>
                                     </StackPanel>
                                     <Slider Grid.Row="15"
                                             Grid.ColumnSpan="7"
@@ -585,7 +589,8 @@
                                         Spacing="8"
                                         Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
                                 <!--设备信息-->
-                                <Expander HorizontalAlignment="Stretch">
+                                <Expander HorizontalAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch">
                                     <Expander.Header>
                                         <!--标题栏-->
                                         <StackPanel Orientation="Horizontal"
@@ -610,11 +615,10 @@
                                     <!--设备信息展开区-->
                                     <Expander.Content>
                                         <!--设置设备信息-->
-                                        <StackPanel Spacing="16">
+                                        <StackPanel Spacing="8">
                                             <StackPanel Orientation="Vertical"
                                                         Spacing="8"
                                                         Padding="8"
-                                                        HorizontalAlignment="Stretch"
                                                         CornerRadius="5">
                                                 <StackPanel.Background>
                                                     <SolidColorBrush Color="{StaticResource SystemAccentColor}"
@@ -659,8 +663,14 @@
                                                             Command="{x:Bind ViewModel.SetBaudRateCommand}" />
                                                 </Grid>
                                             </StackPanel>
-                                            <VariableSizedWrapGrid Orientation="Horizontal"
-                                                                   MaximumRowsOrColumns="5">
+                                            <GridView>
+                                                <GridView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                                                                       MaximumRowsOrColumns="5"
+                                                                       Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </GridView.ItemsPanel>
                                                 <CheckBox Content="交流源"
                                                           IsChecked="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_ACS,Mode=OneWay}" />
@@ -712,7 +722,7 @@
                                                 <CheckBox Content="校准功能"
                                                           IsChecked="{x:Bind ViewModel.IsEnabled_Calibrate,Mode=OneWay}"
                                                           IsEnabled="{x:Bind ViewModel.IsEnabled_Calibrate,Mode=OneWay}" />
-                                            </VariableSizedWrapGrid>
+                                            </GridView>
                                         </StackPanel>
                                     </Expander.Content>
                                 </Expander >
@@ -775,6 +785,12 @@
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition />
                                                     <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
                                                 </Grid.RowDefinitions>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="auto" />
@@ -825,10 +841,148 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                <!--通道3-->
+                                                <ComboBox Header="通道3"
+                                                          Grid.Row="2"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值3-->
+                                                <NumberBox Header="幅值3"
+                                                           Grid.Row="2"
+                                                           MinWidth="180"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="2"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                <!--通道4-->
+                                                <ComboBox Header="通道4"
+                                                          Grid.Row="3"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值4-->
+                                                <NumberBox Header="幅值4"
+                                                           Grid.Row="3"
+                                                           MinWidth="180"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="3"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                <!--通道5-->
+                                                <ComboBox Header="通道5"
+                                                          Grid.Row="4"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值5-->
+                                                <NumberBox Header="幅值5"
+                                                           Grid.Row="4"
+                                                           MinWidth="180"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="4"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                <!--通道6-->
+                                                <ComboBox Header="通道6"
+                                                          Grid.Row="5"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值6-->
+                                                <NumberBox Header="幅值6"
+                                                           Grid.Row="5"
+                                                           MinWidth="180"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="5"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                <!--通道7-->
+                                                <ComboBox Header="通道7"
+                                                          Grid.Row="6"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值7-->
+                                                <NumberBox Header="幅值7"
+                                                           Grid.Row="6"
+                                                           MinWidth="180"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="6"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                <!--通道8-->
+                                                <ComboBox Header="通道8"
+                                                          Grid.Row="7"
+                                                          MinWidth="100"
+                                                          ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
+                                                          SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
+                                                          Margin="8" />
+                                                <!--幅值8-->
+                                                <NumberBox Header="幅值8"
+                                                           Grid.Row="7"
+                                                           MinWidth="180"
+                                                           Grid.Column="1"
+                                                           Margin="8"
+                                                           PlaceholderText="单位：V 或 A"
+                                                           SmallChange="10"
+                                                           Value="{x:Bind ViewModel.SetAmplitudeValue_2,Mode=TwoWay}" />
+                                                <Button Grid.Column="2"
+                                                        Grid.Row="7"
+                                                        Content="立即输出"
+                                                        VerticalAlignment="Stretch"
+                                                        Margin="8"
+                                                        HorizontalAlignment="Stretch"
+                                                        Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
                                                 <Button Content="同时设定"
                                                         Grid.Column="4"
                                                         Grid.Row="0"
-                                                        Grid.RowSpan="5"
+                                                        Grid.RowSpan="8"
                                                         VerticalAlignment="Stretch"
                                                         Margin="8"
                                                         Command="{x:Bind ViewModel.SetAmplitude_DualCommand}" />
