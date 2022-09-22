@@ -214,7 +214,7 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" GotFocus="UA_GotFocus" LostFocus="UA_LostFocus" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" GotFocus="UA_GotFocus" LostFocus="UA_LostFocus" UseSystemFocusVisuals="False"/>
                                     <NumberBox Name="UB"
                                                Grid.Row="1"
                                                Grid.Column="3"
