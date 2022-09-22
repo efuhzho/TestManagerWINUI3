@@ -214,7 +214,7 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" GotFocus="UA_GotFocus" LostFocus="UA_LostFocus" />
                                     <NumberBox Name="UB"
                                                Grid.Row="1"
                                                Grid.Column="3"
@@ -477,38 +477,45 @@
                                                   ItemsSource="{x:Bind ViewModel.ItemsWireMode }"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="接线方式"
-                                                  SelectedIndex="{x:Bind ViewModel.WireModeIndex,Mode=TwoWay}" VerticalAlignment="Center"/>
+                                                  SelectedIndex="{x:Bind ViewModel.WireModeIndex,Mode=TwoWay}"
+                                                  VerticalAlignment="Center" />
                                         <ComboBox Name="cbxCloseLoopMode"
                                                   MinWidth="110"
                                                   ItemsSource="{x:Bind ViewModel.ItemsCloseLoopMode}"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="闭环模式"
-                                                  SelectedIndex="{x:Bind ViewModel.LoopModeIndex,Mode=TwoWay}" VerticalAlignment="Center"/>
+                                                  SelectedIndex="{x:Bind ViewModel.LoopModeIndex,Mode=TwoWay}"
+                                                  VerticalAlignment="Center" />
                                         <ComboBox Name="cbxHarmonicMode"
                                                   MinWidth="130"
                                                   ItemsSource="{x:Bind ViewModel.ItemsHarmonicMode}"
                                                   SelectedIndex="{x:Bind ViewModel.HarmonicModeIndex,Mode=TwoWay}"
                                                   ToolTipService.Placement="Bottom"
-                                                  ToolTipService.ToolTip="谐波模式" VerticalAlignment="Center"/>
+                                                  ToolTipService.ToolTip="谐波模式"
+                                                  VerticalAlignment="Center" />
                                         <ComboBox Name="cbxQPMode"
                                                   MinWidth="80"
                                                   ItemsSource="{x:Bind ViewModel.ItemsQPMode}"
                                                   SelectedItem="{x:Bind ViewModel.QP_Mode,Mode=TwoWay}"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="无功计算方法"
-                                                  IsEnabled="False" VerticalAlignment="Center"/>
+                                                  IsEnabled="False"
+                                                  VerticalAlignment="Center" />
                                         <ComboBox Name="cbxRangeSwitchMode"
                                                   ItemsSource="{x:Bind ViewModel.ItemsRangeSwitchMode}"
                                                   SelectedItem="{x:Bind ViewModel.RangeSwitchMode,Mode=TwoWay}"
                                                   ToolTipService.Placement="Bottom"
                                                   ToolTipService.ToolTip="档位切换模式"
-                                                  IsEnabled="False" VerticalAlignment="Center"/>
+                                                  IsEnabled="False"
+                                                  VerticalAlignment="Center" />
                                         <AppBarButton Icon="Stop"
                                                       IsCompact="True"
                                                       LabelPosition="Collapsed"
                                                       VerticalAlignment="Center"
                                                       Width="100"
-                                                      Foreground="#ff99a4" Command="{x:Bind ViewModel.StopACSCommand}" Background="#442726"/>
+                                                      Foreground="#ff99a4"
+                                                      Command="{x:Bind ViewModel.StopACSCommand}"
+                                                      Background="#442726" />
                                     </StackPanel>
                                     <Slider Grid.Row="15"
                                             Grid.ColumnSpan="7"
@@ -841,14 +848,15 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
-                                                <!--通道3-->
+                                                <!--#region -->
+                                                <!--通道3--><!--
                                                 <ComboBox Header="通道3"
                                                           Grid.Row="2"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
-                                                <!--幅值3-->
+                                                --><!--幅值3--><!--
                                                 <NumberBox Header="幅值3"
                                                            Grid.Row="2"
                                                            MinWidth="180"
@@ -864,14 +872,14 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
-                                                <!--通道4-->
+                                                --><!--通道4--><!--
                                                 <ComboBox Header="通道4"
                                                           Grid.Row="3"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
-                                                <!--幅值4-->
+                                                --><!--幅值4--><!--
                                                 <NumberBox Header="幅值4"
                                                            Grid.Row="3"
                                                            MinWidth="180"
@@ -887,14 +895,14 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
-                                                <!--通道5-->
+                                                --><!--通道5--><!--
                                                 <ComboBox Header="通道5"
                                                           Grid.Row="4"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
-                                                <!--幅值5-->
+                                                --><!--幅值5--><!--
                                                 <NumberBox Header="幅值5"
                                                            Grid.Row="4"
                                                            MinWidth="180"
@@ -910,14 +918,14 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
-                                                <!--通道6-->
+                                                --><!--通道6--><!--
                                                 <ComboBox Header="通道6"
                                                           Grid.Row="5"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
-                                                <!--幅值6-->
+                                                --><!--幅值6--><!--
                                                 <NumberBox Header="幅值6"
                                                            Grid.Row="5"
                                                            MinWidth="180"
@@ -933,14 +941,14 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
-                                                <!--通道7-->
+                                                --><!--通道7--><!--
                                                 <ComboBox Header="通道7"
                                                           Grid.Row="6"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
-                                                <!--幅值7-->
+                                                --><!--幅值7--><!--
                                                 <NumberBox Header="幅值7"
                                                            Grid.Row="6"
                                                            MinWidth="180"
@@ -956,14 +964,14 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
-                                                <!--通道8-->
+                                                --><!--通道8--><!--
                                                 <ComboBox Header="通道8"
                                                           Grid.Row="7"
                                                           MinWidth="100"
                                                           ItemsSource="{x:Bind ViewModel.Channels,Mode=OneWay}"
                                                           SelectedValue="{x:Bind ViewModel.Channel_2,Mode=TwoWay}"
                                                           Margin="8" />
-                                                <!--幅值8-->
+                                                --><!--幅值8--><!--
                                                 <NumberBox Header="幅值8"
                                                            Grid.Row="7"
                                                            MinWidth="180"
@@ -979,6 +987,7 @@
                                                         Margin="8"
                                                         HorizontalAlignment="Stretch"
                                                         Command="{x:Bind ViewModel.SetAmplitude_2Command}" />
+                                                --><!--#endregion-->
                                                 <Button Content="同时设定"
                                                         Grid.Column="4"
                                                         Grid.Row="0"

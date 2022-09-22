@@ -453,9 +453,45 @@ public partial class MainViewModel : ObservableObject
     [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
     private Channels channel_2;
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_3;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_4;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_5;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_6;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_7;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_DualCommand))]
+    [NotifyCanExecuteChangedFor(nameof(SetAmplitude_2Command))]
+    private Channels channel_8;
+    [ObservableProperty]
     private float setAmplitudeValue_1;
     [ObservableProperty]
     private float setAmplitudeValue_2;
+    [ObservableProperty]
+    private float setAmplitudeValue_3;
+    [ObservableProperty]
+    private float setAmplitudeValue_4;
+    [ObservableProperty]
+    private float setAmplitudeValue_5;
+    [ObservableProperty]
+    private float setAmplitudeValue_6;
+    [ObservableProperty]
+    private float setAmplitudeValue_7;
+    [ObservableProperty]
+    private float setAmplitudeValue_8;
 
     /// <summary>
     /// 当打开交流源开关则显示相关操作菜单
@@ -480,12 +516,11 @@ public partial class MainViewModel : ObservableObject
     }
     [RelayCommand(CanExecute = nameof(CanExecute_Dual))]
     private async void SetAmplitude_Dual ()
-    {
+    {        
         var result1 = await SetAmplitude_1();
         UpdateInfoBar("设置幅值(通道1)" , result1);
         var result2 = await SetAmplitude_2();
         UpdateInfoBar("设置幅值(通道2)" , result2);
-
     }
     private bool CanExecute_1 ()
     {
@@ -495,9 +530,33 @@ public partial class MainViewModel : ObservableObject
     {
         return channel_2 != 0;
     }
+    private bool CanExecute_3 ()
+    {
+        return channel_3 != 0;
+    }
+    private bool CanExecute_4 ()
+    {
+        return channel_4 != 0;
+    }
+    private bool CanExecute_5 ()
+    {
+        return channel_5 != 0;
+    }
+    private bool CanExecute_6 ()
+    {
+        return channel_6 != 0;
+    }
+    private bool CanExecute_7 ()
+    {
+        return channel_7 != 0;
+    }
+    private bool CanExecute_8 ()
+    {
+        return channel_8 != 0;
+    }
     private bool CanExecute_Dual ()
     {
-        return channel_1 != 0 && channel_2 != 0;
+        return channel_1 != 0 && channel_2 != 0 ;
     }
     #endregion 交流源》
 

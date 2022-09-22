@@ -1,5 +1,5 @@
 ﻿using Microsoft. UI. Xaml. Controls;
-
+using Microsoft. Web. WebView2. Core;
 using TestManager. ViewModels;
 
 namespace TestManager. Views;
@@ -73,7 +73,7 @@ public sealed partial class MainPage : Page
     private async void IX_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
         await Task. Run(() => ViewModel. DKS?.ACS. SetAmplitude(Channels. Ix , ( float )args. NewValue));
-    }       
+    }
 
     private async void FaiUB_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
@@ -108,11 +108,26 @@ public sealed partial class MainPage : Page
 
     private async void Freq_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
-        await Task. Run(() => ViewModel. DKS?. ACS. SetFrequency(( float )args. NewValue));
+        await Task. Run(() => ViewModel. DKS?.ACS. SetFrequency(( float )args. NewValue));
     }
 
     private async void FreqX_ValueChanged (NumberBox sender , NumberBoxValueChangedEventArgs args)
     {
-        await Task. Run(() => ViewModel. DKS?.ACS. SetFrequency(ViewModel.Freq,( float )args.NewValue));
+        await Task. Run(() => ViewModel. DKS?.ACS. SetFrequency(ViewModel. Freq , ( float )args. NewValue));
     }
+
+    private void UA_GotFocus (object sender , Microsoft. UI. Xaml. RoutedEventArgs e)
+    {
+        ViewModel. IsOpenACS = false;
+    }
+
+    private void UA_LostFocus (object sender , Microsoft. UI. Xaml. RoutedEventArgs e)
+    {
+        NumberBox numberBox = ( NumberBox )sender;
+        var value = ( float )numberBox. Value;
+        Task. Run(() => ViewModel. DKS?.ACS. SetAmplitude(Channels. Ua , value));
+        ViewModel. IsOpenACS = true;
+    }
+
+    
 }
