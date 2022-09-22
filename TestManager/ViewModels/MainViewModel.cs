@@ -22,6 +22,7 @@ public partial class MainViewModel : ObservableObject
         SetNumberBoxNumberFormatter_ACI();
         SetNumberBoxNumberFormatter_PQ();
         SetNumberBoxNumberFormatter_Freq();
+        SetNumberBoxNumberFormatter_PF();
     }
 
     /// <summary>
@@ -203,7 +204,7 @@ public partial class MainViewModel : ObservableObject
     {
         this.OnWireModeIndexChange(value);
     }
-   
+
     private async void OnWireModeIndexChange(byte value)
     {
         var result = await Task.Run(() => DKS?.ACS.SetWireMode((WireMode)value));
@@ -217,14 +218,14 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private byte loopModeIndex;
     partial void OnLoopModeIndexChanging(byte value)
-    {       
+    {
         SetCloseLoopMode(value);
     }
- 
+
     private async void SetCloseLoopMode(byte value)
     {
         var result = await Task.Run(() => DKS?.ACS.SetClosedLoop((CloseLoopMode)value, (HarmonicMode)HarmonicModeIndex));
-       
+
         UpdateInfoBar("设置闭环模式", result);
     }
     #endregion 设置闭环模式》
@@ -235,19 +236,19 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private byte harmonicModeIndex;
     partial void OnHarmonicModeIndexChanging(byte value)
-    {       
+    {
         SetHarmonicMode(value);
     }
     partial void OnHarmonicModeIndexChanged(byte value)
     {
-       // SetHarmonicMode(value);
+        // SetHarmonicMode(value);
 
     }
 
     private async void SetHarmonicMode(byte harmonicMode)
     {
         var result = await Task.Run(() => DKS?.ACS.SetHarmonicMode((HarmonicMode)harmonicMode, (CloseLoopMode)loopModeIndex));
-      
+
         UpdateInfoBar("设置谐波模式", result);
     }
     #endregion 设置谐波模式》
@@ -552,20 +553,7 @@ public partial class MainViewModel : ObservableObject
 
 
 
-    /// <summary>
-    /// 指示ACS开关状态.
-    /// </summary>
-    [ObservableProperty]
-    private bool isOpenACS;
 
-    [ObservableProperty]
-    private bool isOpenDCS;
-
-    [ObservableProperty]
-    private bool isOpenEQP;
-
-    [ObservableProperty]
-    private bool isOpenDCM;
 
     #region 《选择交流电压档位索引值
     [ObservableProperty]
@@ -578,17 +566,13 @@ public partial class MainViewModel : ObservableObject
     public float SmallChange_U => (float)((ranges_ACU != null && rangeIndex_Ua != 0XFF) ? ranges_ACU[rangeIndex_Ua] * 0.1 : 0);
     public float LargeChange_U => (float)((ranges_ACU != null && rangeIndex_Ua != 0XFF) ? ranges_ACU[rangeIndex_Ua] * 0.2 : 0);
 
-    /// <summary>
-    /// 【备份】用于设置失败时恢复设置前的值；
-    /// </summary>
-    private byte rangeIndex_Ua_Backup;
+
     partial void OnRangeIndex_UaChanging(byte value)
     {
         if (value == 0xff)
         {
             return;
         }
-        rangeIndex_Ua_Backup = rangeIndex_Ua;
         SetRange_ACU(value);
     }
     partial void OnRangeIndex_UaChanged(byte value)
@@ -597,17 +581,13 @@ public partial class MainViewModel : ObservableObject
         {
             return;
         }
-        rangeIndex_Ua = rangeIndex_Ua_Backup;
+
         MaxValue_U = (float)((ranges_ACU != null && rangeIndex_Ua != 0XFF) ? ranges_ACU[rangeIndex_Ua] * 1.2 : 0);
     }
 
     private async void SetRange_ACU(byte index)
     {
         var result = await Task.Run(() => DKS?.ACS.SetRanges(index, rangeIndex_Ia));
-        if (result?.IsSuccess ?? false)
-        {
-            rangeIndex_Ua_Backup = index;
-        }
 
         UpdateInfoBar("设置交流电压档位", result);
     }
@@ -657,6 +637,21 @@ public partial class MainViewModel : ObservableObject
     #endregion 电流档位索引值》
 
     #region 《功能模块开关操作
+    /// <summary>
+    /// 指示ACS开关状态.
+    /// </summary>
+    [ObservableProperty]
+    private bool isOpenACS;
+
+    [ObservableProperty]
+    private bool isOpenDCS;
+
+    [ObservableProperty]
+    private bool isOpenEQP;
+
+    [ObservableProperty]
+    private bool isOpenDCM;
+
     [ObservableProperty]
     private Brush progressRingColor_ACS;
     [ObservableProperty]
@@ -665,65 +660,35 @@ public partial class MainViewModel : ObservableObject
     private Brush progressRingColor_DCM;
     [ObservableProperty]
     private Brush progressRingColor_EPQ;
+
+    private readonly Brush red = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+    private readonly Brush green = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+    #region <- ACS
+    partial void OnIsOpenACSChanging(bool value)
+    {
+        if (!value)
+        {
+
+        }
+    }
     partial void OnIsOpenACSChanged(bool value)
     {
         if (value)
         {
-            ReadDataACS();
             Visibility_ACS = Visibility.Visible;
+            ReadDataACS();
         }
         else
         {
-            Task.Run(() => DKS?.ACS.Stop());
             Visibility_ACS = Visibility.Collapsed;
-        }
-    }
-
-    partial void OnIsOpenDCSChanged(bool value)
-    {
-        if (value)
-        {
-            ReadDataDCS();
-            Visibility_DCS = Visibility.Visible;
-        }
-        else
-        {
-            Task.Run(() =>
-            {
-                DKS?.DCS.Stop_DCI();
-                DKS?.DCS.Stop_DCU();
-                DKS?.DCS.Stop_DCR();
-            });
-            Visibility_DCS = Visibility.Collapsed;
-        }
-    }
-    partial void OnIsOpenEQPChanged(bool value)
-    {
-        if (value)
-        {
-            ReadDataEQP();
-        }
-        else
-        {
-        }
-    }
-    partial void OnIsOpenDCMChanged(bool value)
-    {
-        if (value)
-        {
-            ReadDataDCM();
-            Visibility_DCM = Visibility.Visible;
-        }
-        else
-        {
-            Visibility_DCM = Visibility.Collapsed;
+            StopReadACS();
         }
     }
 
     private async void ReadDataACS()
     {
-        // DKS?.ACS. Open();
-        while (IsOpenACS)
+
+        while (isOpenACS)
         {
             var result = await Task.Run(() => DKS?.ACS.ReadData());
             if (result?.IsSuccess ?? false)
@@ -767,16 +732,65 @@ public partial class MainViewModel : ObservableObject
                 Freq = DKS?.ACS.Freq ?? 0;
                 RangeIndex_Ia = DKS?.ACS.RangeIndex_Ia ?? 0;
                 RangeIndex_Ua = DKS?.ACS.RangeIndex_Ua ?? 0;
-                ProgressRingColor_ACS = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+                ProgressRingColor_ACS = green;
             }
             else
             {
-                ProgressRingColor_ACS = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+                ProgressRingColor_ACS = red;
             }
-
             UpdateInfoBar("Read ACS", result);
         }
+
     }
+    private async void StopReadACS()
+    {
+        await Task.Run(() => DKS?.ACS.Stop());
+    }
+    #endregion ACS ->
+
+
+    partial void OnIsOpenDCSChanging(bool value)
+    {
+        if (value)
+        {
+            ReadDataDCS();
+            Visibility_DCS = Visibility.Visible;
+        }
+        else
+        {
+            Task.Run(() =>
+            {
+                DKS?.DCS.Stop_DCI();
+                DKS?.DCS.Stop_DCU();
+                DKS?.DCS.Stop_DCR();
+            });
+            Visibility_DCS = Visibility.Collapsed;
+        }
+    }
+    partial void OnIsOpenEQPChanging(bool value)
+    {
+        if (value)
+        {
+            ReadDataEQP();
+        }
+        else
+        {
+        }
+    }
+    partial void OnIsOpenDCMChanging(bool value)
+    {
+        if (value)
+        {
+            ReadDataDCM();
+            Visibility_DCM = Visibility.Visible;
+        }
+        else
+        {
+            Visibility_DCM = Visibility.Collapsed;
+        }
+    }
+
+
     private async void ReadDataDCS()
     {
         while (IsOpenDCS)
@@ -863,13 +877,7 @@ public partial class MainViewModel : ObservableObject
     private bool isOn_PortSwitch;
     partial void OnIsOn_PortSwitchChanging(bool value)
     {
-        if (!value)
-        {
-            IsOpenACS = false;
-            IsOpenDCM = false;
-            IsOpenEQP = false;
-            IsOpenDCS = false;
-        }
+
     }
 
 

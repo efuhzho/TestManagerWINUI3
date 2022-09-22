@@ -421,19 +421,23 @@
                                                NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="2"
-                                               Value="{x:Bind ViewModel.PFA,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PFA,Mode=OneWay}" NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}"/>
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="3"
-                                               Value="{x:Bind ViewModel.PFB,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PFB,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="4"
-                                               Value="{x:Bind ViewModel.PFC,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PFC,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="5"
-                                               Value="{x:Bind ViewModel.PFX,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PFX,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="6"
-                                               Value="{x:Bind ViewModel.PF,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PF,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}" />
                                     <NumberBox Name="Freq"
                                                Grid.Row="11"
                                                Grid.Column="2"
