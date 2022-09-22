@@ -976,7 +976,7 @@ public partial class MainViewModel : ObservableObject
     private void ReadData_ACS ()
     {
         DKS?.ACS. ReadData();
-        UA = DKS?.ACS. IA ?? 0;
+        UA = DKS?.ACS. UA ?? 0;
         UB = DKS?.ACS. UB ?? 0;
         UC = DKS?.ACS. UC ?? 0;
         UX = DKS?.ACS. UX ?? 0;
