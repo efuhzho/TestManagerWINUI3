@@ -81,9 +81,7 @@
                                             <Setter Property="Margin"
                                                     Value="5" />
                                             <Setter Property="HorizontalAlignment"
-                                                    Value="Stretch" />
-                                            <Setter Property="Visibility"
-                                                    Value="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}" />
+                                                    Value="Stretch" /> 
                                         </Style>
                                     </Grid.Resources>
                                     <!--行定义-->
@@ -470,7 +468,7 @@
                                                 Grid.ColumnSpan="7"
                                                 Orientation="Horizontal"
                                                 Margin="8"
-                                                Visibility="{x:Bind ViewModel.VisibilityFollowToggleSwitch,Mode=OneWay}">
+                                                Visibility="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}">
                                         <StackPanel.Background>
                                             <SolidColorBrush Color="{StaticResource SystemAccentColor}"
                                                              Opacity="0.1" />
@@ -897,7 +895,7 @@
                                                     HorizontalAlignment="Stretch"
                                                     Command="{x:Bind ViewModel.SetAmplitude_DCUCommand}" />
                                             <ComboBox Grid.Row="1"
-                                                      ItemsSource="{x:Bind ViewModel.Ranges_DCU,Mode=OneWay}"
+                                                      ItemsSource="{x:Bind ViewModel.Ranges_DCI,Mode=OneWay}"
                                                       SelectedIndex="{x:Bind ViewModel.RangeIndex_DCI,Mode=TwoWay}"
                                                       Header="电流档位"
                                                       Margin="8"

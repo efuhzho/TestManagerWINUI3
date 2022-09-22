@@ -840,7 +840,6 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty]
     public InfoBarSeverity infoBarSeverity = InfoBarSeverity.Success;
-
     #endregion
 
     #region 串口开关绑定
@@ -851,9 +850,11 @@ public partial class MainViewModel : ObservableObject
     private bool isOn_PortSwitch;
     partial void OnIsOn_PortSwitchChanging(bool value)
     {
-
+        IsOpenACS = false;
+        IsOpenDCM = false;
+        IsOpenDCS = false;
+        IsOpenEQP = false;
     }
-
 
     /// <summary>
     /// 丹迪克设备对象
