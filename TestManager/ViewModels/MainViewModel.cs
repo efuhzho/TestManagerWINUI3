@@ -439,7 +439,6 @@ public partial class MainViewModel : ObservableObject
         var result = await Task.Run(() => DKS?.Settings.SetBaudRate(settingBaudRate));
         UpdateInfoBar("设置装置波特率", result);
     }
-
     #endregion 设置》
 
     #region 《交流源
@@ -495,7 +494,6 @@ public partial class MainViewModel : ObservableObject
     {
         return channel_1 != 0 && channel_2 != 0;
     }
-
     #endregion 交流源》
 
     #region 《直流电压电流幅值设置
@@ -551,10 +549,6 @@ public partial class MainViewModel : ObservableObject
     private Visibility visibility_DCM = Visibility.Collapsed;
     #endregion 直流表操作》
 
-
-
-
-
     #region 《选择交流电压档位索引值
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MaxValue_U))]
@@ -566,29 +560,27 @@ public partial class MainViewModel : ObservableObject
     public float SmallChange_U => (float)((ranges_ACU != null && rangeIndex_Ua != 0XFF) ? ranges_ACU[rangeIndex_Ua] * 0.1 : 0);
     public float LargeChange_U => (float)((ranges_ACU != null && rangeIndex_Ua != 0XFF) ? ranges_ACU[rangeIndex_Ua] * 0.2 : 0);
 
-
-    partial void OnRangeIndex_UaChanging(byte value)
+    private async void UpdateRangesIndex()
     {
-        if (value == 0xff)
-        {
-            return;
-        }
-        SetRange_ACU(value);
+        await Task.Run(() => Thread.Sleep(1000));
+        RangeIndex_Ua = DKS?.ACS.RangeIndex_Ua ?? 0;
+        RangeIndex_Ia = DKS?.ACS.RangeIndex_Ia ?? 0;
     }
+
     partial void OnRangeIndex_UaChanged(byte value)
     {
         if (value == 0xff)
         {
             return;
         }
-
+        SetRange_ACU(value);
+        UpdateRangesIndex();
         MaxValue_U = (float)((ranges_ACU != null && rangeIndex_Ua != 0XFF) ? ranges_ACU[rangeIndex_Ua] * 1.2 : 0);
     }
 
     private async void SetRange_ACU(byte index)
     {
         var result = await Task.Run(() => DKS?.ACS.SetRanges(index, rangeIndex_Ia));
-
         UpdateInfoBar("设置交流电压档位", result);
     }
     #endregion 电压档位索引值》
@@ -603,35 +595,21 @@ public partial class MainViewModel : ObservableObject
     private float maxValue_I;
     public float SmallChange_I => (float)((ranges_ACI != null && rangeIndex_Ia != 0XFF) ? ranges_ACI[rangeIndex_Ia] * 0.1 : 0);
     public float LargeChange_I => (float)((ranges_ACI != null && rangeIndex_Ia != 0XFF) ? ranges_ACI[rangeIndex_Ia] * 0.2 : 0);
-    /// <summary>
-    /// 【备份】用于设置失败时恢复设置前的值；
-    /// </summary>
-    private byte rangeIndex_Ia_Temp;
-    partial void OnRangeIndex_IaChanging(byte value)
-    {
-        if (value == 0xff)
-        {
-            return;
-        }
-        rangeIndex_Ia_Temp = rangeIndex_Ia;
-        SetRange_ACI(value);
-    }
+
     partial void OnRangeIndex_IaChanged(byte value)
     {
         if (value == 0xff)
         {
             return;
         }
-        rangeIndex_Ia = rangeIndex_Ia_Temp;
+        SetRange_ACI(value);
+        UpdateRangesIndex();
+
         MaxValue_I = (float)((ranges_ACI != null && rangeIndex_Ia != 0XFF) ? ranges_ACI[rangeIndex_Ia] * 1.2 : 0);
     }
     private async void SetRange_ACI(byte index)
     {
         var result = await Task.Run(() => DKS?.ACS.SetRanges(rangeIndex_Ua, index));
-        if (result?.IsSuccess ?? false)
-        {
-            rangeIndex_Ia_Temp = index;
-        }
         UpdateInfoBar("设置交流电流档位", result);
     }
     #endregion 电流档位索引值》
@@ -661,7 +639,7 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private Brush progressRingColor_EPQ;
 
-    private readonly Brush red = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+    private readonly Brush red = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
     private readonly Brush green = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
     #region <- ACS
     partial void OnIsOpenACSChanging(bool value)
@@ -687,8 +665,8 @@ public partial class MainViewModel : ObservableObject
 
     private async void ReadDataACS()
     {
-
-        while (isOpenACS)
+        UpdateRangesIndex();       
+        do
         {
             var result = await Task.Run(() => DKS?.ACS.ReadData());
             if (result?.IsSuccess ?? false)
@@ -730,8 +708,6 @@ public partial class MainViewModel : ObservableObject
                 FreqC = DKS?.ACS.Freq_C ?? 0;
                 FreqX = DKS?.ACS.Freq_X ?? 0;
                 Freq = DKS?.ACS.Freq ?? 0;
-                RangeIndex_Ia = DKS?.ACS.RangeIndex_Ia ?? 0;
-                RangeIndex_Ua = DKS?.ACS.RangeIndex_Ua ?? 0;
                 ProgressRingColor_ACS = green;
             }
             else
@@ -739,17 +715,16 @@ public partial class MainViewModel : ObservableObject
                 ProgressRingColor_ACS = red;
             }
             UpdateInfoBar("Read ACS", result);
-        }
-
+        } while (isOpenACS);
     }
+    
     private async void StopReadACS()
     {
         await Task.Run(() => DKS?.ACS.Stop());
     }
     #endregion ACS ->
 
-
-    partial void OnIsOpenDCSChanging(bool value)
+    partial void OnIsOpenDCSChanged(bool value)
     {
         if (value)
         {
@@ -767,17 +742,18 @@ public partial class MainViewModel : ObservableObject
             Visibility_DCS = Visibility.Collapsed;
         }
     }
-    partial void OnIsOpenEQPChanging(bool value)
+    partial void OnIsOpenEQPChanged(bool value)
     {
         if (value)
         {
             ReadDataEQP();
+          
         }
         else
         {
         }
     }
-    partial void OnIsOpenDCMChanging(bool value)
+    partial void OnIsOpenDCMChanged(bool value)
     {
         if (value)
         {
@@ -790,7 +766,6 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-
     private async void ReadDataDCS()
     {
         while (IsOpenDCS)
@@ -800,12 +775,11 @@ public partial class MainViewModel : ObservableObject
             {
                 DCU = DKS?.DCS.DCU ?? 0;
                 DCI = DKS?.DCS.DCI ?? 0;
-                ProgressRingColor_DCS = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+                ProgressRingColor_DCS = green;
             }
             else
             {
-
-                ProgressRingColor_DCS = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+                ProgressRingColor_DCS = red;
             }
 
             UpdateInfoBar("Read DCS", result);
@@ -820,11 +794,11 @@ public partial class MainViewModel : ObservableObject
             {
                 DCMU = DKS?.DCM.DCMU ?? 0;
                 DCMI = DKS?.DCM.DCMI ?? 0;
-                ProgressRingColor_DCM = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+                ProgressRingColor_DCM = green;
             }
             else
             {
-                ProgressRingColor_DCM = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+                ProgressRingColor_DCM = red;
             }
             UpdateInfoBar("Read DCM", result);
         }
@@ -836,11 +810,11 @@ public partial class MainViewModel : ObservableObject
             var result = await Task.Run(() => DKS?.EPQ.ReadData());
             if (result?.IsSuccess ?? false)
             {
-                ProgressRingColor_EPQ = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 255, 0));
+                ProgressRingColor_EPQ = green;
             }
             else
             {
-                ProgressRingColor_EPQ = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 255, 0, 0));
+                ProgressRingColor_EPQ = red;
             }
 
             UpdateInfoBar("Read EPQ", result);
@@ -950,49 +924,48 @@ public partial class MainViewModel : ObservableObject
     }
     #endregion
 
-    [RelayCommand]
-    private void ReadData_ACS()
-    {
-        DKS?.ACS.ReadData();
-        UA = DKS?.ACS.UA ?? 0;
-        UB = DKS?.ACS.UB ?? 0;
-        UC = DKS?.ACS.UC ?? 0;
-        UX = DKS?.ACS.UX ?? 0;
-        IA = DKS?.ACS.IA ?? 0;
-        IB = DKS?.ACS.IB ?? 0;
-        IC = DKS?.ACS.IC ?? 0;
-        IX = DKS?.ACS.IX ?? 0;
-        FaiUA = DKS?.ACS.FAI_UA ?? 0;
-        FaiUB = DKS?.ACS.FAI_UB ?? 0;
-        FaiUC = DKS?.ACS.FAI_UC ?? 0;
-        FaiIA = DKS?.ACS.FAI_IA ?? 0;
-        FaiIB = DKS?.ACS.FAI_IB ?? 0;
-        FaiIC = DKS?.ACS.FAI_IC ?? 0;
-        PA = DKS?.ACS.PA ?? 0;
-        PB = DKS?.ACS.PB ?? 0;
-        PC = DKS?.ACS.PC ?? 0;
-        PX = DKS?.ACS.PX ?? 0;
-        P = DKS?.ACS.P ?? 0;
-        QA = DKS?.ACS.QA ?? 0;
-        QB = DKS?.ACS.QB ?? 0;
-        QC = DKS?.ACS.QC ?? 0;
-        QX = DKS?.ACS.QX ?? 0;
-        Q = DKS?.ACS.Q ?? 0;
-        SA = DKS?.ACS.SA ?? 0;
-        SB = DKS?.ACS.SB ?? 0;
-        SC = DKS?.ACS.SC ?? 0;
-        SX = DKS?.ACS.SX ?? 0;
-        S = DKS?.ACS.S ?? 0;
-        PFA = DKS?.ACS.PFA ?? 0;
-        PFB = DKS?.ACS.PFB ?? 0;
-        PFC = DKS?.ACS.PFC ?? 0;
-        PFX = DKS?.ACS.PFX ?? 0;
-        PF = DKS?.ACS.PF ?? 0;
-        FreqC = DKS?.ACS.Freq_C ?? 0;
-        FreqX = DKS?.ACS.Freq_X ?? 0;
-        Freq = DKS?.ACS.Freq ?? 0;
-        Thread.Sleep(500);
-    }
+    //[RelayCommand]
+    //private void ReadData_ACS()
+    //{
+    //    DKS?.ACS.ReadData();
+    //    UA = DKS?.ACS.UA ?? 0;
+    //    UB = DKS?.ACS.UB ?? 0;
+    //    UC = DKS?.ACS.UC ?? 0;
+    //    UX = DKS?.ACS.UX ?? 0;
+    //    IA = DKS?.ACS.IA ?? 0;
+    //    IB = DKS?.ACS.IB ?? 0;
+    //    IC = DKS?.ACS.IC ?? 0;
+    //    IX = DKS?.ACS.IX ?? 0;
+    //    FaiUA = DKS?.ACS.FAI_UA ?? 0;
+    //    FaiUB = DKS?.ACS.FAI_UB ?? 0;
+    //    FaiUC = DKS?.ACS.FAI_UC ?? 0;
+    //    FaiIA = DKS?.ACS.FAI_IA ?? 0;
+    //    FaiIB = DKS?.ACS.FAI_IB ?? 0;
+    //    FaiIC = DKS?.ACS.FAI_IC ?? 0;
+    //    PA = DKS?.ACS.PA ?? 0;
+    //    PB = DKS?.ACS.PB ?? 0;
+    //    PC = DKS?.ACS.PC ?? 0;
+    //    PX = DKS?.ACS.PX ?? 0;
+    //    P = DKS?.ACS.P ?? 0;
+    //    QA = DKS?.ACS.QA ?? 0;
+    //    QB = DKS?.ACS.QB ?? 0;
+    //    QC = DKS?.ACS.QC ?? 0;
+    //    QX = DKS?.ACS.QX ?? 0;
+    //    Q = DKS?.ACS.Q ?? 0;
+    //    SA = DKS?.ACS.SA ?? 0;
+    //    SB = DKS?.ACS.SB ?? 0;
+    //    SC = DKS?.ACS.SC ?? 0;
+    //    SX = DKS?.ACS.SX ?? 0;
+    //    S = DKS?.ACS.S ?? 0;
+    //    PFA = DKS?.ACS.PFA ?? 0;
+    //    PFB = DKS?.ACS.PFB ?? 0;
+    //    PFC = DKS?.ACS.PFC ?? 0;
+    //    PFX = DKS?.ACS.PFX ?? 0;
+    //    PF = DKS?.ACS.PF ?? 0;
+    //    FreqC = DKS?.ACS.Freq_C ?? 0;
+    //    FreqX = DKS?.ACS.Freq_X ?? 0;
+    //    Freq = DKS?.ACS.Freq ?? 0;
+    //}
 
     /// <summary>
     /// 打开串口开关时，设备实例化
@@ -1074,7 +1047,7 @@ public partial class MainViewModel : ObservableObject
                     //*****异步获取交流源档位
                     var res2 = await Task.Run(() =>
                       {
-                          return DKS.Settings.IsEnabled_ACS ? DKS.ACS.GetRanges() : null;
+                          return DKS.ACS.GetRanges();
                       });
 
                     if (res2 != null && !res2.IsSuccess)
@@ -1094,7 +1067,7 @@ public partial class MainViewModel : ObservableObject
                     //*****异步获取直流源档位
                     var res3 = await Task.Run(() =>
                     {
-                        return DKS.Settings.IsEnabled_DCS ? DKS.DCS.GetRanges() : null;
+                        return DKS.DCS.GetRanges();
                     });
 
                     if (res3 != null && !res3.IsSuccess)
@@ -1135,12 +1108,12 @@ public partial class MainViewModel : ObservableObject
                         Ranges_ACU = DKS.ACS.Ranges_ACU;
                     }
 
-
                     //交流电流档位集合初始化
                     if ((DKS.ACS.Ranges_ACI != null) && (!Ranges_ACI?.SequenceEqual(DKS.ACS.Ranges_ACI) ?? true))
                     {
                         Ranges_ACI = DKS.ACS.Ranges_ACI;
                     }
+
                     //直流源量程
                     if ((DKS.DCS.Ranges_DCI != null) && (!Ranges_DCI?.SequenceEqual(DKS.DCS.Ranges_DCI) ?? true))
                     {
@@ -1166,7 +1139,6 @@ public partial class MainViewModel : ObservableObject
                     VisibilityFollowToggleSwitch = Visibility.Visible;
                     //停止转圈圈
                     ProgressRingWhenSwitching = false;
-
                 }
                 else
                 {

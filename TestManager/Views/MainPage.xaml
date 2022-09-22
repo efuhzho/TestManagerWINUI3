@@ -82,6 +82,8 @@
                                                     Value="5" />
                                             <Setter Property="HorizontalAlignment"
                                                     Value="Stretch" />
+                                            <Setter Property="Visibility"
+                                                    Value="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}" />
                                         </Style>
                                     </Grid.Resources>
                                     <!--行定义-->
@@ -247,7 +249,8 @@
                                               ItemsSource="{x:Bind ViewModel.Ranges_ACU,Mode=OneWay}"
                                               SelectedIndex="{x:Bind ViewModel.RangeIndex_Ua,Mode=TwoWay}"
                                               HorizontalAlignment="Stretch"
-                                              Margin="5" />
+                                              Margin="5"
+                                              Visibility="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}" />
                                     <!--行2：交流电流数据-->
                                     <NumberBox Name="IA"
                                                Grid.Row="2"
@@ -289,7 +292,8 @@
                                               ItemsSource="{x:Bind ViewModel.Ranges_ACI,Mode=OneWay}"
                                               SelectedIndex="{x:Bind ViewModel.RangeIndex_Ia,Mode=TwoWay}"
                                               HorizontalAlignment="Stretch"
-                                              Margin="5" />
+                                              Margin="5"
+                                              Visibility="{x:Bind ViewModel.Visibility_ACS,Mode=OneWay}" />
                                     <NumberBox Name="FaiUA"
                                                Grid.Row="3"
                                                Grid.Column="2"
@@ -421,7 +425,8 @@
                                                NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="2"
-                                               Value="{x:Bind ViewModel.PFA,Mode=OneWay}" NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}"/>
+                                               Value="{x:Bind ViewModel.PFA,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PF,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="3"
                                                Value="{x:Bind ViewModel.PFB,Mode=OneWay}"
