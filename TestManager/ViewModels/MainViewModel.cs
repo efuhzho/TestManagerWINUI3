@@ -758,7 +758,7 @@ public partial class MainViewModel : ObservableObject
             var result = await Task. Run(() => DKS?.ACS. ReadData());
             if ( result?.IsSuccess ?? false )
             {
-                UA = DKS?.ACS. IA ?? 0;
+                UA = DKS?.ACS. UA ?? 0;
                 UB = DKS?.ACS. UB ?? 0;
                 UC = DKS?.ACS. UC ?? 0;
                 UX = DKS?.ACS. UX ?? 0;
@@ -1013,6 +1013,7 @@ public partial class MainViewModel : ObservableObject
         FreqC = DKS?.ACS. Freq_C ?? 0;
         FreqX = DKS?.ACS. Freq_X ?? 0;
         Freq = DKS?.ACS. Freq ?? 0;
+        Thread.Sleep(500);
     }
 
     /// <summary>
