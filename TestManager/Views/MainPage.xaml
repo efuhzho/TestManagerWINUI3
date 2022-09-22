@@ -214,16 +214,15 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                               ValueChanged="UA_ValueChanged"
                                                NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="UB"
                                                Grid.Row="1"
                                                Grid.Column="3"
-                                               Text="{x:Bind ViewModel.UB,Mode=OneWay}"
+                                               Value="{x:Bind ViewModel.UB,Mode=OneWay}"
                                                Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                               ValueChanged="UB_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="UC"
                                                Grid.Row="1"
                                                Grid.Column="4"
@@ -231,7 +230,7 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                               ValueChanged="UC_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="UX"
                                                Grid.Row="1"
                                                Grid.Column="5"
@@ -239,7 +238,7 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_U,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_U,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_U,Mode=OneWay}"
-                                               ValueChanged="UX_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <!--交流电压档位列表-->
                                     <ComboBox Header="ACU Ranges"
                                               Grid.Row="1"
@@ -257,16 +256,15 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
-                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACI,Mode=OneWay}"
-                                               ValueChanged="IA_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACI,Mode=OneWay}" />
                                     <NumberBox Name="IB"
                                                Grid.Row="2"
                                                Grid.Column="3"
-                                               Text="{x:Bind ViewModel.IB,Mode=OneWay}"
+                                               Value="{x:Bind ViewModel.IB,Mode=OneWay}"
                                                Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
-                                               ValueChanged="IB_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACI,Mode=OneWay}" />
                                     <NumberBox Name="IC"
                                                Grid.Row="2"
                                                Grid.Column="4"
@@ -274,7 +272,7 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
-                                               ValueChanged="IC_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACI,Mode=OneWay}" />
                                     <NumberBox Name="IX"
                                                Grid.Row="2"
                                                Grid.Column="5"
@@ -282,7 +280,7 @@
                                                Maximum="{x:Bind ViewModel.MaxValue_I,Mode=OneWay}"
                                                SmallChange="{x:Bind ViewModel.SmallChange_I,Mode=OneWay}"
                                                LargeChange="{x:Bind ViewModel.LargeChange_I,Mode=OneWay}"
-                                               ValueChanged="IX_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACI,Mode=OneWay}" />
                                     <!--交流电流档位列表-->
                                     <ComboBox Header="ACI Ranges"
                                               Grid.Row="3"
@@ -292,43 +290,45 @@
                                               SelectedIndex="{x:Bind ViewModel.RangeIndex_Ia,Mode=TwoWay}"
                                               HorizontalAlignment="Stretch"
                                               Margin="5" />
-                                    <TextBox Name="FaiUA"
-                                             Grid.Row="3"
-                                             Grid.Column="2"
-                                             Text="{x:Bind ViewModel.FaiUA,Mode=OneWay}" />
+                                    <NumberBox Name="FaiUA"
+                                               Grid.Row="3"
+                                               Grid.Column="2"
+                                               Value="{x:Bind ViewModel.FaiUA,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="FaiUB"
                                                Grid.Row="3"
                                                Grid.Column="3"
                                                Value="{x:Bind ViewModel.FaiUB,Mode=OneWay}"
-                                               ValueChanged="FaiUB_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="FaiUC"
                                                Grid.Row="3"
                                                Grid.Column="4"
                                                Value="{x:Bind ViewModel.FaiUC,Mode=OneWay}"
-                                               ValueChanged="FaiUC_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Grid.Row="3"
                                                Grid.Column="5"
-                                               Value="{x:Bind ViewModel.FaiUX,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.FaiUX,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="FaiIA"
                                                Grid.Row="4"
                                                Grid.Column="2"
                                                Value="{x:Bind ViewModel.FaiIA,Mode=OneWay}"
-                                               ValueChanged="FaiIA_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="FaiIB"
                                                Grid.Row="4"
                                                Grid.Column="3"
                                                Value="{x:Bind ViewModel.FaiIB,Mode=OneWay}"
-                                               ValueChanged="FaiIB_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="FaiIC"
                                                Grid.Row="4"
                                                Grid.Column="4"
                                                Value="{x:Bind ViewModel.FaiIC,Mode=OneWay}"
-                                               ValueChanged="FaiIC_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <NumberBox Name="FaiIX"
                                                Grid.Row="4"
                                                Grid.Column="5"
                                                Value="{x:Bind ViewModel.FaiIX,Mode=OneWay}"
-                                               ValueChanged="FaiIX_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_ACU,Mode=OneWay}" />
                                     <TextBox Grid.Row="5"
                                              Text="{x:Bind ViewModel.THDUA}"
                                              Grid.Column="2" />
@@ -362,50 +362,63 @@
                                     <NumberBox Grid.Row="7"
                                                Grid.Column="2"
                                                Value="{x:Bind ViewModel.PA,Mode=OneWay}"
-                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ}" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="7"
                                                Grid.Column="3"
-                                               Value="{x:Bind ViewModel.PB,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PB,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="7"
                                                Grid.Column="4"
-                                               Value="{x:Bind ViewModel.PC,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PC,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="7"
                                                Grid.Column="5"
-                                               Value="{x:Bind ViewModel.PX,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.PX,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="7"
                                                Grid.Column="6"
-                                               Value="{x:Bind ViewModel.P,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.P,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="8"
                                                Grid.Column="2"
                                                Value="{x:Bind ViewModel.QA,Mode=OneWay}"
-                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ}" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="8"
                                                Grid.Column="3"
-                                               Value="{x:Bind ViewModel.QB,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.QB,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="8"
                                                Grid.Column="4"
-                                               Value="{x:Bind ViewModel.QC,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.QC,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="8"
                                                Grid.Column="5"
-                                               Value="{x:Bind ViewModel.QX,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.QX,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="8"
                                                Grid.Column="6"
-                                               Value="{x:Bind ViewModel.Q,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.Q,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="9"
                                                Grid.Column="2"
-                                               Value="{x:Bind ViewModel.SA,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.SA,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="9"
                                                Grid.Column="3"
-                                               Value="{x:Bind ViewModel.SB,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.SB,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="9"
                                                Grid.Column="4"
-                                               Value="{x:Bind ViewModel.SC,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.SC,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="9"
                                                Grid.Column="5"
-                                               Value="{x:Bind ViewModel.SX,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.SX,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="9"
                                                Grid.Column="6"
-                                               Value="{x:Bind ViewModel.S,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.S,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_PQ,Mode=OneWay}" />
                                     <NumberBox Grid.Row="10"
                                                Grid.Column="2"
                                                Value="{x:Bind ViewModel.PFA,Mode=OneWay}" />
@@ -425,18 +438,20 @@
                                                Grid.Row="11"
                                                Grid.Column="2"
                                                Value="{x:Bind ViewModel.Freq,Mode=OneWay}"
-                                               ValueChanged="Freq_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_Freq,Mode=OneWay}" />
                                     <NumberBox Grid.Row="11"
                                                Grid.Column="3"
-                                               Value="{x:Bind ViewModel.Freq,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.Freq,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_Freq,Mode=OneWay}" />
                                     <NumberBox Grid.Row="11"
                                                Grid.Column="4"
-                                               Value="{x:Bind ViewModel.FreqC,Mode=OneWay}" />
+                                               Value="{x:Bind ViewModel.FreqC,Mode=OneWay}"
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_Freq,Mode=OneWay}" />
                                     <NumberBox Name="FreqX"
                                                Grid.Row="11"
                                                Grid.Column="5"
                                                Value="{x:Bind ViewModel.FreqX,Mode=OneWay}"
-                                               ValueChanged="FreqX_ValueChanged" />
+                                               NumberFormatter="{x:Bind ViewModel.Formatter_Freq,Mode=OneWay}" />
                                     <TextBlock Grid.Row="11"
                                                Grid.Column="6"
                                                Text="{x:Bind ViewModel.FrequencySync}" />
@@ -541,9 +556,10 @@
                                              Margin="8"
                                              IsReadOnly="True" />
                                     <TextBox Header="DCMI"
-                                               MinWidth="150"
-                                               Text="{x:Bind ViewModel.DCMI,Mode=TwoWay}"
-                                               Margin="8" IsReadOnly="True"/>
+                                             MinWidth="150"
+                                             Text="{x:Bind ViewModel.DCMI,Mode=TwoWay}"
+                                             Margin="8"
+                                             IsReadOnly="True" />
                                 </StackPanel>
                                 <!--#endregion 数据显示区-->
                             </StackPanel>
@@ -620,7 +636,8 @@
                                                             Grid.Column="2"
                                                             VerticalAlignment="Stretch"
                                                             Margin="8"
-                                                            HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.SetDeviceInfoCommand}"/>
+                                                            HorizontalAlignment="Stretch"
+                                                            Command="{x:Bind ViewModel.SetDeviceInfoCommand}" />
                                                     <NumberBox Header="设置波特率"
                                                                MinWidth="100"
                                                                Maximum="65535"
@@ -631,7 +648,8 @@
                                                             VerticalAlignment="Stretch"
                                                             Grid.Column="4"
                                                             Margin="8"
-                                                            HorizontalAlignment="Stretch" Command="{x:Bind ViewModel.SetBaudRateCommand}"/>
+                                                            HorizontalAlignment="Stretch"
+                                                            Command="{x:Bind ViewModel.SetBaudRateCommand}" />
                                                 </Grid>
                                             </StackPanel>
                                             <VariableSizedWrapGrid Orientation="Horizontal"
@@ -714,7 +732,8 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing IsActive="{x:Bind ViewModel.IsOpenACS,Mode=OneWay}"
                                                                       Width="16"
-                                                                      Height="16" Foreground="{x:Bind ViewModel.ProgressRingColor_ACS,Mode=OneWay}"/>
+                                                                      Height="16"
+                                                                      Foreground="{x:Bind ViewModel.ProgressRingColor_ACS,Mode=OneWay}" />
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
@@ -833,7 +852,8 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing Width="16"
                                                                       Height="16"
-                                                                      IsActive="{x:Bind ViewModel.IsOpenDCS,Mode=OneWay}" Foreground="{x:Bind ViewModel.ProgressRingColor_DCS,Mode=OneWay}"/>
+                                                                      IsActive="{x:Bind ViewModel.IsOpenDCS,Mode=OneWay}"
+                                                                      Foreground="{x:Bind ViewModel.ProgressRingColor_DCS,Mode=OneWay}" />
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
@@ -911,7 +931,8 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing IsActive="{x:Bind ViewModel.IsOpenDCM,Mode=OneWay}"
                                                                       Width="16"
-                                                                      Height="16" Foreground="{x:Bind ViewModel.ProgressRingColor_DCM,Mode=OneWay}"/>
+                                                                      Height="16"
+                                                                      Foreground="{x:Bind ViewModel.ProgressRingColor_DCM,Mode=OneWay}" />
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
@@ -940,13 +961,14 @@
                                                         <TextBlock Text="Reading" />
                                                         <ProgressRing IsActive="{x:Bind ViewModel.IsOpenEQP,Mode=OneWay}"
                                                                       Width="16"
-                                                                      Height="16" Foreground="{x:Bind ViewModel.ProgressRingColor_EPQ,Mode=OneWay}"/>
+                                                                      Height="16"
+                                                                      Foreground="{x:Bind ViewModel.ProgressRingColor_EPQ,Mode=OneWay}" />
                                                     </StackPanel>
                                                 </ToggleSwitch.OnContent>
                                             </ToggleSwitch>
                                         </Grid>
                                     </Expander.Header>
-                                </Expander>                                
+                                </Expander>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
