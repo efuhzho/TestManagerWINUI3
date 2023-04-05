@@ -16,7 +16,7 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel ()
     {
         portNames. Sort();
-        portName = portNames[0];
+        //portName = portNames[0];
         baudRate = baudRates[2];
         SetNumberBoxNumberFormatter_ACU();
         SetNumberBoxNumberFormatter_ACI();
@@ -695,13 +695,13 @@ public partial class MainViewModel : ObservableObject
     private bool isOpenDCM;
 
     [ObservableProperty]
-    private Brush progressRingColor_ACS;
+    private Brush? progressRingColor_ACS;
     [ObservableProperty]
-    private Brush progressRingColor_DCS;
+    private Brush? progressRingColor_DCS;
     [ObservableProperty]
-    private Brush progressRingColor_DCM;
+    private Brush? progressRingColor_DCM;
     [ObservableProperty]
-    private Brush progressRingColor_EPQ;
+    private Brush? progressRingColor_EPQ;
 
     private readonly Brush red = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 255 , 0 , 0));
     private readonly Brush green = new SolidColorBrush(Windows. UI. Color. FromArgb(255 , 0 , 255 , 0));
